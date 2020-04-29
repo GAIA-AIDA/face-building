@@ -1,0 +1,2 @@
+copy google500_2_classifier.pkl here.
+It should be 329MB
