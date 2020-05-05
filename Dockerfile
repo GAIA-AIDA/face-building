@@ -17,7 +17,12 @@ RUN conda update -n base -c defaults conda && conda -V && conda install setuptoo
 WORKDIR /home/brian/facenet-master/
 RUN git clone https://github.com/davidsandberg/facenet.git
 RUN ls -al /home/brian/facenet-master/
-ENV PYTHONPATH "/aida/src/:/aida/src/src/:/home/brian/facenet-master/"
+
+WORKDIR /object-detection/src/lib
+RUN git clone --branch v1.12.0 https://github.com/tensorflow/models.git
+RUN git clone --branch tag/v1.0.3 https://github.com/NextCenturyCorporation/AIDA-Interchange-Format.git
+
+ENV PYTHONPATH "/aida/src/:/aida/src/slim/:/aida/src/src/:/home/brian/facenet-master/:/usr/local/bin/python:/object-detection/src/lib/models/research:/object-detection/src/lib/models/research/slim:/object-detection/src/lib/AIDA-Interchange-Format/python:."
 WORKDIR /aida/src/
 
 COPY aida-env.txt ./
