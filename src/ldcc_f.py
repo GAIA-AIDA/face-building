@@ -3,15 +3,24 @@ import cv2
 from glob import glob
 import os
 from shutil import copyfile
+import sys
 #for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m9/data/jpg/jpg/*.jpg.ldcc'):
 #for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m9/data/png/png/*.png.ldcc'):
 #for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m9/data/gif/gif/*.gif.ldcc'):
 
 #for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m9/data/bmp/bmp/*.bmp.ldcc'):
-if not os.path.exists('datasets/ldc_isi_dryrun3u_f/'):
-    os.makedirs('datasets/ldc_isi_dryrun3u_f/')
-for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/data/video_shot_boundaries/representative_frames/*/*.ldcc'):
-    #print name
+jpg_path = sys.argv[1]
+jpg_out = sys.argv[2]
+
+#print(jpg_out2)
+import os
+if not os.path.exists(jpg_out):
+    os.makedirs(jpg_out)
+
+#if not os.path.exists('datasets/ldc_isi_dryrun3u_f/'):
+#    os.makedirs('datasets/ldc_isi_dryrun3u_f/')
+for name in glob(jpg_path+'*/*.ldcc'):
+    #print (name)
     #data = name.split('/')
     #print data[-2]    
     #for name in glob('jpg_back/*.jpg.ldcc'):
@@ -33,10 +42,10 @@ for name in glob('/dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42_AIDA_P
     data = name.split('/')
     #print data[-2]
     data2 = data[-1].split('.')[0]
-    if not os.path.exists('datasets/m18_f/'+data[-2]):
-        os.makedirs('datasets/m18_f/'+data[-2])
+    if not os.path.exists(jpg_out+data[-2]):
+        os.makedirs(jpg_out+data[-2])
 
-    dst = 'datasets/m18_f/'+data[-2]+'/'+data2+'.jpg'
-    print dst
+    dst = jpg_out+data[-2]+'/'+data2+'.jpg'
+    print (dst)
     #copyfile(name, dst)
     cv2.imwrite(dst,  cv2.cvtColor(imgrgb, cv2.COLOR_RGB2BGR))
