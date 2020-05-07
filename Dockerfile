@@ -26,7 +26,7 @@ ENV PYTHONPATH "/aida/src/:/aida/src/slim/:/aida/src/src/:/home/brian/facenet-ma
 WORKDIR /aida/src/
 
 COPY aida-env.txt ./
-RUN conda create --name aida-env --file ./aida-env.txt python=3.6
+RUN conda create --name aida-env --file ./aida-env.txt -c conda-forge tensorflow-gpu=1.14 rdflib=4.2.2 python=3.6
 RUN echo "source activate aida-env" >> ~/.bashrc
 
 # Bundle app source
