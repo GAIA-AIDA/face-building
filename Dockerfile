@@ -1,12 +1,15 @@
 FROM nvidia/cuda:10.2-base-ubuntu16.04
 
-LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
+LABEL maintainer="Dan Napierski (ISI) <dan.napierski@toptal.com>"
+LABEL name="AIDA Face and Building Detection"
+LABEL version=0
+LABEL revision=1
 
 # Create app directory
 WORKDIR /aida/src/
 
 # Update
-RUN apt-get update && apt-get install -y apt-utils wget bzip2 tree nano git 
+RUN apt-get update && apt-get install -y apt-utils wget bzip2 tree nano git unzip gcc
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.1-Linux-x86_64.sh
 RUN chmod +x ./Miniconda3-4.5.1-Linux-x86_64.sh
 RUN ./Miniconda3-4.5.1-Linux-x86_64.sh -b -p ~/conda
@@ -18,13 +21,18 @@ WORKDIR /home/brian/facenet-master/
 RUN git clone https://github.com/davidsandberg/facenet.git
 RUN ls -al /home/brian/facenet-master/
 
-WORKDIR /object-detection/src/lib
+WORKDIR /face-building/src/lib
 RUN git clone --branch v1.12.0 https://github.com/tensorflow/models.git
-RUN git clone --branch tag/v1.0.3 https://github.com/NextCenturyCorporation/AIDA-Interchange-Format.git
+RUN git clone https://github.com/NextCenturyCorporation/AIDA-Interchange-Format.git
 
-ENV PYTHONPATH "/aida/src/:/aida/src/slim/:/aida/src/src/:/home/brian/facenet-master/:/usr/local/bin/python:/object-detection/src/lib/models/research:/object-detection/src/lib/models/research/slim:/object-detection/src/lib/AIDA-Interchange-Format/python:."
+ENV PYTHONPATH "/aida/src/:/aida/src/slim/:/aida/src/src/:/home/brian/facenet-master/:/usr/local/bin/python:/face-building/src/lib/models/research:/face-building/src/lib/models/research/slim:/face-building/src/lib/AIDA-Interchange-Format/python:."
+
+WORKDIR /face-building/src/lib/AIDA-Interchange-Format/python/
+RUN ls -al
+#under AIDA-Interchange-Format/python/
+RUN python setup.py install
+
 WORKDIR /aida/src/
-
 COPY aida-env.txt ./
 RUN conda create --name aida-env --file ./aida-env.txt -c conda-forge tensorflow-gpu=1.14 rdflib=4.2.2 python=3.6
 RUN echo "source activate aida-env" >> ~/.bashrc
@@ -54,12 +62,7 @@ ENV LDCC_PATH="/corpus/data/jpg/jpg/"
 
 WORKDIR /aida/src
 
-RUN apt-get -y install unzip
 #'*.jpg.ldcc'):
-
-LABEL name="AIDA Face and Building Detection"
-LABEL version=0
-LABEL revision=1
 
 # Open port
 EXPOSE 8082

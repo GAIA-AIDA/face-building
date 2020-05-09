@@ -1,5 +1,6 @@
 cudatoolkit
 cudnn
+lmdb
 numpy=1.16.2
 opencv
 pillow
