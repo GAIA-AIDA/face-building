@@ -47,19 +47,20 @@ from glob import glob
 import sys
 
 feature_dir = sys.argv[1]
-output_pickle = sys.argv[2]
+feature_db = sys.argv[2]
+output_pickle = sys.argv[3]
 
 import multiprocessing
 
 pickle_in = open("num2name.p","rb")
-num2name = pickle.load(pickle_in)
+num2name = pickle.load(pickle_in, encoding='latin1')
 
 def count_i(land_name):
 	data = land_name.split('/')[-1].split('.')[0]
 	#file1 = open('txt_file_m18_m/'+data+'.txt','w')
 	maxNum = 0
 	maxName = ''
-	for name in glob(feature_dir+'/*'):
+	for name in glob(feature_db+'*'):
 		#print (name)
 		name2 = name.split('/')
 		number = name2[-1].split('.')[0]			
@@ -98,24 +99,28 @@ def count_i(land_name):
 					min_samples=3,
 					residual_threshold=20,
 					max_trials=1000)
-
-			tf.logging.info('Found %d inliers' % sum(inliers))
+			#print(sum(inliers))
+			#print(maxNum)			
+			#"""
+			#tf.logging.info('Found %d inliers' % sum(inliers))
 			#print(sum(inliers))
 			#print(maxNum)
 			score = int(sum(inliers))
-			#file1.write(name+'\t'+str(sum(inliers))+'\n')		
+			#file1.write(name+'\t'+str(sum(inliers))+'\n')	
+			maxName = num2name[number]	
 			num = name.split('/')[-1].split('.')[0]  
 			if score>35 and score>maxNum:
 				maxNum = score
 				maxName = num2name[number]
-				#print (maxName)
-				#print (maxNum)
+				print (maxName)
+				print (maxNum)
 				#break
+			#"""
 
 		except:
 				#print('fail')
 				a=0
-
+		#break
 	#print (maxName)
 	#result_dic[data] = maxName
 	return maxName
@@ -124,17 +129,17 @@ def main(unused_argv):
 	#tf.logging.set_verbosity(tf.logging.INFO)
 	name_list = []
 	C=0
-	for land_name in glob(feature_dir+'/*'):
+	for land_name in glob(feature_dir+'*'):
 		#print (land_name)
 		name_list.append(land_name)
 		C+=1
-		#if C>10:
+		#if C>0:
 		#	break
 	print(name_list)
 
 	
 		#break
-	pool = multiprocessing.Pool(processes=32)
+	pool = multiprocessing.Pool(processes=96)
 	maxList = pool.map(count_i, name_list)
 	result_dic = {}
 	i=0

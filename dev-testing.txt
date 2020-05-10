@@ -1,0 +1,763 @@
+[napiersk@gaia01 aida_face_building]$ docker build . --tag aida-col-fb
+Sending build context to Docker daemon  118.6MB
+Step 1/21 : FROM nvidia/cuda:10.2-base-ubuntu16.04
+ ---> 1f1787acfb4e
+Step 2/21 : LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
+ ---> Using cache
+ ---> 7a3cc9966d90
+Step 3/21 : WORKDIR /aida/src/
+ ---> Using cache
+ ---> 20e2d9c53a5f
+Step 4/21 : RUN apt-get update && apt-get install -y apt-utils wget bzip2 tree nano
+ ---> Using cache
+ ---> 7af65cd79113
+Step 5/21 : RUN wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.1-Linux-x86_64.sh
+ ---> Using cache
+ ---> 3939e79fe9df
+Step 6/21 : RUN chmod +x ./Miniconda3-4.5.1-Linux-x86_64.sh
+ ---> Using cache
+ ---> 304871279743
+Step 7/21 : RUN ./Miniconda3-4.5.1-Linux-x86_64.sh -b -p ~/conda
+ ---> Using cache
+ ---> 29f8ae62d323
+Step 8/21 : RUN echo ". /root/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+ ---> Using cache
+ ---> e6bf87291f0e
+Step 9/21 : RUN echo "conda activate" >> ~/.bashrc
+ ---> Using cache
+ ---> 6c8527ba44f8
+Step 10/21 : ENV PATH="/root/conda/bin:${PATH}"
+ ---> Using cache
+ ---> d09ae2976337
+Step 11/21 : RUN echo $PATH
+ ---> Using cache
+ ---> ab6ca80ea5f2
+Step 12/21 : RUN conda update -n base -c defaults conda
+ ---> Using cache
+ ---> 3d3d2070fa99
+Step 13/21 : RUN conda -V
+ ---> Using cache
+ ---> f214b5a308e2
+Step 14/21 : RUN conda install setuptools
+ ---> Using cache
+ ---> 3c68a7148ae0
+Step 15/21 : RUN conda install -c anaconda scikit-learn numpy cffi wrapt absl-py urllib3 six
+ ---> Using cache
+ ---> b09ad6578902
+Step 16/21 : COPY aida-env.txt ./
+ ---> 661a74c8b208
+Step 17/21 : RUN conda create --name aida-env --file ./aida-env.txt
+ ---> Running in a955ea2557ce
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... failed with repodata from current_repodata.json, will retry with next repodata source.
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /root/conda/envs/aida-env
+
+  added / updated specs:
+    - tensorflow-gpu==1.12.0
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _tflow_select-2.1.0        |              gpu           2 KB
+    absl-py-0.9.0              |           py36_0         167 KB
+    astor-0.8.0                |           py36_0          46 KB
+    blas-1.0                   |              mkl           6 KB
+    c-ares-1.15.0              |    h7b6447c_1001          89 KB
+    ca-certificates-2020.1.1   |                0         125 KB
+    certifi-2019.11.28         |           py36_0         153 KB
+    cudatoolkit-9.2            |                0       233.9 MB
+    cudnn-7.6.5                |        cuda9.2_0       142.7 MB
+    cupti-9.2.148              |                0         1.5 MB
+    gast-0.3.3                 |             py_0          14 KB
+    grpcio-1.16.1              |   py36hf8bcb03_1         984 KB
+    h5py-2.10.0                |   py36h7918eee_0         1.0 MB
+    hdf5-1.10.4                |       hb1b8bf9_0         3.9 MB
+    intel-openmp-2020.0        |              166         756 KB
+    keras-applications-1.0.8   |             py_0          33 KB
+    keras-preprocessing-1.1.0  |             py_1          36 KB
+    ld_impl_linux-64-2.33.1    |       h53a641e_7         568 KB
+    libgfortran-ng-7.3.0       |       hdf63c60_0        1006 KB
+    libprotobuf-3.11.3         |       hd408876_0         2.9 MB
+    libstdcxx-ng-9.1.0         |       hdf63c60_0         3.1 MB
+    markdown-3.1.1             |           py36_0         116 KB
+    mkl-2020.0                 |              166       128.9 MB
+    mkl-service-2.3.0          |   py36he904b0f_0         219 KB
+    mkl_fft-1.0.15             |   py36ha843d7b_0         155 KB
+    mkl_random-1.1.0           |   py36hd6b4f25_0         324 KB
+    ncurses-6.1                |       he6710b0_1         777 KB
+    numpy-1.18.1               |   py36h4f9e942_0           5 KB
+    numpy-base-1.18.1          |   py36hde5b4d6_1         4.2 MB
+    openssl-1.1.1d             |       h7b6447c_4         2.5 MB
+    pip-20.0.2                 |           py36_1         1.7 MB
+    protobuf-3.11.3            |   py36he6710b0_0         640 KB
+    python-3.6.10              |       h0371630_0        29.7 MB
+    scipy-1.4.1                |   py36h0b6359f_0        14.6 MB
+    setuptools-45.2.0          |           py36_0         520 KB
+    six-1.14.0                 |           py36_0          27 KB
+    tensorboard-1.12.2         |   py36he6710b0_0         3.0 MB
+    tensorflow-1.12.0          |gpu_py36he74679b_0           4 KB
+    tensorflow-base-1.12.0     |gpu_py36had579c0_0       102.7 MB
+    tensorflow-gpu-1.12.0      |       h0d30ee6_0           3 KB
+    termcolor-1.1.0            |           py36_1           8 KB
+    werkzeug-1.0.0             |             py_0         240 KB
+    wheel-0.34.2               |           py36_0          51 KB
+    ------------------------------------------------------------
+                                           Total:       683.2 MB
+
+The following NEW packages will be INSTALLED:
+
+  _libgcc_mutex      pkgs/main/linux-64::_libgcc_mutex-0.1-main
+  _tflow_select      pkgs/main/linux-64::_tflow_select-2.1.0-gpu
+  absl-py            pkgs/main/linux-64::absl-py-0.9.0-py36_0
+  astor              pkgs/main/linux-64::astor-0.8.0-py36_0
+  blas               pkgs/main/linux-64::blas-1.0-mkl
+  c-ares             pkgs/main/linux-64::c-ares-1.15.0-h7b6447c_1001
+  ca-certificates    pkgs/main/linux-64::ca-certificates-2020.1.1-0
+  certifi            pkgs/main/linux-64::certifi-2019.11.28-py36_0
+  cudatoolkit        pkgs/main/linux-64::cudatoolkit-9.2-0
+  cudnn              pkgs/main/linux-64::cudnn-7.6.5-cuda9.2_0
+  cupti              pkgs/main/linux-64::cupti-9.2.148-0
+  gast               pkgs/main/noarch::gast-0.3.3-py_0
+  grpcio             pkgs/main/linux-64::grpcio-1.16.1-py36hf8bcb03_1
+  h5py               pkgs/main/linux-64::h5py-2.10.0-py36h7918eee_0
+  hdf5               pkgs/main/linux-64::hdf5-1.10.4-hb1b8bf9_0
+  intel-openmp       pkgs/main/linux-64::intel-openmp-2020.0-166
+  keras-applications pkgs/main/noarch::keras-applications-1.0.8-py_0
+  keras-preprocessi~ pkgs/main/noarch::keras-preprocessing-1.1.0-py_1
+  ld_impl_linux-64   pkgs/main/linux-64::ld_impl_linux-64-2.33.1-h53a641e_7
+  libedit            pkgs/main/linux-64::libedit-3.1.20181209-hc058e9b_0
+  libffi             pkgs/main/linux-64::libffi-3.2.1-hd88cf55_4
+  libgcc-ng          pkgs/main/linux-64::libgcc-ng-9.1.0-hdf63c60_0
+  libgfortran-ng     pkgs/main/linux-64::libgfortran-ng-7.3.0-hdf63c60_0
+  libprotobuf        pkgs/main/linux-64::libprotobuf-3.11.3-hd408876_0
+  libstdcxx-ng       pkgs/main/linux-64::libstdcxx-ng-9.1.0-hdf63c60_0
+  markdown           pkgs/main/linux-64::markdown-3.1.1-py36_0
+  mkl                pkgs/main/linux-64::mkl-2020.0-166
+  mkl-service        pkgs/main/linux-64::mkl-service-2.3.0-py36he904b0f_0
+  mkl_fft            pkgs/main/linux-64::mkl_fft-1.0.15-py36ha843d7b_0
+  mkl_random         pkgs/main/linux-64::mkl_random-1.1.0-py36hd6b4f25_0
+  ncurses            pkgs/main/linux-64::ncurses-6.1-he6710b0_1
+  numpy              pkgs/main/linux-64::numpy-1.18.1-py36h4f9e942_0
+  numpy-base         pkgs/main/linux-64::numpy-base-1.18.1-py36hde5b4d6_1
+  openssl            pkgs/main/linux-64::openssl-1.1.1d-h7b6447c_4
+  pip                pkgs/main/linux-64::pip-20.0.2-py36_1
+  protobuf           pkgs/main/linux-64::protobuf-3.11.3-py36he6710b0_0
+  python             pkgs/main/linux-64::python-3.6.10-h0371630_0
+  readline           pkgs/main/linux-64::readline-7.0-h7b6447c_5
+  scipy              pkgs/main/linux-64::scipy-1.4.1-py36h0b6359f_0
+  setuptools         pkgs/main/linux-64::setuptools-45.2.0-py36_0
+  six                pkgs/main/linux-64::six-1.14.0-py36_0
+  sqlite             pkgs/main/linux-64::sqlite-3.31.1-h7b6447c_0
+  tensorboard        pkgs/main/linux-64::tensorboard-1.12.2-py36he6710b0_0
+  tensorflow         pkgs/main/linux-64::tensorflow-1.12.0-gpu_py36he74679b_0
+  tensorflow-base    pkgs/main/linux-64::tensorflow-base-1.12.0-gpu_py36had579c0_0
+  tensorflow-gpu     pkgs/main/linux-64::tensorflow-gpu-1.12.0-h0d30ee6_0
+  termcolor          pkgs/main/linux-64::termcolor-1.1.0-py36_1
+  tk                 pkgs/main/linux-64::tk-8.6.8-hbc83047_0
+  werkzeug           pkgs/main/noarch::werkzeug-1.0.0-py_0
+  wheel              pkgs/main/linux-64::wheel-0.34.2-py36_0
+  xz                 pkgs/main/linux-64::xz-5.2.4-h14c3975_4
+  zlib               pkgs/main/linux-64::zlib-1.2.11-h7b6447c_3
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+mkl-2020.0           | 128.9 MB  | ########## | 100% 
+ncurses-6.1          | 777 KB    | ########## | 100% 
+gast-0.3.3           | 14 KB     | ########## | 100% 
+libgfortran-ng-7.3.0 | 1006 KB   | ########## | 100% 
+astor-0.8.0          | 46 KB     | ########## | 100% 
+setuptools-45.2.0    | 520 KB    | ########## | 100% 
+tensorflow-1.12.0    | 4 KB      | ########## | 100% 
+numpy-1.18.1         | 5 KB      | ########## | 100% 
+markdown-3.1.1       | 116 KB    | ########## | 100% 
+mkl_random-1.1.0     | 324 KB    | ########## | 100% 
+grpcio-1.16.1        | 984 KB    | ########## | 100% 
+protobuf-3.11.3      | 640 KB    | ########## | 100% 
+numpy-base-1.18.1    | 4.2 MB    | ########## | 100% 
+libstdcxx-ng-9.1.0   | 3.1 MB    | ########## | 100% 
+_tflow_select-2.1.0  | 2 KB      | ########## | 100% 
+tensorflow-base-1.12 | 102.7 MB  | ########## | 100% 
+keras-preprocessing- | 36 KB     | ########## | 100% 
+keras-applications-1 | 33 KB     | ########## | 100% 
+termcolor-1.1.0      | 8 KB      | ########## | 100% 
+wheel-0.34.2         | 51 KB     | ########## | 100% 
+six-1.14.0           | 27 KB     | ########## | 100% 
+scipy-1.4.1          | 14.6 MB   | ########## | 100% 
+openssl-1.1.1d       | 2.5 MB    | ########## | 100% 
+ca-certificates-2020 | 125 KB    | ########## | 100% 
+intel-openmp-2020.0  | 756 KB    | ########## | 100% 
+absl-py-0.9.0        | 167 KB    | ########## | 100% 
+cudnn-7.6.5          | 142.7 MB  | ########## | 100% 
+certifi-2019.11.28   | 153 KB    | ########## | 100% 
+tensorboard-1.12.2   | 3.0 MB    | ########## | 100% 
+ld_impl_linux-64-2.3 | 568 KB    | ########## | 100% 
+python-3.6.10        | 29.7 MB   | ########## | 100% 
+hdf5-1.10.4          | 3.9 MB    | ########## | 100% 
+cupti-9.2.148        | 1.5 MB    | ########## | 100% 
+c-ares-1.15.0        | 89 KB     | ########## | 100% 
+blas-1.0             | 6 KB      | ########## | 100% 
+werkzeug-1.0.0       | 240 KB    | ########## | 100% 
+h5py-2.10.0          | 1.0 MB    | ########## | 100% 
+mkl_fft-1.0.15       | 155 KB    | ########## | 100% 
+cudatoolkit-9.2      | 233.9 MB  | ########## | 100% 
+mkl-service-2.3.0    | 219 KB    | ########## | 100% 
+tensorflow-gpu-1.12. | 3 KB      | ########## | 100% 
+libprotobuf-3.11.3   | 2.9 MB    | ########## | 100% 
+pip-20.0.2           | 1.7 MB    | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate aida-env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+Removing intermediate container a955ea2557ce
+ ---> e80a19fdd895
+Step 18/21 : RUN echo "conda activate aida-env" >> ~/.bashrc
+ ---> Running in 5f62bda9d88b
+Removing intermediate container 5f62bda9d88b
+ ---> fab0439500eb
+Step 19/21 : COPY . .
+ ---> 33ae593b1ad4
+Step 20/21 : EXPOSE 8082
+ ---> Running in ee80d4509528
+Removing intermediate container ee80d4509528
+ ---> df05afb6bfa9
+Step 21/21 : CMD [ "/bin/bash", "" ]
+ ---> Running in 57633c739c9d
+Removing intermediate container 57633c739c9d
+ ---> f1da8265da63
+Successfully built f1da8265da63
+Successfully tagged aida-col-fb:latest
+[napiersk@gaia01 aida_face_building]$ docker run -itd --gpus 1 --name col-fb5 aida-col-fb /bin/bash
+395e41b83e1447e701786817c8cb60b50994ed8808de55c0d345305116399117
+[napiersk@gaia01 aida_face_building]$ docker exec -it col-fb5 /bin/bash
+(aida-env) root@395e41b83e14:/aida/src# python ./smoke-test.py 
+begin smoke test
+2020-02-14 17:17:12.390034: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-02-14 17:17:13.896585: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-02-14 17:17:13.896701: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-02-14 17:17:14.554188: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-14 17:17:14.554278: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-02-14 17:17:14.554303: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-02-14 17:17:14.554583: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 10232 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+<<< See GPU info above >>>
+end smoke test
+(aida-env) root@395e41b83e14:/aida/src# exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ docker build . --tag cu-fb
+Sending build context to Docker daemon  118.7MB
+Step 1/22 : FROM nvidia/cuda:10.2-base-ubuntu16.04
+ ---> 1f1787acfb4e
+Step 2/22 : LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
+ ---> Using cache
+ ---> 7a3cc9966d90
+Step 3/22 : WORKDIR /aida/src/
+ ---> Using cache
+ ---> 20e2d9c53a5f
+Step 4/22 : RUN apt-get update && apt-get install -y apt-utils wget bzip2 tree nano git
+ ---> Using cache
+ ---> a5ad1ad3542e
+Step 5/22 : RUN wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.1-Linux-x86_64.sh
+ ---> Using cache
+ ---> 62a709d27038
+Step 6/22 : RUN chmod +x ./Miniconda3-4.5.1-Linux-x86_64.sh
+ ---> Using cache
+ ---> c7eb3888a1c3
+Step 7/22 : RUN ./Miniconda3-4.5.1-Linux-x86_64.sh -b -p ~/conda
+ ---> Using cache
+ ---> bc4009538bde
+Step 8/22 : RUN echo ". /root/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+ ---> Using cache
+ ---> 8bc142803c6e
+Step 9/22 : ENV PATH="/root/conda/bin:${PATH}"
+ ---> Running in 780b6dc4d5d7
+Removing intermediate container 780b6dc4d5d7
+ ---> 8c1df232e71e
+Step 10/22 : RUN echo $PATH
+ ---> Running in 878d0728a165
+/root/conda/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Removing intermediate container 878d0728a165
+ ---> 231be47f743b
+Step 11/22 : RUN conda update -n base -c defaults conda && conda -V && conda install setuptools
+ ---> Running in a8fb3d82c0c6
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /root/conda
+
+  added / updated specs: 
+    - conda
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    enum34-1.1.6               |           py27_1          57 KB
+    tk-8.5.18                  |                0         1.9 MB
+    pip-9.0.1                  |           py27_1         1.6 MB
+    asn1crypto-1.3.0           |           py27_0         164 KB
+    certifi-2019.11.28         |           py27_0         156 KB
+    wheel-0.33.6               |           py27_0          40 KB
+    libgcc-ng-9.1.0            |       hdf63c60_0         8.1 MB
+    ncurses-6.1                |       hf484d3e_0         943 KB
+    cryptography-2.3.1         |   py27hc365091_0         576 KB
+    readline-6.2               |                2         606 KB
+    setuptools-44.0.0          |           py27_0         647 KB
+    urllib3-1.25.7             |           py27_0         164 KB
+    ruamel_yaml-0.15.87        |   py27h7b6447c_0         255 KB
+    _libgcc_mutex-0.1          |             main           3 KB
+    cffi-1.13.2                |   py27h2e261b9_0         221 KB
+    zlib-1.2.11                |       h7b6447c_3         120 KB
+    python-2.7.11              |                0        13.1 MB
+    idna-2.8                   |           py27_0         133 KB
+    ipaddress-1.0.23           |             py_0          23 KB
+    sqlite-3.31.1              |       h7b6447c_0         2.0 MB
+    conda-4.3.25               |           py27_0         494 KB
+    pycosat-0.6.2              |           py27_0         194 KB
+    pyopenssl-19.0.0           |           py27_0          80 KB
+    ca-certificates-2020.1.1   |                0         132 KB
+    pysocks-1.7.1              |           py27_0          30 KB
+    libedit-3.1.20181209       |       hc058e9b_0         188 KB
+    openssl-1.0.2u             |       h7b6447c_0         3.1 MB
+    pycparser-2.19             |             py_0          89 KB
+    chardet-3.0.4              |        py27_1003         186 KB
+    six-1.13.0                 |           py27_0          26 KB
+    requests-2.22.0            |           py27_1          89 KB
+    ------------------------------------------------------------
+                                           Total:        35.2 MB
+
+The following NEW packages will be INSTALLED:
+
+    _libgcc_mutex:   0.1-main              
+    enum34:          1.1.6-py27_1          
+    ipaddress:       1.0.23-py_0           
+
+The following packages will be UPDATED:
+
+    asn1crypto:      0.24.0-py36_0          --> 1.3.0-py27_0           
+    ca-certificates: 2018.03.07-0           --> 2020.1.1-0             
+    certifi:         2018.4.16-py36_0       --> 2019.11.28-py27_0      
+    cffi:            1.11.5-py36h9745a5d_0  --> 1.13.2-py27h2e261b9_0  
+    chardet:         3.0.4-py36h0f667ec_1   --> 3.0.4-py27_1003        
+    cryptography:    2.2.2-py36h14c3975_0   --> 2.3.1-py27hc365091_0   
+    idna:            2.6-py36h82fb2a8_1     --> 2.8-py27_0             
+    libedit:         3.1-heed3624_0         --> 3.1.20181209-hc058e9b_0
+    libgcc-ng:       7.2.0-hdf63c60_3       --> 9.1.0-hdf63c60_0       
+    ncurses:         6.0-h9df7e31_2         --> 6.1-hf484d3e_0         
+    openssl:         1.0.2o-h20670df_0      --> 1.0.2u-h7b6447c_0      
+    pycparser:       2.18-py36hf9f622e_1    --> 2.19-py_0              
+    pyopenssl:       17.5.0-py36h20ba746_0  --> 19.0.0-py27_0          
+    pysocks:         1.6.8-py36_0           --> 1.7.1-py27_0           
+    requests:        2.18.4-py36he2e5f8d_1  --> 2.22.0-py27_1          
+    ruamel_yaml:     0.15.35-py36h14c3975_1 --> 0.15.87-py27h7b6447c_0 
+    setuptools:      39.0.1-py36_0          --> 44.0.0-py27_0          
+    six:             1.11.0-py36h372c433_1  --> 1.13.0-py27_0          
+    sqlite:          3.23.1-he433501_0      --> 3.31.1-h7b6447c_0      
+    urllib3:         1.22-py36hbe7ace6_0    --> 1.25.7-py27_0          
+    wheel:           0.31.0-py36_0          --> 0.33.6-py27_0          
+    zlib:            1.2.11-ha838bed_2      --> 1.2.11-h7b6447c_3      
+
+The following packages will be DOWNGRADED:
+
+    conda:           4.5.1-py36_0           --> 4.3.25-py27_0          
+    pip:             9.0.3-py36_0           --> 9.0.1-py27_1           
+    pycosat:         0.6.3-py36h0a5515d_0   --> 0.6.2-py27_0           
+    python:          3.6.5-hc3d631a_0       --> 2.7.11-0               
+    readline:        7.0-ha6073c6_4         --> 6.2-2                  
+    tk:              8.6.7-hc745277_3       --> 8.5.18-0               
+
+Proceed ([y]/n)? 
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.5.1
+  latest version: 4.8.2
+
+Please update conda by running
+
+    $ conda update -n base conda
+
+
+enum34 1.1.6########## | 100% 
+tk 8.5.18########## | 100% 
+pip 9.0.1########## | 100% 
+asn1crypto 1.3.0########## | 100% 
+certifi 2019.11.28########## | 100% 
+wheel 0.33.6########## | 100% 
+libgcc-ng 9.1.0########## | 100% 
+ncurses 6.1########## | 100% 
+cryptography 2.3.1########## | 100% 
+readline 6.2########## | 100% 
+setuptools 44.0.0########## | 100% 
+urllib3 1.25.7########## | 100% 
+ruamel_yaml 0.15.87########## | 100% 
+_libgcc_mutex 0.1########## | 100% 
+cffi 1.13.2########## | 100% 
+zlib 1.2.11########## | 100% 
+python 2.7.11########## | 100% 
+idna 2.8########## | 100% 
+ipaddress 1.0.23########## | 100% 
+sqlite 3.31.1########## | 100% 
+conda 4.3.25########## | 100% 
+pycosat 0.6.2########## | 100% 
+pyopenssl 19.0.0########## | 100% 
+ca-certificates 2020.1.1########## | 100% 
+pysocks 1.7.1########## | 100% 
+libedit 3.1.20181209########## | 100% 
+openssl 1.0.2u########## | 100% 
+pycparser 2.19########## | 100% 
+chardet 3.0.4########## | 100% 
+six 1.13.0########## | 100% 
+requests 2.22.0########## | 100% 
+Downloading and Extracting Packages
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+
+conda 4.3.25
+Fetching package metadata .........
+Solving package specifications: .
+
+Package plan for installation in environment /root/conda:
+
+The following packages will be UPDATED:
+
+    conda:       4.3.25-py27_0                                              --> 4.3.30-py27h6ae6dc7_0
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+    conda-env:   2.6.0-h36134e3_1       https://repo.continuum.io/pkgs/main --> 2.6.0-0              
+    libffi:      3.2.1-hd88cf55_4       https://repo.continuum.io/pkgs/main --> 3.2.1-1              
+    ruamel_yaml: 0.15.87-py27h7b6447c_0 https://repo.anaconda.com/pkgs/main --> 0.11.14-py27_1       
+    setuptools:  44.0.0-py27_0          https://repo.anaconda.com/pkgs/main --> 36.4.0-py27_1        
+    xz:          5.2.3-h55aa19d_2       https://repo.continuum.io/pkgs/main --> 5.2.3-0              
+    yaml:        0.1.7-had09818_2       https://repo.continuum.io/pkgs/main --> 0.1.6-0              
+
+Proceed ([y]/n)? 
+conda-env-2.6. 100% |###############################| Time: 0:00:00 253.92 kB/s
+libffi-3.2.1-1 100% |###############################| Time: 0:00:00  12.15 MB/s
+xz-5.2.3-0.tar 100% |###############################| Time: 0:00:00  35.02 MB/s
+yaml-0.1.6-0.t 100% |###############################| Time: 0:00:00  42.78 MB/s
+ruamel_yaml-0. 100% |###############################| Time: 0:00:00  40.08 MB/s
+setuptools-36. 100% |###############################| Time: 0:00:00  19.38 MB/s
+conda-4.3.30-p 100% |###############################| Time: 0:00:00  28.10 MB/s
+Removing intermediate container a8fb3d82c0c6
+ ---> b459acaed36d
+Step 12/22 : COPY aida-env.txt ./
+ ---> 7684299af332
+Step 13/22 : RUN conda create --name aida-env --file ./aida-env.txt python=3.6
+ ---> Running in e6c71e9b02c2
+Fetching package metadata ...........
+Solving package specifications: .
+
+Package plan for installation in environment /root/conda/envs/aida-env:
+
+The following NEW packages will be INSTALLED:
+
+    _libgcc_mutex:       0.1-main                 
+    _tflow_select:       2.1.0-gpu                
+    absl-py:             0.9.0-py36_0             
+    astor:               0.8.0-py36_0             
+    blas:                1.0-mkl                  
+    bzip2:               1.0.8-h7b6447c_0         
+    c-ares:              1.15.0-h7b6447c_1001     
+    ca-certificates:     2020.1.1-0               
+    cairo:               1.14.12-h8948797_3       
+    certifi:             2019.11.28-py36_0        
+    cudatoolkit:         9.2-0                    
+    cudnn:               7.6.5-cuda9.2_0          
+    cupti:               9.2.148-0                
+    ffmpeg:              4.0-hcdf2ecd_0           
+    fontconfig:          2.13.0-h9420a91_0        
+    freeglut:            3.0.0-hf484d3e_5         
+    freetype:            2.9.1-h8a8886c_1         
+    gast:                0.3.3-py_0               
+    glib:                2.63.1-h5a9c865_0        
+    graphite2:           1.3.13-h23475e2_0        
+    grpcio:              1.27.2-py36hf8bcb03_0    
+    h5py:                2.8.0-py36h61e79e4_3     
+    harfbuzz:            1.8.8-hffaf4a1_0         
+    hdf5:                1.8.20-hba1933b_1        
+    icu:                 58.2-h9c2bf20_1          
+    intel-openmp:        2020.0-166               
+    jasper:              2.0.14-h07fcdf6_1        
+    joblib:              0.14.1-py_0              
+    jpeg:                9b-h024ee3a_2            
+    keras-applications:  1.0.8-py_0               
+    keras-preprocessing: 1.1.0-py_1               
+    ld_impl_linux-64:    2.33.1-h53a641e_7        
+    libedit:             3.1.20181209-hc058e9b_0  
+    libffi:              3.2.1-hd88cf55_4         
+    libgcc-ng:           9.1.0-hdf63c60_0         
+    libgfortran-ng:      7.3.0-hdf63c60_0         
+    libglu:              9.0.0-hf484d3e_1         
+    libopencv:           3.4.2-h765d7f9_1         
+    libopus:             1.3-h7b6447c_0           
+    libpng:              1.6.37-hbc83047_0        
+    libprotobuf:         3.11.4-hd408876_0        
+    libstdcxx-ng:        9.1.0-hdf63c60_0         
+    libtiff:             4.1.0-h2733197_0         
+    libuuid:             1.0.3-h1bed415_2         
+    libvpx:              1.7.0-h439df22_0         
+    libxcb:              1.13-h1bed415_1          
+    libxml2:             2.9.9-hea5a465_1         
+    markdown:            3.1.1-py36_0             
+    mkl:                 2020.0-166               
+    mkl-service:         2.3.0-py36he904b0f_0     
+    mkl_fft:             1.0.15-py36ha843d7b_0    
+    mkl_random:          1.1.0-py36hd6b4f25_0     
+    ncurses:             6.2-he6710b0_0           
+    numpy:               1.16.2-py36h7e9f1db_0    
+    numpy-base:          1.16.2-py36hde5b4d6_0    
+    opencv:              3.4.2-py36h40b0b35_1     
+    openssl:             1.1.1d-h7b6447c_4        
+    pcre:                8.43-he6710b0_0          
+    pip:                 20.0.2-py36_1            
+    pixman:              0.38.0-h7b6447c_0        
+    protobuf:            3.11.4-py36he6710b0_0    
+    py-opencv:           3.4.2-py36h765d7f9_1     
+    python:              3.6.10-h0371630_0        
+    readline:            7.0-h7b6447c_5           
+    scikit-learn:        0.22.1-py36hd81dba3_0    
+    scipy:               1.4.1-py36h0b6359f_0     
+    setuptools:          45.2.0-py36_0            
+    six:                 1.14.0-py36_0            
+    sqlite:              3.31.1-h7b6447c_0        
+    tensorboard:         1.12.2-py36he6710b0_0    
+    tensorflow:          1.12.0-gpu_py36he74679b_0
+    tensorflow-base:     1.12.0-gpu_py36had579c0_0
+    tensorflow-gpu:      1.12.0-h0d30ee6_0        
+    termcolor:           1.1.0-py36_1             
+    tk:                  8.6.8-hbc83047_0         
+    werkzeug:            1.0.0-py_0               
+    wheel:               0.34.2-py36_0            
+    xz:                  5.2.4-h14c3975_4         
+    zlib:                1.2.11-h7b6447c_3        
+    zstd:                1.3.7-h0b5b093_0         
+
+Proceed ([y]/n)? 
+_tflow_select- 100% |###############################| Time: 0:00:00   1.86 MB/s
+blas-1.0-mkl.t 100% |###############################| Time: 0:00:00   6.42 MB/s
+cudatoolkit-9. 100% |###############################| Time: 0:00:11  32.75 MB/s
+intel-openmp-2 100% |###############################| Time: 0:00:00  35.37 MB/s
+ld_impl_linux- 100% |###############################| Time: 0:00:00  34.78 MB/s
+libgfortran-ng 100% |###############################| Time: 0:00:00  36.14 MB/s
+libstdcxx-ng-9 100% |###############################| Time: 0:00:00  35.02 MB/s
+cudnn-7.6.5-cu 100% |###############################| Time: 0:00:06  32.17 MB/s
+cupti-9.2.148- 100% |###############################| Time: 0:00:00  39.64 MB/s
+mkl-2020.0-166 100% |###############################| Time: 0:00:06  32.34 MB/s
+bzip2-1.0.8-h7 100% |###############################| Time: 0:00:00  35.95 MB/s
+c-ares-1.15.0- 100% |###############################| Time: 0:00:00  35.16 MB/s
+freeglut-3.0.0 100% |###############################| Time: 0:00:00  40.66 MB/s
+graphite2-1.3. 100% |###############################| Time: 0:00:00  35.32 MB/s
+icu-58.2-h9c2b 100% |###############################| Time: 0:00:00  33.92 MB/s
+jpeg-9b-h024ee 100% |###############################| Time: 0:00:00  42.38 MB/s
+libglu-9.0.0-h 100% |###############################| Time: 0:00:00  31.00 MB/s
+libopus-1.3-h7 100% |###############################| Time: 0:00:00  35.72 MB/s
+libuuid-1.0.3- 100% |###############################| Time: 0:00:00  18.09 MB/s
+libvpx-1.7.0-h 100% |###############################| Time: 0:00:00  37.64 MB/s
+libxcb-1.13-h1 100% |###############################| Time: 0:00:00  34.55 MB/s
+ncurses-6.2-he 100% |###############################| Time: 0:00:00  37.44 MB/s
+openssl-1.1.1d 100% |###############################| Time: 0:00:00  37.76 MB/s
+pcre-8.43-he67 100% |###############################| Time: 0:00:00  43.19 MB/s
+pixman-0.38.0- 100% |###############################| Time: 0:00:00  45.64 MB/s
+xz-5.2.4-h14c3 100% |###############################| Time: 0:00:00  45.34 MB/s
+glib-2.63.1-h5 100% |###############################| Time: 0:00:00  40.34 MB/s
+hdf5-1.8.20-hb 100% |###############################| Time: 0:00:00  41.39 MB/s
+jasper-2.0.14- 100% |###############################| Time: 0:00:00  38.66 MB/s
+libpng-1.6.37- 100% |###############################| Time: 0:00:00  42.34 MB/s
+libprotobuf-3. 100% |###############################| Time: 0:00:00  28.99 MB/s
+libxml2-2.9.9- 100% |###############################| Time: 0:00:00  31.24 MB/s
+readline-7.0-h 100% |###############################| Time: 0:00:00  29.45 MB/s
+tk-8.6.8-hbc83 100% |###############################| Time: 0:00:00  35.36 MB/s
+zstd-1.3.7-h0b 100% |###############################| Time: 0:00:00  38.50 MB/s
+freetype-2.9.1 100% |###############################| Time: 0:00:00  39.46 MB/s
+libtiff-4.1.0- 100% |###############################| Time: 0:00:00  36.21 MB/s
+ffmpeg-4.0-hcd 100% |###############################| Time: 0:00:02  33.55 MB/s
+fontconfig-2.1 100% |###############################| Time: 0:00:00  25.78 MB/s
+python-3.6.10- 100% |###############################| Time: 0:00:01  31.89 MB/s
+astor-0.8.0-py 100% |###############################| Time: 0:00:00  28.95 MB/s
+cairo-1.14.12- 100% |###############################| Time: 0:00:00  31.48 MB/s
+certifi-2019.1 100% |###############################| Time: 0:00:00  41.10 MB/s
+gast-0.3.3-py_ 100% |###############################| Time: 0:00:00  18.96 MB/s
+numpy-base-1.1 100% |###############################| Time: 0:00:00  30.21 MB/s
+six-1.14.0-py3 100% |###############################| Time: 0:00:00  23.73 MB/s
+termcolor-1.1. 100% |###############################| Time: 0:00:00   9.83 MB/s
+werkzeug-1.0.0 100% |###############################| Time: 0:00:00  43.32 MB/s
+absl-py-0.9.0- 100% |###############################| Time: 0:00:00  40.61 MB/s
+harfbuzz-1.8.8 100% |###############################| Time: 0:00:00  39.38 MB/s
+mkl-service-2. 100% |###############################| Time: 0:00:00  33.17 MB/s
+setuptools-45. 100% |###############################| Time: 0:00:00  39.24 MB/s
+grpcio-1.27.2- 100% |###############################| Time: 0:00:00  37.60 MB/s
+joblib-0.14.1- 100% |###############################| Time: 0:00:00  40.56 MB/s
+libopencv-3.4. 100% |###############################| Time: 0:00:01  30.13 MB/s
+markdown-3.1.1 100% |###############################| Time: 0:00:00  17.26 MB/s
+protobuf-3.11. 100% |###############################| Time: 0:00:00  34.18 MB/s
+wheel-0.34.2-p 100% |###############################| Time: 0:00:00  26.99 MB/s
+pip-20.0.2-py3 100% |###############################| Time: 0:00:00  29.45 MB/s
+h5py-2.8.0-py3 100% |###############################| Time: 0:00:00  30.52 MB/s
+keras-applicat 100% |###############################| Time: 0:00:00  21.12 MB/s
+mkl_fft-1.0.15 100% |###############################| Time: 0:00:00  19.01 MB/s
+mkl_random-1.1 100% |###############################| Time: 0:00:00  29.78 MB/s
+numpy-1.16.2-p 100% |###############################| Time: 0:00:00  28.45 MB/s
+py-opencv-3.4. 100% |###############################| Time: 0:00:00  32.89 MB/s
+scipy-1.4.1-py 100% |###############################| Time: 0:00:00  31.64 MB/s
+tensorboard-1. 100% |###############################| Time: 0:00:00  32.16 MB/s
+keras-preproce 100% |###############################| Time: 0:00:00  23.16 MB/s
+opencv-3.4.2-p 100% |###############################| Time: 0:00:00   9.38 MB/s
+scikit-learn-0 100% |###############################| Time: 0:00:00  29.80 MB/s
+tensorflow-bas 100% |###############################| Time: 0:00:06  33.60 MB/s
+tensorflow-1.1 100% |###############################| Time: 0:00:00   5.05 MB/s
+tensorflow-gpu 100% |###############################| Time: 0:00:00   3.16 MB/s
+#
+# To activate this environment, use:
+# > source activate aida-env
+#
+# To deactivate an active environment, use:
+# > source deactivate
+#
+
+Removing intermediate container e6c71e9b02c2
+ ---> a0150c2e6d35
+Step 14/22 : RUN echo "source activate aida-env" >> ~/.bashrc
+ ---> Running in 00134b281be8
+Removing intermediate container 00134b281be8
+ ---> b96cc9dd5770
+Step 15/22 : WORKDIR /home/brian/facenet-master/
+ ---> Running in 259713cbadb3
+Removing intermediate container 259713cbadb3
+ ---> 39b56c0036de
+Step 16/22 : RUN git clone https://github.com/davidsandberg/facenet.git
+ ---> Running in 17ad4eb82570
+Cloning into 'facenet'...
+Removing intermediate container 17ad4eb82570
+ ---> 13ad0f6005f3
+Step 17/22 : RUN ls -al /home/brian/facenet-master/
+ ---> Running in 5720232b564a
+total 4
+drwxr-xr-x 1 root root   29 Feb 26 18:45 .
+drwxr-xr-x 1 root root   36 Feb 26 18:45 ..
+drwxr-xr-x 9 root root 4096 Feb 26 18:45 facenet
+Removing intermediate container 5720232b564a
+ ---> d7a918c5c413
+Step 18/22 : ENV PYTHONPATH "/aida/src/:/aida/src/src/:/home/brian/facenet-master/"
+ ---> Running in 45de21f815a1
+Removing intermediate container 45de21f815a1
+ ---> eb6193a93396
+Step 19/22 : WORKDIR /aida/src/
+ ---> Running in 6f4b4ddcd434
+Removing intermediate container 6f4b4ddcd434
+ ---> 931ed532ad14
+Step 20/22 : COPY . .
+ ---> a9d61f058ef3
+Step 21/22 : EXPOSE 8082
+ ---> Running in 5a0e0f56b95e
+Removing intermediate container 5a0e0f56b95e
+ ---> ca2d71970792
+Step 22/22 : CMD [ "/bin/bash", "" ]
+ ---> Running in 9768346482b9
+Removing intermediate container 9768346482b9
+ ---> 935774fc01b3
+Successfully built 935774fc01b3
+Successfully tagged cu-fb:latest
+[napiersk@gaia01 aida_face_building]$ docker run -itd -v /scratch/napiersk/columbia/brian/AIDA_code_brian/results/:/home/brian/facenet-master/results/ -v /scratch/napiersk/columbia/brian/m18_imgs/:/home/brian/facenet-master/datasets/m18/m18/ -v /scratch/napiersk/columbia/brian/LDC2018E80_LORELEI_Background_KB/data/:/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/ --gpus 1 --name cu-fb-brian cu-fb /bin/bash
+10e4226ec2b9c46c8e1890c0e6458883985566781578022c3aa983dfc75c6670
+[napiersk@gaia01 aida_face_building]$ docker exec -it cu-fb-brian /bin/bash
+bash: /root/conda/etc/profile.d/conda.sh: No such file or directory
+(aida-env) root@10e4226ec2b9:/aida/src# python -V
+Python 3.6.10 :: Anaconda, Inc.
+(aida-env) root@10e4226ec2b9:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /home/brian/facenet-master/datasets/m18/m18 datasets/output-dir --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-02-26 18:46:36.872208: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-02-26 18:46:37.278008: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 5.03GiB
+2020-02-26 18:46:37.278127: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-02-26 18:46:38.334135: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-26 18:46:38.337588: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-02-26 18:46:38.337639: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-02-26 18:46:38.337893: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11019 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+2020-02-26 18:46:38.827580: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 10.76G (11554717696 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.829687: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 9.68G (10399245312 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.833646: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 8.72G (9359320064 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.837567: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 7.84G (8423387648 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.842790: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 7.06G (7581048832 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.845896: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 6.35G (6822943744 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.849419: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 5.72G (6140648960 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-02-26 18:46:38.852403: E tensorflow/stream_executor/cuda/cuda_driver.cc:806] failed to allocate 5.15G (5526583808 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+Total number of images: 0
+Number of successfully aligned images: 0
+(aida-env) root@10e4226ec2b9:/aida/src# CUDA_VISIBLE_DEVICES=1 python ./src/align/align_dataset_mtcnn.py /home/brian/facenet-master/datasets/m18/m18 datasets/output-dir --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-02-26 18:47:10.207545: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-02-26 18:47:10.323196: E tensorflow/stream_executor/cuda/cuda_driver.cc:300] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2020-02-26 18:47:10.323668: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:163] retrieving CUDA diagnostic information for host: 10e4226ec2b9
+2020-02-26 18:47:10.323888: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:170] hostname: 10e4226ec2b9
+2020-02-26 18:47:10.324244: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:194] libcuda reported version is: 440.44.0
+2020-02-26 18:47:10.324503: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:198] kernel reported version is: 440.44.0
+2020-02-26 18:47:10.324713: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:305] kernel version seems to match DSO: 440.44.0
+Total number of images: 0
+Number of successfully aligned images: 0
+(aida-env) root@10e4226ec2b9:/aida/src# python ./smoke-test.py 
+begin smoke test
+2020-02-26 18:47:51.457173: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-02-26 18:47:51.860497: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 5.03GiB
+2020-02-26 18:47:51.860619: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-02-26 18:47:52.838624: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-26 18:47:52.840449: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-02-26 18:47:52.840500: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-02-26 18:47:52.840928: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 4768 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+<<< See GPU info above >>>
+end smoke test
+(aida-env) root@10e4226ec2b9:/aida/src# cat ./smoke-test.py 
+print("begin smoke test")
+import sys
+#sys.path.append('/home/brian/facenet-master')
+import facenet
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+import tensorflow as tf
+tf.test.is_gpu_available()
+print("<<< See GPU info above >>>")
+print("end smoke test")
+(aida-env) root@10e4226ec2b9:/aida/src# exit

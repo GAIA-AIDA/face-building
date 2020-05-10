@@ -16,12 +16,16 @@ import tensorflow as tf
 import zipfile
 import os
 
+import sys
+sys.path.append('/aida/models') # point to your tensorflow dir
+sys.path.append('/aida/models/slim') # point ot your slim dir
+
 folder_path = sys.argv[1]#'/home/brian/facenet-master/datasets/m18'
 flag_dic_name = sys.argv[2]#'m18'
-building_list = sys.argv[3]
+building_list_out = sys.argv[3]
 
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
 #os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 if tf.test.gpu_device_name():
@@ -40,8 +44,8 @@ from PIL import Image
 sys.path.append("..")
 from object_detection.utils import ops as utils_ops
 
-if tf.__version__ < '1.4.0':
-  raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!')
+#if tf.__version__ < '1.4.0':
+#  raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!')
 
 
 # # Imports
@@ -52,7 +56,7 @@ if tf.__version__ < '1.4.0':
 
 
 # This is needed to display the images.
-get_ipython().run_line_magic('matplotlib', 'inline')
+#get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # ## Object detection imports
@@ -97,8 +101,8 @@ NUM_CLASSES = 90
 # In[5]:
 
 
-#opener = urllib.request.URLopener()
-#opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+opener = urllib.request.URLopener()
+opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
 tar_file = tarfile.open(MODEL_FILE)
 for file in tar_file.getmembers():
   file_name = os.path.basename(file.name)
@@ -261,7 +265,7 @@ with graph.as_default():
           image = Image.open(image_path)
           start_time = time.time()
 
-          print image_path
+          print (image_path)
           # the array based representation of the image will be used later in order to prepare the
           # result image with boxes and labels on it.
           image_np = load_image_into_numpy_array(image)
@@ -312,7 +316,7 @@ with open(flag_dic_name+'.pickle', 'wb') as f:
 
 
 #print(building_list)
-file1= open(building_list+'.txt','w')
+file1= open(building_list_out+'.txt','w')
 for name in building_list:
     file1.write(name+'\n')
 file1.close()

@@ -1,0 +1,738 @@
+
+[napiersk@gaia01 aida_face_building]$ docker run -itd --gpus 1 --name aida-fb6 \
+>  -v /scratch/napiersk/columbia/brian/AIDA_code_brian/models/facenet/:/data/models/facenet/ \
+>  -v /scratch/napiersk/columbia/home/brian/facenet-master/datasets/m18_f/:/data/jpgs/ \
+>  cu-fb /bin/bash
+3788a43bcc3bbf03d75d5fd7e1d7f8c752e3bc43c3a6f5f5189c6be650dff8f4
+[napiersk@gaia01 aida_face_building]$ docker exec -it aida-fb6 /bin/bash
+(aida-env) root@3788a43bcc3b:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /data/jpgs/v_RTN1vaMyVwYN9wwl datasets/latest --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-03-13 14:46:18.151747: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-13 14:46:19.971371: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-13 14:46:19.971499: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-13 14:46:20.773942: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-13 14:46:20.774059: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-13 14:46:20.774086: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-13 14:46:20.774373: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 4958 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_999.jpg
+Total number of images: 1
+Number of successfully aligned images: 1
+(aida-env) root@3788a43bcc3b:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/classifier.py CLASSIFY datasets/latest /data/models/facenet/20180402-114759/20180402-114759.pb /aida/src/models/google500_2_classifier.pkl classify-output.pkl --batch_size 1000 > results/classify-result.txt
+./src/classifier.py:59: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert(len(cls.image_paths)>0, 'There must be at least one image for each class in the dataset')
+2020-03-13 14:47:33.018131: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-13 14:47:34.620655: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-13 14:47:34.620768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-13 14:47:35.326896: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-13 14:47:35.326989: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-13 14:47:35.327014: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-13 14:47:35.327222: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10232 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+WARNING:tensorflow:From /aida/src/src/facenet.py:381: FastGFile.__init__ (from tensorflow.python.platform.gfile) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.gfile.GFile.
+/root/conda/envs/aida-env/lib/python3.6/site-packages/sklearn/base.py:253: UserWarning: Trying to unpickle estimator SVC from version 0.19.2 when using version 0.20.3. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+Traceback (most recent call last):
+  File "./src/classifier.py", line 200, in <module>
+    main(parse_arguments(sys.argv[1:]))
+  File "./src/classifier.py", line 122, in main
+    for i in range(len(predictions[1])):
+IndexError: index 1 is out of bounds for axis 0 with size 1
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl
+subset                       v_RTN1vaMyVwYN9wwl_1191.jpg  v_RTN1vaMyVwYN9wwl_227.jpg  v_RTN1vaMyVwYN9wwl_420.jpg  v_RTN1vaMyVwYN9wwl_614.jpg  v_RTN1vaMyVwYN9wwl_808.jpg
+v_RTN1vaMyVwYN9wwl_1.jpg     v_RTN1vaMyVwYN9wwl_1192.jpg  v_RTN1vaMyVwYN9wwl_228.jpg  v_RTN1vaMyVwYN9wwl_421.jpg  v_RTN1vaMyVwYN9wwl_615.jpg  v_RTN1vaMyVwYN9wwl_809.jpg
+v_RTN1vaMyVwYN9wwl_10.jpg    v_RTN1vaMyVwYN9wwl_1193.jpg  v_RTN1vaMyVwYN9wwl_229.jpg  v_RTN1vaMyVwYN9wwl_422.jpg  v_RTN1vaMyVwYN9wwl_616.jpg  v_RTN1vaMyVwYN9wwl_81.jpg
+v_RTN1vaMyVwYN9wwl_100.jpg   v_RTN1vaMyVwYN9wwl_1194.jpg  v_RTN1vaMyVwYN9wwl_23.jpg   v_RTN1vaMyVwYN9wwl_423.jpg  v_RTN1vaMyVwYN9wwl_617.jpg  v_RTN1vaMyVwYN9wwl_810.jpg
+v_RTN1vaMyVwYN9wwl_1000.jpg  v_RTN1vaMyVwYN9wwl_1195.jpg  v_RTN1vaMyVwYN9wwl_230.jpg  v_RTN1vaMyVwYN9wwl_424.jpg  v_RTN1vaMyVwYN9wwl_618.jpg  v_RTN1vaMyVwYN9wwl_811.jpg
+v_RTN1vaMyVwYN9wwl_1001.jpg  v_RTN1vaMyVwYN9wwl_1196.jpg  v_RTN1vaMyVwYN9wwl_231.jpg  v_RTN1vaMyVwYN9wwl_425.jpg  v_RTN1vaMyVwYN9wwl_619.jpg  v_RTN1vaMyVwYN9wwl_812.jpg
+v_RTN1vaMyVwYN9wwl_1002.jpg  v_RTN1vaMyVwYN9wwl_1197.jpg  v_RTN1vaMyVwYN9wwl_232.jpg  v_RTN1vaMyVwYN9wwl_426.jpg  v_RTN1vaMyVwYN9wwl_62.jpg   v_RTN1vaMyVwYN9wwl_813.jpg
+v_RTN1vaMyVwYN9wwl_1003.jpg  v_RTN1vaMyVwYN9wwl_1198.jpg  v_RTN1vaMyVwYN9wwl_233.jpg  v_RTN1vaMyVwYN9wwl_427.jpg  v_RTN1vaMyVwYN9wwl_620.jpg  v_RTN1vaMyVwYN9wwl_814.jpg
+v_RTN1vaMyVwYN9wwl_1004.jpg  v_RTN1vaMyVwYN9wwl_1199.jpg  v_RTN1vaMyVwYN9wwl_234.jpg  v_RTN1vaMyVwYN9wwl_428.jpg  v_RTN1vaMyVwYN9wwl_621.jpg  v_RTN1vaMyVwYN9wwl_815.jpg
+v_RTN1vaMyVwYN9wwl_1005.jpg  v_RTN1vaMyVwYN9wwl_12.jpg    v_RTN1vaMyVwYN9wwl_235.jpg  v_RTN1vaMyVwYN9wwl_429.jpg  v_RTN1vaMyVwYN9wwl_622.jpg  v_RTN1vaMyVwYN9wwl_816.jpg
+v_RTN1vaMyVwYN9wwl_1006.jpg  v_RTN1vaMyVwYN9wwl_120.jpg   v_RTN1vaMyVwYN9wwl_236.jpg  v_RTN1vaMyVwYN9wwl_43.jpg   v_RTN1vaMyVwYN9wwl_623.jpg  v_RTN1vaMyVwYN9wwl_817.jpg
+v_RTN1vaMyVwYN9wwl_1007.jpg  v_RTN1vaMyVwYN9wwl_1200.jpg  v_RTN1vaMyVwYN9wwl_237.jpg  v_RTN1vaMyVwYN9wwl_430.jpg  v_RTN1vaMyVwYN9wwl_624.jpg  v_RTN1vaMyVwYN9wwl_818.jpg
+v_RTN1vaMyVwYN9wwl_1008.jpg  v_RTN1vaMyVwYN9wwl_1201.jpg  v_RTN1vaMyVwYN9wwl_238.jpg  v_RTN1vaMyVwYN9wwl_431.jpg  v_RTN1vaMyVwYN9wwl_625.jpg  v_RTN1vaMyVwYN9wwl_819.jpg
+v_RTN1vaMyVwYN9wwl_1009.jpg  v_RTN1vaMyVwYN9wwl_1202.jpg  v_RTN1vaMyVwYN9wwl_239.jpg  v_RTN1vaMyVwYN9wwl_432.jpg  v_RTN1vaMyVwYN9wwl_626.jpg  v_RTN1vaMyVwYN9wwl_82.jpg
+v_RTN1vaMyVwYN9wwl_101.jpg   v_RTN1vaMyVwYN9wwl_1203.jpg  v_RTN1vaMyVwYN9wwl_24.jpg   v_RTN1vaMyVwYN9wwl_433.jpg  v_RTN1vaMyVwYN9wwl_627.jpg  v_RTN1vaMyVwYN9wwl_820.jpg
+v_RTN1vaMyVwYN9wwl_1010.jpg  v_RTN1vaMyVwYN9wwl_1204.jpg  v_RTN1vaMyVwYN9wwl_240.jpg  v_RTN1vaMyVwYN9wwl_434.jpg  v_RTN1vaMyVwYN9wwl_628.jpg  v_RTN1vaMyVwYN9wwl_821.jpg
+v_RTN1vaMyVwYN9wwl_1011.jpg  v_RTN1vaMyVwYN9wwl_1205.jpg  v_RTN1vaMyVwYN9wwl_241.jpg  v_RTN1vaMyVwYN9wwl_435.jpg  v_RTN1vaMyVwYN9wwl_629.jpg  v_RTN1vaMyVwYN9wwl_822.jpg
+v_RTN1vaMyVwYN9wwl_1012.jpg  v_RTN1vaMyVwYN9wwl_1206.jpg  v_RTN1vaMyVwYN9wwl_242.jpg  v_RTN1vaMyVwYN9wwl_436.jpg  v_RTN1vaMyVwYN9wwl_63.jpg   v_RTN1vaMyVwYN9wwl_823.jpg
+v_RTN1vaMyVwYN9wwl_1013.jpg  v_RTN1vaMyVwYN9wwl_1207.jpg  v_RTN1vaMyVwYN9wwl_243.jpg  v_RTN1vaMyVwYN9wwl_437.jpg  v_RTN1vaMyVwYN9wwl_630.jpg  v_RTN1vaMyVwYN9wwl_824.jpg
+v_RTN1vaMyVwYN9wwl_1014.jpg  v_RTN1vaMyVwYN9wwl_1208.jpg  v_RTN1vaMyVwYN9wwl_244.jpg  v_RTN1vaMyVwYN9wwl_438.jpg  v_RTN1vaMyVwYN9wwl_631.jpg  v_RTN1vaMyVwYN9wwl_825.jpg
+v_RTN1vaMyVwYN9wwl_1015.jpg  v_RTN1vaMyVwYN9wwl_1209.jpg  v_RTN1vaMyVwYN9wwl_245.jpg  v_RTN1vaMyVwYN9wwl_439.jpg  v_RTN1vaMyVwYN9wwl_632.jpg  v_RTN1vaMyVwYN9wwl_826.jpg
+v_RTN1vaMyVwYN9wwl_1016.jpg  v_RTN1vaMyVwYN9wwl_121.jpg   v_RTN1vaMyVwYN9wwl_246.jpg  v_RTN1vaMyVwYN9wwl_44.jpg   v_RTN1vaMyVwYN9wwl_633.jpg  v_RTN1vaMyVwYN9wwl_827.jpg
+v_RTN1vaMyVwYN9wwl_1017.jpg  v_RTN1vaMyVwYN9wwl_1210.jpg  v_RTN1vaMyVwYN9wwl_247.jpg  v_RTN1vaMyVwYN9wwl_440.jpg  v_RTN1vaMyVwYN9wwl_634.jpg  v_RTN1vaMyVwYN9wwl_828.jpg
+v_RTN1vaMyVwYN9wwl_1018.jpg  v_RTN1vaMyVwYN9wwl_1211.jpg  v_RTN1vaMyVwYN9wwl_248.jpg  v_RTN1vaMyVwYN9wwl_441.jpg  v_RTN1vaMyVwYN9wwl_635.jpg  v_RTN1vaMyVwYN9wwl_829.jpg
+v_RTN1vaMyVwYN9wwl_1019.jpg  v_RTN1vaMyVwYN9wwl_1212.jpg  v_RTN1vaMyVwYN9wwl_249.jpg  v_RTN1vaMyVwYN9wwl_442.jpg  v_RTN1vaMyVwYN9wwl_636.jpg  v_RTN1vaMyVwYN9wwl_83.jpg
+v_RTN1vaMyVwYN9wwl_102.jpg   v_RTN1vaMyVwYN9wwl_1213.jpg  v_RTN1vaMyVwYN9wwl_25.jpg   v_RTN1vaMyVwYN9wwl_443.jpg  v_RTN1vaMyVwYN9wwl_637.jpg  v_RTN1vaMyVwYN9wwl_830.jpg
+v_RTN1vaMyVwYN9wwl_1020.jpg  v_RTN1vaMyVwYN9wwl_1214.jpg  v_RTN1vaMyVwYN9wwl_250.jpg  v_RTN1vaMyVwYN9wwl_444.jpg  v_RTN1vaMyVwYN9wwl_638.jpg  v_RTN1vaMyVwYN9wwl_831.jpg
+v_RTN1vaMyVwYN9wwl_1021.jpg  v_RTN1vaMyVwYN9wwl_1215.jpg  v_RTN1vaMyVwYN9wwl_251.jpg  v_RTN1vaMyVwYN9wwl_445.jpg  v_RTN1vaMyVwYN9wwl_639.jpg  v_RTN1vaMyVwYN9wwl_832.jpg
+v_RTN1vaMyVwYN9wwl_1022.jpg  v_RTN1vaMyVwYN9wwl_1216.jpg  v_RTN1vaMyVwYN9wwl_252.jpg  v_RTN1vaMyVwYN9wwl_446.jpg  v_RTN1vaMyVwYN9wwl_64.jpg   v_RTN1vaMyVwYN9wwl_833.jpg
+v_RTN1vaMyVwYN9wwl_1023.jpg  v_RTN1vaMyVwYN9wwl_1217.jpg  v_RTN1vaMyVwYN9wwl_253.jpg  v_RTN1vaMyVwYN9wwl_447.jpg  v_RTN1vaMyVwYN9wwl_640.jpg  v_RTN1vaMyVwYN9wwl_834.jpg
+v_RTN1vaMyVwYN9wwl_1024.jpg  v_RTN1vaMyVwYN9wwl_1218.jpg  v_RTN1vaMyVwYN9wwl_254.jpg  v_RTN1vaMyVwYN9wwl_448.jpg  v_RTN1vaMyVwYN9wwl_641.jpg  v_RTN1vaMyVwYN9wwl_835.jpg
+v_RTN1vaMyVwYN9wwl_1025.jpg  v_RTN1vaMyVwYN9wwl_1219.jpg  v_RTN1vaMyVwYN9wwl_255.jpg  v_RTN1vaMyVwYN9wwl_449.jpg  v_RTN1vaMyVwYN9wwl_642.jpg  v_RTN1vaMyVwYN9wwl_836.jpg
+v_RTN1vaMyVwYN9wwl_1026.jpg  v_RTN1vaMyVwYN9wwl_122.jpg   v_RTN1vaMyVwYN9wwl_256.jpg  v_RTN1vaMyVwYN9wwl_45.jpg   v_RTN1vaMyVwYN9wwl_643.jpg  v_RTN1vaMyVwYN9wwl_837.jpg
+v_RTN1vaMyVwYN9wwl_1027.jpg  v_RTN1vaMyVwYN9wwl_1220.jpg  v_RTN1vaMyVwYN9wwl_257.jpg  v_RTN1vaMyVwYN9wwl_450.jpg  v_RTN1vaMyVwYN9wwl_644.jpg  v_RTN1vaMyVwYN9wwl_838.jpg
+v_RTN1vaMyVwYN9wwl_1028.jpg  v_RTN1vaMyVwYN9wwl_1221.jpg  v_RTN1vaMyVwYN9wwl_258.jpg  v_RTN1vaMyVwYN9wwl_451.jpg  v_RTN1vaMyVwYN9wwl_645.jpg  v_RTN1vaMyVwYN9wwl_839.jpg
+v_RTN1vaMyVwYN9wwl_1029.jpg  v_RTN1vaMyVwYN9wwl_1222.jpg  v_RTN1vaMyVwYN9wwl_259.jpg  v_RTN1vaMyVwYN9wwl_452.jpg  v_RTN1vaMyVwYN9wwl_646.jpg  v_RTN1vaMyVwYN9wwl_84.jpg
+v_RTN1vaMyVwYN9wwl_103.jpg   v_RTN1vaMyVwYN9wwl_1223.jpg  v_RTN1vaMyVwYN9wwl_26.jpg   v_RTN1vaMyVwYN9wwl_453.jpg  v_RTN1vaMyVwYN9wwl_647.jpg  v_RTN1vaMyVwYN9wwl_840.jpg
+v_RTN1vaMyVwYN9wwl_1030.jpg  v_RTN1vaMyVwYN9wwl_1224.jpg  v_RTN1vaMyVwYN9wwl_260.jpg  v_RTN1vaMyVwYN9wwl_454.jpg  v_RTN1vaMyVwYN9wwl_648.jpg  v_RTN1vaMyVwYN9wwl_841.jpg
+v_RTN1vaMyVwYN9wwl_1031.jpg  v_RTN1vaMyVwYN9wwl_1225.jpg  v_RTN1vaMyVwYN9wwl_261.jpg  v_RTN1vaMyVwYN9wwl_455.jpg  v_RTN1vaMyVwYN9wwl_649.jpg  v_RTN1vaMyVwYN9wwl_842.jpg
+v_RTN1vaMyVwYN9wwl_1032.jpg  v_RTN1vaMyVwYN9wwl_1226.jpg  v_RTN1vaMyVwYN9wwl_262.jpg  v_RTN1vaMyVwYN9wwl_456.jpg  v_RTN1vaMyVwYN9wwl_65.jpg   v_RTN1vaMyVwYN9wwl_843.jpg
+v_RTN1vaMyVwYN9wwl_1033.jpg  v_RTN1vaMyVwYN9wwl_1227.jpg  v_RTN1vaMyVwYN9wwl_263.jpg  v_RTN1vaMyVwYN9wwl_457.jpg  v_RTN1vaMyVwYN9wwl_650.jpg  v_RTN1vaMyVwYN9wwl_844.jpg
+v_RTN1vaMyVwYN9wwl_1034.jpg  v_RTN1vaMyVwYN9wwl_1228.jpg  v_RTN1vaMyVwYN9wwl_264.jpg  v_RTN1vaMyVwYN9wwl_458.jpg  v_RTN1vaMyVwYN9wwl_651.jpg  v_RTN1vaMyVwYN9wwl_845.jpg
+v_RTN1vaMyVwYN9wwl_1035.jpg  v_RTN1vaMyVwYN9wwl_1229.jpg  v_RTN1vaMyVwYN9wwl_265.jpg  v_RTN1vaMyVwYN9wwl_459.jpg  v_RTN1vaMyVwYN9wwl_652.jpg  v_RTN1vaMyVwYN9wwl_846.jpg
+v_RTN1vaMyVwYN9wwl_1036.jpg  v_RTN1vaMyVwYN9wwl_123.jpg   v_RTN1vaMyVwYN9wwl_266.jpg  v_RTN1vaMyVwYN9wwl_46.jpg   v_RTN1vaMyVwYN9wwl_653.jpg  v_RTN1vaMyVwYN9wwl_847.jpg
+v_RTN1vaMyVwYN9wwl_1037.jpg  v_RTN1vaMyVwYN9wwl_1230.jpg  v_RTN1vaMyVwYN9wwl_267.jpg  v_RTN1vaMyVwYN9wwl_460.jpg  v_RTN1vaMyVwYN9wwl_654.jpg  v_RTN1vaMyVwYN9wwl_848.jpg
+v_RTN1vaMyVwYN9wwl_1038.jpg  v_RTN1vaMyVwYN9wwl_1231.jpg  v_RTN1vaMyVwYN9wwl_268.jpg  v_RTN1vaMyVwYN9wwl_461.jpg  v_RTN1vaMyVwYN9wwl_655.jpg  v_RTN1vaMyVwYN9wwl_849.jpg
+v_RTN1vaMyVwYN9wwl_1039.jpg  v_RTN1vaMyVwYN9wwl_1232.jpg  v_RTN1vaMyVwYN9wwl_269.jpg  v_RTN1vaMyVwYN9wwl_462.jpg  v_RTN1vaMyVwYN9wwl_656.jpg  v_RTN1vaMyVwYN9wwl_85.jpg
+v_RTN1vaMyVwYN9wwl_104.jpg   v_RTN1vaMyVwYN9wwl_1233.jpg  v_RTN1vaMyVwYN9wwl_27.jpg   v_RTN1vaMyVwYN9wwl_463.jpg  v_RTN1vaMyVwYN9wwl_657.jpg  v_RTN1vaMyVwYN9wwl_850.jpg
+v_RTN1vaMyVwYN9wwl_1040.jpg  v_RTN1vaMyVwYN9wwl_1234.jpg  v_RTN1vaMyVwYN9wwl_270.jpg  v_RTN1vaMyVwYN9wwl_464.jpg  v_RTN1vaMyVwYN9wwl_658.jpg  v_RTN1vaMyVwYN9wwl_851.jpg
+v_RTN1vaMyVwYN9wwl_1041.jpg  v_RTN1vaMyVwYN9wwl_1235.jpg  v_RTN1vaMyVwYN9wwl_271.jpg  v_RTN1vaMyVwYN9wwl_465.jpg  v_RTN1vaMyVwYN9wwl_659.jpg  v_RTN1vaMyVwYN9wwl_852.jpg
+v_RTN1vaMyVwYN9wwl_1042.jpg  v_RTN1vaMyVwYN9wwl_1236.jpg  v_RTN1vaMyVwYN9wwl_272.jpg  v_RTN1vaMyVwYN9wwl_466.jpg  v_RTN1vaMyVwYN9wwl_66.jpg   v_RTN1vaMyVwYN9wwl_853.jpg
+v_RTN1vaMyVwYN9wwl_1043.jpg  v_RTN1vaMyVwYN9wwl_1237.jpg  v_RTN1vaMyVwYN9wwl_273.jpg  v_RTN1vaMyVwYN9wwl_467.jpg  v_RTN1vaMyVwYN9wwl_660.jpg  v_RTN1vaMyVwYN9wwl_854.jpg
+v_RTN1vaMyVwYN9wwl_1044.jpg  v_RTN1vaMyVwYN9wwl_1238.jpg  v_RTN1vaMyVwYN9wwl_274.jpg  v_RTN1vaMyVwYN9wwl_468.jpg  v_RTN1vaMyVwYN9wwl_661.jpg  v_RTN1vaMyVwYN9wwl_855.jpg
+v_RTN1vaMyVwYN9wwl_1045.jpg  v_RTN1vaMyVwYN9wwl_1239.jpg  v_RTN1vaMyVwYN9wwl_275.jpg  v_RTN1vaMyVwYN9wwl_469.jpg  v_RTN1vaMyVwYN9wwl_662.jpg  v_RTN1vaMyVwYN9wwl_856.jpg
+v_RTN1vaMyVwYN9wwl_1046.jpg  v_RTN1vaMyVwYN9wwl_124.jpg   v_RTN1vaMyVwYN9wwl_276.jpg  v_RTN1vaMyVwYN9wwl_47.jpg   v_RTN1vaMyVwYN9wwl_663.jpg  v_RTN1vaMyVwYN9wwl_857.jpg
+v_RTN1vaMyVwYN9wwl_1047.jpg  v_RTN1vaMyVwYN9wwl_1240.jpg  v_RTN1vaMyVwYN9wwl_277.jpg  v_RTN1vaMyVwYN9wwl_470.jpg  v_RTN1vaMyVwYN9wwl_664.jpg  v_RTN1vaMyVwYN9wwl_858.jpg
+v_RTN1vaMyVwYN9wwl_1048.jpg  v_RTN1vaMyVwYN9wwl_1241.jpg  v_RTN1vaMyVwYN9wwl_278.jpg  v_RTN1vaMyVwYN9wwl_471.jpg  v_RTN1vaMyVwYN9wwl_665.jpg  v_RTN1vaMyVwYN9wwl_859.jpg
+v_RTN1vaMyVwYN9wwl_1049.jpg  v_RTN1vaMyVwYN9wwl_1242.jpg  v_RTN1vaMyVwYN9wwl_279.jpg  v_RTN1vaMyVwYN9wwl_472.jpg  v_RTN1vaMyVwYN9wwl_666.jpg  v_RTN1vaMyVwYN9wwl_86.jpg
+v_RTN1vaMyVwYN9wwl_105.jpg   v_RTN1vaMyVwYN9wwl_1243.jpg  v_RTN1vaMyVwYN9wwl_28.jpg   v_RTN1vaMyVwYN9wwl_473.jpg  v_RTN1vaMyVwYN9wwl_667.jpg  v_RTN1vaMyVwYN9wwl_860.jpg
+v_RTN1vaMyVwYN9wwl_1050.jpg  v_RTN1vaMyVwYN9wwl_1244.jpg  v_RTN1vaMyVwYN9wwl_280.jpg  v_RTN1vaMyVwYN9wwl_474.jpg  v_RTN1vaMyVwYN9wwl_668.jpg  v_RTN1vaMyVwYN9wwl_861.jpg
+v_RTN1vaMyVwYN9wwl_1051.jpg  v_RTN1vaMyVwYN9wwl_1245.jpg  v_RTN1vaMyVwYN9wwl_281.jpg  v_RTN1vaMyVwYN9wwl_475.jpg  v_RTN1vaMyVwYN9wwl_669.jpg  v_RTN1vaMyVwYN9wwl_862.jpg
+v_RTN1vaMyVwYN9wwl_1052.jpg  v_RTN1vaMyVwYN9wwl_1246.jpg  v_RTN1vaMyVwYN9wwl_282.jpg  v_RTN1vaMyVwYN9wwl_476.jpg  v_RTN1vaMyVwYN9wwl_67.jpg   v_RTN1vaMyVwYN9wwl_863.jpg
+v_RTN1vaMyVwYN9wwl_1053.jpg  v_RTN1vaMyVwYN9wwl_1247.jpg  v_RTN1vaMyVwYN9wwl_283.jpg  v_RTN1vaMyVwYN9wwl_477.jpg  v_RTN1vaMyVwYN9wwl_670.jpg  v_RTN1vaMyVwYN9wwl_864.jpg
+v_RTN1vaMyVwYN9wwl_1054.jpg  v_RTN1vaMyVwYN9wwl_1248.jpg  v_RTN1vaMyVwYN9wwl_284.jpg  v_RTN1vaMyVwYN9wwl_478.jpg  v_RTN1vaMyVwYN9wwl_671.jpg  v_RTN1vaMyVwYN9wwl_865.jpg
+v_RTN1vaMyVwYN9wwl_1055.jpg  v_RTN1vaMyVwYN9wwl_1249.jpg  v_RTN1vaMyVwYN9wwl_285.jpg  v_RTN1vaMyVwYN9wwl_479.jpg  v_RTN1vaMyVwYN9wwl_672.jpg  v_RTN1vaMyVwYN9wwl_866.jpg
+v_RTN1vaMyVwYN9wwl_1056.jpg  v_RTN1vaMyVwYN9wwl_125.jpg   v_RTN1vaMyVwYN9wwl_286.jpg  v_RTN1vaMyVwYN9wwl_48.jpg   v_RTN1vaMyVwYN9wwl_673.jpg  v_RTN1vaMyVwYN9wwl_867.jpg
+v_RTN1vaMyVwYN9wwl_1057.jpg  v_RTN1vaMyVwYN9wwl_1250.jpg  v_RTN1vaMyVwYN9wwl_287.jpg  v_RTN1vaMyVwYN9wwl_480.jpg  v_RTN1vaMyVwYN9wwl_674.jpg  v_RTN1vaMyVwYN9wwl_868.jpg
+v_RTN1vaMyVwYN9wwl_1058.jpg  v_RTN1vaMyVwYN9wwl_1251.jpg  v_RTN1vaMyVwYN9wwl_288.jpg  v_RTN1vaMyVwYN9wwl_481.jpg  v_RTN1vaMyVwYN9wwl_675.jpg  v_RTN1vaMyVwYN9wwl_869.jpg
+v_RTN1vaMyVwYN9wwl_1059.jpg  v_RTN1vaMyVwYN9wwl_1252.jpg  v_RTN1vaMyVwYN9wwl_289.jpg  v_RTN1vaMyVwYN9wwl_482.jpg  v_RTN1vaMyVwYN9wwl_676.jpg  v_RTN1vaMyVwYN9wwl_87.jpg
+v_RTN1vaMyVwYN9wwl_106.jpg   v_RTN1vaMyVwYN9wwl_1253.jpg  v_RTN1vaMyVwYN9wwl_29.jpg   v_RTN1vaMyVwYN9wwl_483.jpg  v_RTN1vaMyVwYN9wwl_677.jpg  v_RTN1vaMyVwYN9wwl_870.jpg
+v_RTN1vaMyVwYN9wwl_1060.jpg  v_RTN1vaMyVwYN9wwl_1254.jpg  v_RTN1vaMyVwYN9wwl_290.jpg  v_RTN1vaMyVwYN9wwl_484.jpg  v_RTN1vaMyVwYN9wwl_678.jpg  v_RTN1vaMyVwYN9wwl_871.jpg
+v_RTN1vaMyVwYN9wwl_1061.jpg  v_RTN1vaMyVwYN9wwl_1255.jpg  v_RTN1vaMyVwYN9wwl_291.jpg  v_RTN1vaMyVwYN9wwl_485.jpg  v_RTN1vaMyVwYN9wwl_679.jpg  v_RTN1vaMyVwYN9wwl_872.jpg
+v_RTN1vaMyVwYN9wwl_1062.jpg  v_RTN1vaMyVwYN9wwl_1256.jpg  v_RTN1vaMyVwYN9wwl_292.jpg  v_RTN1vaMyVwYN9wwl_486.jpg  v_RTN1vaMyVwYN9wwl_68.jpg   v_RTN1vaMyVwYN9wwl_873.jpg
+v_RTN1vaMyVwYN9wwl_1063.jpg  v_RTN1vaMyVwYN9wwl_1257.jpg  v_RTN1vaMyVwYN9wwl_293.jpg  v_RTN1vaMyVwYN9wwl_487.jpg  v_RTN1vaMyVwYN9wwl_680.jpg  v_RTN1vaMyVwYN9wwl_874.jpg
+v_RTN1vaMyVwYN9wwl_1064.jpg  v_RTN1vaMyVwYN9wwl_1258.jpg  v_RTN1vaMyVwYN9wwl_294.jpg  v_RTN1vaMyVwYN9wwl_488.jpg  v_RTN1vaMyVwYN9wwl_681.jpg  v_RTN1vaMyVwYN9wwl_875.jpg
+v_RTN1vaMyVwYN9wwl_1065.jpg  v_RTN1vaMyVwYN9wwl_1259.jpg  v_RTN1vaMyVwYN9wwl_295.jpg  v_RTN1vaMyVwYN9wwl_489.jpg  v_RTN1vaMyVwYN9wwl_682.jpg  v_RTN1vaMyVwYN9wwl_876.jpg
+v_RTN1vaMyVwYN9wwl_1066.jpg  v_RTN1vaMyVwYN9wwl_126.jpg   v_RTN1vaMyVwYN9wwl_296.jpg  v_RTN1vaMyVwYN9wwl_49.jpg   v_RTN1vaMyVwYN9wwl_683.jpg  v_RTN1vaMyVwYN9wwl_877.jpg
+v_RTN1vaMyVwYN9wwl_1067.jpg  v_RTN1vaMyVwYN9wwl_1260.jpg  v_RTN1vaMyVwYN9wwl_297.jpg  v_RTN1vaMyVwYN9wwl_490.jpg  v_RTN1vaMyVwYN9wwl_684.jpg  v_RTN1vaMyVwYN9wwl_878.jpg
+v_RTN1vaMyVwYN9wwl_1068.jpg  v_RTN1vaMyVwYN9wwl_1261.jpg  v_RTN1vaMyVwYN9wwl_298.jpg  v_RTN1vaMyVwYN9wwl_491.jpg  v_RTN1vaMyVwYN9wwl_685.jpg  v_RTN1vaMyVwYN9wwl_879.jpg
+v_RTN1vaMyVwYN9wwl_1069.jpg  v_RTN1vaMyVwYN9wwl_1262.jpg  v_RTN1vaMyVwYN9wwl_299.jpg  v_RTN1vaMyVwYN9wwl_492.jpg  v_RTN1vaMyVwYN9wwl_686.jpg  v_RTN1vaMyVwYN9wwl_88.jpg
+v_RTN1vaMyVwYN9wwl_107.jpg   v_RTN1vaMyVwYN9wwl_1263.jpg  v_RTN1vaMyVwYN9wwl_3.jpg    v_RTN1vaMyVwYN9wwl_493.jpg  v_RTN1vaMyVwYN9wwl_687.jpg  v_RTN1vaMyVwYN9wwl_880.jpg
+v_RTN1vaMyVwYN9wwl_1070.jpg  v_RTN1vaMyVwYN9wwl_1264.jpg  v_RTN1vaMyVwYN9wwl_30.jpg   v_RTN1vaMyVwYN9wwl_494.jpg  v_RTN1vaMyVwYN9wwl_688.jpg  v_RTN1vaMyVwYN9wwl_881.jpg
+v_RTN1vaMyVwYN9wwl_1071.jpg  v_RTN1vaMyVwYN9wwl_1265.jpg  v_RTN1vaMyVwYN9wwl_300.jpg  v_RTN1vaMyVwYN9wwl_495.jpg  v_RTN1vaMyVwYN9wwl_689.jpg  v_RTN1vaMyVwYN9wwl_882.jpg
+v_RTN1vaMyVwYN9wwl_1072.jpg  v_RTN1vaMyVwYN9wwl_1266.jpg  v_RTN1vaMyVwYN9wwl_301.jpg  v_RTN1vaMyVwYN9wwl_496.jpg  v_RTN1vaMyVwYN9wwl_69.jpg   v_RTN1vaMyVwYN9wwl_883.jpg
+v_RTN1vaMyVwYN9wwl_1073.jpg  v_RTN1vaMyVwYN9wwl_1267.jpg  v_RTN1vaMyVwYN9wwl_302.jpg  v_RTN1vaMyVwYN9wwl_497.jpg  v_RTN1vaMyVwYN9wwl_690.jpg  v_RTN1vaMyVwYN9wwl_884.jpg
+v_RTN1vaMyVwYN9wwl_1074.jpg  v_RTN1vaMyVwYN9wwl_1268.jpg  v_RTN1vaMyVwYN9wwl_303.jpg  v_RTN1vaMyVwYN9wwl_498.jpg  v_RTN1vaMyVwYN9wwl_691.jpg  v_RTN1vaMyVwYN9wwl_885.jpg
+v_RTN1vaMyVwYN9wwl_1075.jpg  v_RTN1vaMyVwYN9wwl_1269.jpg  v_RTN1vaMyVwYN9wwl_304.jpg  v_RTN1vaMyVwYN9wwl_499.jpg  v_RTN1vaMyVwYN9wwl_692.jpg  v_RTN1vaMyVwYN9wwl_886.jpg
+v_RTN1vaMyVwYN9wwl_1076.jpg  v_RTN1vaMyVwYN9wwl_127.jpg   v_RTN1vaMyVwYN9wwl_305.jpg  v_RTN1vaMyVwYN9wwl_5.jpg    v_RTN1vaMyVwYN9wwl_693.jpg  v_RTN1vaMyVwYN9wwl_887.jpg
+v_RTN1vaMyVwYN9wwl_1077.jpg  v_RTN1vaMyVwYN9wwl_1270.jpg  v_RTN1vaMyVwYN9wwl_306.jpg  v_RTN1vaMyVwYN9wwl_50.jpg   v_RTN1vaMyVwYN9wwl_694.jpg  v_RTN1vaMyVwYN9wwl_888.jpg
+v_RTN1vaMyVwYN9wwl_1078.jpg  v_RTN1vaMyVwYN9wwl_1271.jpg  v_RTN1vaMyVwYN9wwl_307.jpg  v_RTN1vaMyVwYN9wwl_500.jpg  v_RTN1vaMyVwYN9wwl_695.jpg  v_RTN1vaMyVwYN9wwl_889.jpg
+v_RTN1vaMyVwYN9wwl_1079.jpg  v_RTN1vaMyVwYN9wwl_1272.jpg  v_RTN1vaMyVwYN9wwl_308.jpg  v_RTN1vaMyVwYN9wwl_501.jpg  v_RTN1vaMyVwYN9wwl_696.jpg  v_RTN1vaMyVwYN9wwl_89.jpg
+v_RTN1vaMyVwYN9wwl_108.jpg   v_RTN1vaMyVwYN9wwl_1273.jpg  v_RTN1vaMyVwYN9wwl_309.jpg  v_RTN1vaMyVwYN9wwl_502.jpg  v_RTN1vaMyVwYN9wwl_697.jpg  v_RTN1vaMyVwYN9wwl_890.jpg
+v_RTN1vaMyVwYN9wwl_1080.jpg  v_RTN1vaMyVwYN9wwl_1274.jpg  v_RTN1vaMyVwYN9wwl_31.jpg   v_RTN1vaMyVwYN9wwl_503.jpg  v_RTN1vaMyVwYN9wwl_698.jpg  v_RTN1vaMyVwYN9wwl_891.jpg
+v_RTN1vaMyVwYN9wwl_1081.jpg  v_RTN1vaMyVwYN9wwl_1275.jpg  v_RTN1vaMyVwYN9wwl_310.jpg  v_RTN1vaMyVwYN9wwl_504.jpg  v_RTN1vaMyVwYN9wwl_699.jpg  v_RTN1vaMyVwYN9wwl_892.jpg
+v_RTN1vaMyVwYN9wwl_1082.jpg  v_RTN1vaMyVwYN9wwl_1276.jpg  v_RTN1vaMyVwYN9wwl_311.jpg  v_RTN1vaMyVwYN9wwl_505.jpg  v_RTN1vaMyVwYN9wwl_7.jpg    v_RTN1vaMyVwYN9wwl_893.jpg
+v_RTN1vaMyVwYN9wwl_1083.jpg  v_RTN1vaMyVwYN9wwl_1277.jpg  v_RTN1vaMyVwYN9wwl_312.jpg  v_RTN1vaMyVwYN9wwl_506.jpg  v_RTN1vaMyVwYN9wwl_70.jpg   v_RTN1vaMyVwYN9wwl_894.jpg
+v_RTN1vaMyVwYN9wwl_1084.jpg  v_RTN1vaMyVwYN9wwl_1278.jpg  v_RTN1vaMyVwYN9wwl_313.jpg  v_RTN1vaMyVwYN9wwl_507.jpg  v_RTN1vaMyVwYN9wwl_700.jpg  v_RTN1vaMyVwYN9wwl_895.jpg
+v_RTN1vaMyVwYN9wwl_1085.jpg  v_RTN1vaMyVwYN9wwl_1279.jpg  v_RTN1vaMyVwYN9wwl_314.jpg  v_RTN1vaMyVwYN9wwl_508.jpg  v_RTN1vaMyVwYN9wwl_701.jpg  v_RTN1vaMyVwYN9wwl_896.jpg
+v_RTN1vaMyVwYN9wwl_1086.jpg  v_RTN1vaMyVwYN9wwl_128.jpg   v_RTN1vaMyVwYN9wwl_315.jpg  v_RTN1vaMyVwYN9wwl_509.jpg  v_RTN1vaMyVwYN9wwl_702.jpg  v_RTN1vaMyVwYN9wwl_897.jpg
+v_RTN1vaMyVwYN9wwl_1087.jpg  v_RTN1vaMyVwYN9wwl_1280.jpg  v_RTN1vaMyVwYN9wwl_316.jpg  v_RTN1vaMyVwYN9wwl_51.jpg   v_RTN1vaMyVwYN9wwl_703.jpg  v_RTN1vaMyVwYN9wwl_898.jpg
+v_RTN1vaMyVwYN9wwl_1088.jpg  v_RTN1vaMyVwYN9wwl_1281.jpg  v_RTN1vaMyVwYN9wwl_317.jpg  v_RTN1vaMyVwYN9wwl_510.jpg  v_RTN1vaMyVwYN9wwl_704.jpg  v_RTN1vaMyVwYN9wwl_899.jpg
+v_RTN1vaMyVwYN9wwl_1089.jpg  v_RTN1vaMyVwYN9wwl_1282.jpg  v_RTN1vaMyVwYN9wwl_318.jpg  v_RTN1vaMyVwYN9wwl_511.jpg  v_RTN1vaMyVwYN9wwl_705.jpg  v_RTN1vaMyVwYN9wwl_9.jpg
+v_RTN1vaMyVwYN9wwl_109.jpg   v_RTN1vaMyVwYN9wwl_1283.jpg  v_RTN1vaMyVwYN9wwl_319.jpg  v_RTN1vaMyVwYN9wwl_512.jpg  v_RTN1vaMyVwYN9wwl_706.jpg  v_RTN1vaMyVwYN9wwl_90.jpg
+v_RTN1vaMyVwYN9wwl_1090.jpg  v_RTN1vaMyVwYN9wwl_1284.jpg  v_RTN1vaMyVwYN9wwl_32.jpg   v_RTN1vaMyVwYN9wwl_513.jpg  v_RTN1vaMyVwYN9wwl_707.jpg  v_RTN1vaMyVwYN9wwl_900.jpg
+v_RTN1vaMyVwYN9wwl_1091.jpg  v_RTN1vaMyVwYN9wwl_1285.jpg  v_RTN1vaMyVwYN9wwl_320.jpg  v_RTN1vaMyVwYN9wwl_514.jpg  v_RTN1vaMyVwYN9wwl_708.jpg  v_RTN1vaMyVwYN9wwl_901.jpg
+v_RTN1vaMyVwYN9wwl_1092.jpg  v_RTN1vaMyVwYN9wwl_1286.jpg  v_RTN1vaMyVwYN9wwl_321.jpg  v_RTN1vaMyVwYN9wwl_515.jpg  v_RTN1vaMyVwYN9wwl_709.jpg  v_RTN1vaMyVwYN9wwl_902.jpg
+v_RTN1vaMyVwYN9wwl_1093.jpg  v_RTN1vaMyVwYN9wwl_129.jpg   v_RTN1vaMyVwYN9wwl_322.jpg  v_RTN1vaMyVwYN9wwl_516.jpg  v_RTN1vaMyVwYN9wwl_71.jpg   v_RTN1vaMyVwYN9wwl_903.jpg
+v_RTN1vaMyVwYN9wwl_1094.jpg  v_RTN1vaMyVwYN9wwl_13.jpg    v_RTN1vaMyVwYN9wwl_323.jpg  v_RTN1vaMyVwYN9wwl_517.jpg  v_RTN1vaMyVwYN9wwl_710.jpg  v_RTN1vaMyVwYN9wwl_904.jpg
+v_RTN1vaMyVwYN9wwl_1095.jpg  v_RTN1vaMyVwYN9wwl_130.jpg   v_RTN1vaMyVwYN9wwl_324.jpg  v_RTN1vaMyVwYN9wwl_518.jpg  v_RTN1vaMyVwYN9wwl_711.jpg  v_RTN1vaMyVwYN9wwl_905.jpg
+v_RTN1vaMyVwYN9wwl_1096.jpg  v_RTN1vaMyVwYN9wwl_131.jpg   v_RTN1vaMyVwYN9wwl_325.jpg  v_RTN1vaMyVwYN9wwl_519.jpg  v_RTN1vaMyVwYN9wwl_712.jpg  v_RTN1vaMyVwYN9wwl_906.jpg
+v_RTN1vaMyVwYN9wwl_1097.jpg  v_RTN1vaMyVwYN9wwl_132.jpg   v_RTN1vaMyVwYN9wwl_326.jpg  v_RTN1vaMyVwYN9wwl_52.jpg   v_RTN1vaMyVwYN9wwl_713.jpg  v_RTN1vaMyVwYN9wwl_907.jpg
+v_RTN1vaMyVwYN9wwl_1098.jpg  v_RTN1vaMyVwYN9wwl_133.jpg   v_RTN1vaMyVwYN9wwl_327.jpg  v_RTN1vaMyVwYN9wwl_520.jpg  v_RTN1vaMyVwYN9wwl_714.jpg  v_RTN1vaMyVwYN9wwl_908.jpg
+v_RTN1vaMyVwYN9wwl_1099.jpg  v_RTN1vaMyVwYN9wwl_134.jpg   v_RTN1vaMyVwYN9wwl_328.jpg  v_RTN1vaMyVwYN9wwl_521.jpg  v_RTN1vaMyVwYN9wwl_715.jpg  v_RTN1vaMyVwYN9wwl_909.jpg
+v_RTN1vaMyVwYN9wwl_11.jpg    v_RTN1vaMyVwYN9wwl_135.jpg   v_RTN1vaMyVwYN9wwl_329.jpg  v_RTN1vaMyVwYN9wwl_522.jpg  v_RTN1vaMyVwYN9wwl_716.jpg  v_RTN1vaMyVwYN9wwl_91.jpg
+v_RTN1vaMyVwYN9wwl_110.jpg   v_RTN1vaMyVwYN9wwl_136.jpg   v_RTN1vaMyVwYN9wwl_33.jpg   v_RTN1vaMyVwYN9wwl_523.jpg  v_RTN1vaMyVwYN9wwl_717.jpg  v_RTN1vaMyVwYN9wwl_910.jpg
+v_RTN1vaMyVwYN9wwl_1100.jpg  v_RTN1vaMyVwYN9wwl_137.jpg   v_RTN1vaMyVwYN9wwl_330.jpg  v_RTN1vaMyVwYN9wwl_524.jpg  v_RTN1vaMyVwYN9wwl_718.jpg  v_RTN1vaMyVwYN9wwl_911.jpg
+v_RTN1vaMyVwYN9wwl_1101.jpg  v_RTN1vaMyVwYN9wwl_138.jpg   v_RTN1vaMyVwYN9wwl_331.jpg  v_RTN1vaMyVwYN9wwl_525.jpg  v_RTN1vaMyVwYN9wwl_719.jpg  v_RTN1vaMyVwYN9wwl_912.jpg
+v_RTN1vaMyVwYN9wwl_1102.jpg  v_RTN1vaMyVwYN9wwl_139.jpg   v_RTN1vaMyVwYN9wwl_332.jpg  v_RTN1vaMyVwYN9wwl_526.jpg  v_RTN1vaMyVwYN9wwl_72.jpg   v_RTN1vaMyVwYN9wwl_913.jpg
+v_RTN1vaMyVwYN9wwl_1103.jpg  v_RTN1vaMyVwYN9wwl_14.jpg    v_RTN1vaMyVwYN9wwl_333.jpg  v_RTN1vaMyVwYN9wwl_527.jpg  v_RTN1vaMyVwYN9wwl_720.jpg  v_RTN1vaMyVwYN9wwl_914.jpg
+v_RTN1vaMyVwYN9wwl_1104.jpg  v_RTN1vaMyVwYN9wwl_140.jpg   v_RTN1vaMyVwYN9wwl_334.jpg  v_RTN1vaMyVwYN9wwl_528.jpg  v_RTN1vaMyVwYN9wwl_721.jpg  v_RTN1vaMyVwYN9wwl_915.jpg
+v_RTN1vaMyVwYN9wwl_1105.jpg  v_RTN1vaMyVwYN9wwl_141.jpg   v_RTN1vaMyVwYN9wwl_335.jpg  v_RTN1vaMyVwYN9wwl_529.jpg  v_RTN1vaMyVwYN9wwl_722.jpg  v_RTN1vaMyVwYN9wwl_916.jpg
+v_RTN1vaMyVwYN9wwl_1106.jpg  v_RTN1vaMyVwYN9wwl_142.jpg   v_RTN1vaMyVwYN9wwl_336.jpg  v_RTN1vaMyVwYN9wwl_53.jpg   v_RTN1vaMyVwYN9wwl_723.jpg  v_RTN1vaMyVwYN9wwl_917.jpg
+v_RTN1vaMyVwYN9wwl_1107.jpg  v_RTN1vaMyVwYN9wwl_143.jpg   v_RTN1vaMyVwYN9wwl_337.jpg  v_RTN1vaMyVwYN9wwl_530.jpg  v_RTN1vaMyVwYN9wwl_724.jpg  v_RTN1vaMyVwYN9wwl_918.jpg
+v_RTN1vaMyVwYN9wwl_1108.jpg  v_RTN1vaMyVwYN9wwl_144.jpg   v_RTN1vaMyVwYN9wwl_338.jpg  v_RTN1vaMyVwYN9wwl_531.jpg  v_RTN1vaMyVwYN9wwl_725.jpg  v_RTN1vaMyVwYN9wwl_919.jpg
+v_RTN1vaMyVwYN9wwl_1109.jpg  v_RTN1vaMyVwYN9wwl_145.jpg   v_RTN1vaMyVwYN9wwl_339.jpg  v_RTN1vaMyVwYN9wwl_532.jpg  v_RTN1vaMyVwYN9wwl_726.jpg  v_RTN1vaMyVwYN9wwl_92.jpg
+v_RTN1vaMyVwYN9wwl_111.jpg   v_RTN1vaMyVwYN9wwl_146.jpg   v_RTN1vaMyVwYN9wwl_34.jpg   v_RTN1vaMyVwYN9wwl_533.jpg  v_RTN1vaMyVwYN9wwl_727.jpg  v_RTN1vaMyVwYN9wwl_920.jpg
+v_RTN1vaMyVwYN9wwl_1110.jpg  v_RTN1vaMyVwYN9wwl_147.jpg   v_RTN1vaMyVwYN9wwl_340.jpg  v_RTN1vaMyVwYN9wwl_534.jpg  v_RTN1vaMyVwYN9wwl_728.jpg  v_RTN1vaMyVwYN9wwl_921.jpg
+v_RTN1vaMyVwYN9wwl_1111.jpg  v_RTN1vaMyVwYN9wwl_148.jpg   v_RTN1vaMyVwYN9wwl_341.jpg  v_RTN1vaMyVwYN9wwl_535.jpg  v_RTN1vaMyVwYN9wwl_729.jpg  v_RTN1vaMyVwYN9wwl_922.jpg
+v_RTN1vaMyVwYN9wwl_1112.jpg  v_RTN1vaMyVwYN9wwl_149.jpg   v_RTN1vaMyVwYN9wwl_342.jpg  v_RTN1vaMyVwYN9wwl_536.jpg  v_RTN1vaMyVwYN9wwl_73.jpg   v_RTN1vaMyVwYN9wwl_923.jpg
+v_RTN1vaMyVwYN9wwl_1113.jpg  v_RTN1vaMyVwYN9wwl_15.jpg    v_RTN1vaMyVwYN9wwl_343.jpg  v_RTN1vaMyVwYN9wwl_537.jpg  v_RTN1vaMyVwYN9wwl_730.jpg  v_RTN1vaMyVwYN9wwl_924.jpg
+v_RTN1vaMyVwYN9wwl_1114.jpg  v_RTN1vaMyVwYN9wwl_150.jpg   v_RTN1vaMyVwYN9wwl_344.jpg  v_RTN1vaMyVwYN9wwl_538.jpg  v_RTN1vaMyVwYN9wwl_731.jpg  v_RTN1vaMyVwYN9wwl_925.jpg
+v_RTN1vaMyVwYN9wwl_1115.jpg  v_RTN1vaMyVwYN9wwl_151.jpg   v_RTN1vaMyVwYN9wwl_345.jpg  v_RTN1vaMyVwYN9wwl_539.jpg  v_RTN1vaMyVwYN9wwl_732.jpg  v_RTN1vaMyVwYN9wwl_926.jpg
+v_RTN1vaMyVwYN9wwl_1116.jpg  v_RTN1vaMyVwYN9wwl_152.jpg   v_RTN1vaMyVwYN9wwl_346.jpg  v_RTN1vaMyVwYN9wwl_54.jpg   v_RTN1vaMyVwYN9wwl_733.jpg  v_RTN1vaMyVwYN9wwl_927.jpg
+v_RTN1vaMyVwYN9wwl_1117.jpg  v_RTN1vaMyVwYN9wwl_153.jpg   v_RTN1vaMyVwYN9wwl_347.jpg  v_RTN1vaMyVwYN9wwl_540.jpg  v_RTN1vaMyVwYN9wwl_734.jpg  v_RTN1vaMyVwYN9wwl_928.jpg
+v_RTN1vaMyVwYN9wwl_1118.jpg  v_RTN1vaMyVwYN9wwl_154.jpg   v_RTN1vaMyVwYN9wwl_348.jpg  v_RTN1vaMyVwYN9wwl_541.jpg  v_RTN1vaMyVwYN9wwl_735.jpg  v_RTN1vaMyVwYN9wwl_929.jpg
+v_RTN1vaMyVwYN9wwl_1119.jpg  v_RTN1vaMyVwYN9wwl_155.jpg   v_RTN1vaMyVwYN9wwl_349.jpg  v_RTN1vaMyVwYN9wwl_542.jpg  v_RTN1vaMyVwYN9wwl_736.jpg  v_RTN1vaMyVwYN9wwl_93.jpg
+v_RTN1vaMyVwYN9wwl_112.jpg   v_RTN1vaMyVwYN9wwl_156.jpg   v_RTN1vaMyVwYN9wwl_35.jpg   v_RTN1vaMyVwYN9wwl_543.jpg  v_RTN1vaMyVwYN9wwl_737.jpg  v_RTN1vaMyVwYN9wwl_930.jpg
+v_RTN1vaMyVwYN9wwl_1120.jpg  v_RTN1vaMyVwYN9wwl_157.jpg   v_RTN1vaMyVwYN9wwl_350.jpg  v_RTN1vaMyVwYN9wwl_544.jpg  v_RTN1vaMyVwYN9wwl_738.jpg  v_RTN1vaMyVwYN9wwl_931.jpg
+v_RTN1vaMyVwYN9wwl_1121.jpg  v_RTN1vaMyVwYN9wwl_158.jpg   v_RTN1vaMyVwYN9wwl_351.jpg  v_RTN1vaMyVwYN9wwl_545.jpg  v_RTN1vaMyVwYN9wwl_739.jpg  v_RTN1vaMyVwYN9wwl_932.jpg
+v_RTN1vaMyVwYN9wwl_1122.jpg  v_RTN1vaMyVwYN9wwl_159.jpg   v_RTN1vaMyVwYN9wwl_352.jpg  v_RTN1vaMyVwYN9wwl_546.jpg  v_RTN1vaMyVwYN9wwl_74.jpg   v_RTN1vaMyVwYN9wwl_933.jpg
+v_RTN1vaMyVwYN9wwl_1123.jpg  v_RTN1vaMyVwYN9wwl_16.jpg    v_RTN1vaMyVwYN9wwl_353.jpg  v_RTN1vaMyVwYN9wwl_547.jpg  v_RTN1vaMyVwYN9wwl_740.jpg  v_RTN1vaMyVwYN9wwl_934.jpg
+v_RTN1vaMyVwYN9wwl_1124.jpg  v_RTN1vaMyVwYN9wwl_160.jpg   v_RTN1vaMyVwYN9wwl_354.jpg  v_RTN1vaMyVwYN9wwl_548.jpg  v_RTN1vaMyVwYN9wwl_741.jpg  v_RTN1vaMyVwYN9wwl_935.jpg
+v_RTN1vaMyVwYN9wwl_1125.jpg  v_RTN1vaMyVwYN9wwl_161.jpg   v_RTN1vaMyVwYN9wwl_355.jpg  v_RTN1vaMyVwYN9wwl_549.jpg  v_RTN1vaMyVwYN9wwl_742.jpg  v_RTN1vaMyVwYN9wwl_936.jpg
+v_RTN1vaMyVwYN9wwl_1126.jpg  v_RTN1vaMyVwYN9wwl_162.jpg   v_RTN1vaMyVwYN9wwl_356.jpg  v_RTN1vaMyVwYN9wwl_55.jpg   v_RTN1vaMyVwYN9wwl_743.jpg  v_RTN1vaMyVwYN9wwl_937.jpg
+v_RTN1vaMyVwYN9wwl_1127.jpg  v_RTN1vaMyVwYN9wwl_163.jpg   v_RTN1vaMyVwYN9wwl_357.jpg  v_RTN1vaMyVwYN9wwl_550.jpg  v_RTN1vaMyVwYN9wwl_744.jpg  v_RTN1vaMyVwYN9wwl_938.jpg
+v_RTN1vaMyVwYN9wwl_1128.jpg  v_RTN1vaMyVwYN9wwl_164.jpg   v_RTN1vaMyVwYN9wwl_358.jpg  v_RTN1vaMyVwYN9wwl_551.jpg  v_RTN1vaMyVwYN9wwl_745.jpg  v_RTN1vaMyVwYN9wwl_939.jpg
+v_RTN1vaMyVwYN9wwl_1129.jpg  v_RTN1vaMyVwYN9wwl_165.jpg   v_RTN1vaMyVwYN9wwl_359.jpg  v_RTN1vaMyVwYN9wwl_552.jpg  v_RTN1vaMyVwYN9wwl_746.jpg  v_RTN1vaMyVwYN9wwl_94.jpg
+v_RTN1vaMyVwYN9wwl_113.jpg   v_RTN1vaMyVwYN9wwl_166.jpg   v_RTN1vaMyVwYN9wwl_36.jpg   v_RTN1vaMyVwYN9wwl_553.jpg  v_RTN1vaMyVwYN9wwl_747.jpg  v_RTN1vaMyVwYN9wwl_940.jpg
+v_RTN1vaMyVwYN9wwl_1130.jpg  v_RTN1vaMyVwYN9wwl_167.jpg   v_RTN1vaMyVwYN9wwl_360.jpg  v_RTN1vaMyVwYN9wwl_554.jpg  v_RTN1vaMyVwYN9wwl_748.jpg  v_RTN1vaMyVwYN9wwl_941.jpg
+v_RTN1vaMyVwYN9wwl_1131.jpg  v_RTN1vaMyVwYN9wwl_168.jpg   v_RTN1vaMyVwYN9wwl_361.jpg  v_RTN1vaMyVwYN9wwl_555.jpg  v_RTN1vaMyVwYN9wwl_749.jpg  v_RTN1vaMyVwYN9wwl_942.jpg
+v_RTN1vaMyVwYN9wwl_1132.jpg  v_RTN1vaMyVwYN9wwl_169.jpg   v_RTN1vaMyVwYN9wwl_362.jpg  v_RTN1vaMyVwYN9wwl_556.jpg  v_RTN1vaMyVwYN9wwl_75.jpg   v_RTN1vaMyVwYN9wwl_943.jpg
+v_RTN1vaMyVwYN9wwl_1133.jpg  v_RTN1vaMyVwYN9wwl_17.jpg    v_RTN1vaMyVwYN9wwl_363.jpg  v_RTN1vaMyVwYN9wwl_557.jpg  v_RTN1vaMyVwYN9wwl_750.jpg  v_RTN1vaMyVwYN9wwl_944.jpg
+v_RTN1vaMyVwYN9wwl_1134.jpg  v_RTN1vaMyVwYN9wwl_170.jpg   v_RTN1vaMyVwYN9wwl_364.jpg  v_RTN1vaMyVwYN9wwl_558.jpg  v_RTN1vaMyVwYN9wwl_751.jpg  v_RTN1vaMyVwYN9wwl_945.jpg
+v_RTN1vaMyVwYN9wwl_1135.jpg  v_RTN1vaMyVwYN9wwl_171.jpg   v_RTN1vaMyVwYN9wwl_365.jpg  v_RTN1vaMyVwYN9wwl_559.jpg  v_RTN1vaMyVwYN9wwl_752.jpg  v_RTN1vaMyVwYN9wwl_946.jpg
+v_RTN1vaMyVwYN9wwl_1136.jpg  v_RTN1vaMyVwYN9wwl_172.jpg   v_RTN1vaMyVwYN9wwl_366.jpg  v_RTN1vaMyVwYN9wwl_56.jpg   v_RTN1vaMyVwYN9wwl_753.jpg  v_RTN1vaMyVwYN9wwl_947.jpg
+v_RTN1vaMyVwYN9wwl_1137.jpg  v_RTN1vaMyVwYN9wwl_173.jpg   v_RTN1vaMyVwYN9wwl_367.jpg  v_RTN1vaMyVwYN9wwl_560.jpg  v_RTN1vaMyVwYN9wwl_754.jpg  v_RTN1vaMyVwYN9wwl_948.jpg
+v_RTN1vaMyVwYN9wwl_1138.jpg  v_RTN1vaMyVwYN9wwl_174.jpg   v_RTN1vaMyVwYN9wwl_368.jpg  v_RTN1vaMyVwYN9wwl_561.jpg  v_RTN1vaMyVwYN9wwl_755.jpg  v_RTN1vaMyVwYN9wwl_949.jpg
+v_RTN1vaMyVwYN9wwl_1139.jpg  v_RTN1vaMyVwYN9wwl_175.jpg   v_RTN1vaMyVwYN9wwl_369.jpg  v_RTN1vaMyVwYN9wwl_562.jpg  v_RTN1vaMyVwYN9wwl_756.jpg  v_RTN1vaMyVwYN9wwl_95.jpg
+v_RTN1vaMyVwYN9wwl_114.jpg   v_RTN1vaMyVwYN9wwl_176.jpg   v_RTN1vaMyVwYN9wwl_37.jpg   v_RTN1vaMyVwYN9wwl_563.jpg  v_RTN1vaMyVwYN9wwl_757.jpg  v_RTN1vaMyVwYN9wwl_950.jpg
+v_RTN1vaMyVwYN9wwl_1140.jpg  v_RTN1vaMyVwYN9wwl_177.jpg   v_RTN1vaMyVwYN9wwl_370.jpg  v_RTN1vaMyVwYN9wwl_564.jpg  v_RTN1vaMyVwYN9wwl_758.jpg  v_RTN1vaMyVwYN9wwl_951.jpg
+v_RTN1vaMyVwYN9wwl_1141.jpg  v_RTN1vaMyVwYN9wwl_178.jpg   v_RTN1vaMyVwYN9wwl_371.jpg  v_RTN1vaMyVwYN9wwl_565.jpg  v_RTN1vaMyVwYN9wwl_759.jpg  v_RTN1vaMyVwYN9wwl_952.jpg
+v_RTN1vaMyVwYN9wwl_1142.jpg  v_RTN1vaMyVwYN9wwl_179.jpg   v_RTN1vaMyVwYN9wwl_372.jpg  v_RTN1vaMyVwYN9wwl_566.jpg  v_RTN1vaMyVwYN9wwl_76.jpg   v_RTN1vaMyVwYN9wwl_953.jpg
+v_RTN1vaMyVwYN9wwl_1143.jpg  v_RTN1vaMyVwYN9wwl_18.jpg    v_RTN1vaMyVwYN9wwl_373.jpg  v_RTN1vaMyVwYN9wwl_567.jpg  v_RTN1vaMyVwYN9wwl_760.jpg  v_RTN1vaMyVwYN9wwl_954.jpg
+v_RTN1vaMyVwYN9wwl_1144.jpg  v_RTN1vaMyVwYN9wwl_180.jpg   v_RTN1vaMyVwYN9wwl_374.jpg  v_RTN1vaMyVwYN9wwl_568.jpg  v_RTN1vaMyVwYN9wwl_761.jpg  v_RTN1vaMyVwYN9wwl_955.jpg
+v_RTN1vaMyVwYN9wwl_1145.jpg  v_RTN1vaMyVwYN9wwl_181.jpg   v_RTN1vaMyVwYN9wwl_375.jpg  v_RTN1vaMyVwYN9wwl_569.jpg  v_RTN1vaMyVwYN9wwl_762.jpg  v_RTN1vaMyVwYN9wwl_956.jpg
+v_RTN1vaMyVwYN9wwl_1146.jpg  v_RTN1vaMyVwYN9wwl_182.jpg   v_RTN1vaMyVwYN9wwl_376.jpg  v_RTN1vaMyVwYN9wwl_57.jpg   v_RTN1vaMyVwYN9wwl_763.jpg  v_RTN1vaMyVwYN9wwl_957.jpg
+v_RTN1vaMyVwYN9wwl_1147.jpg  v_RTN1vaMyVwYN9wwl_183.jpg   v_RTN1vaMyVwYN9wwl_377.jpg  v_RTN1vaMyVwYN9wwl_570.jpg  v_RTN1vaMyVwYN9wwl_764.jpg  v_RTN1vaMyVwYN9wwl_958.jpg
+v_RTN1vaMyVwYN9wwl_1148.jpg  v_RTN1vaMyVwYN9wwl_184.jpg   v_RTN1vaMyVwYN9wwl_378.jpg  v_RTN1vaMyVwYN9wwl_571.jpg  v_RTN1vaMyVwYN9wwl_765.jpg  v_RTN1vaMyVwYN9wwl_959.jpg
+v_RTN1vaMyVwYN9wwl_1149.jpg  v_RTN1vaMyVwYN9wwl_185.jpg   v_RTN1vaMyVwYN9wwl_379.jpg  v_RTN1vaMyVwYN9wwl_572.jpg  v_RTN1vaMyVwYN9wwl_766.jpg  v_RTN1vaMyVwYN9wwl_96.jpg
+v_RTN1vaMyVwYN9wwl_115.jpg   v_RTN1vaMyVwYN9wwl_186.jpg   v_RTN1vaMyVwYN9wwl_38.jpg   v_RTN1vaMyVwYN9wwl_573.jpg  v_RTN1vaMyVwYN9wwl_767.jpg  v_RTN1vaMyVwYN9wwl_960.jpg
+v_RTN1vaMyVwYN9wwl_1150.jpg  v_RTN1vaMyVwYN9wwl_187.jpg   v_RTN1vaMyVwYN9wwl_380.jpg  v_RTN1vaMyVwYN9wwl_574.jpg  v_RTN1vaMyVwYN9wwl_768.jpg  v_RTN1vaMyVwYN9wwl_961.jpg
+v_RTN1vaMyVwYN9wwl_1151.jpg  v_RTN1vaMyVwYN9wwl_188.jpg   v_RTN1vaMyVwYN9wwl_381.jpg  v_RTN1vaMyVwYN9wwl_575.jpg  v_RTN1vaMyVwYN9wwl_769.jpg  v_RTN1vaMyVwYN9wwl_962.jpg
+v_RTN1vaMyVwYN9wwl_1152.jpg  v_RTN1vaMyVwYN9wwl_189.jpg   v_RTN1vaMyVwYN9wwl_382.jpg  v_RTN1vaMyVwYN9wwl_576.jpg  v_RTN1vaMyVwYN9wwl_77.jpg   v_RTN1vaMyVwYN9wwl_963.jpg
+v_RTN1vaMyVwYN9wwl_1153.jpg  v_RTN1vaMyVwYN9wwl_19.jpg    v_RTN1vaMyVwYN9wwl_383.jpg  v_RTN1vaMyVwYN9wwl_577.jpg  v_RTN1vaMyVwYN9wwl_770.jpg  v_RTN1vaMyVwYN9wwl_964.jpg
+v_RTN1vaMyVwYN9wwl_1154.jpg  v_RTN1vaMyVwYN9wwl_190.jpg   v_RTN1vaMyVwYN9wwl_384.jpg  v_RTN1vaMyVwYN9wwl_578.jpg  v_RTN1vaMyVwYN9wwl_771.jpg  v_RTN1vaMyVwYN9wwl_965.jpg
+v_RTN1vaMyVwYN9wwl_1155.jpg  v_RTN1vaMyVwYN9wwl_191.jpg   v_RTN1vaMyVwYN9wwl_385.jpg  v_RTN1vaMyVwYN9wwl_579.jpg  v_RTN1vaMyVwYN9wwl_772.jpg  v_RTN1vaMyVwYN9wwl_966.jpg
+v_RTN1vaMyVwYN9wwl_1156.jpg  v_RTN1vaMyVwYN9wwl_192.jpg   v_RTN1vaMyVwYN9wwl_386.jpg  v_RTN1vaMyVwYN9wwl_58.jpg   v_RTN1vaMyVwYN9wwl_773.jpg  v_RTN1vaMyVwYN9wwl_967.jpg
+v_RTN1vaMyVwYN9wwl_1157.jpg  v_RTN1vaMyVwYN9wwl_193.jpg   v_RTN1vaMyVwYN9wwl_387.jpg  v_RTN1vaMyVwYN9wwl_580.jpg  v_RTN1vaMyVwYN9wwl_774.jpg  v_RTN1vaMyVwYN9wwl_968.jpg
+v_RTN1vaMyVwYN9wwl_1158.jpg  v_RTN1vaMyVwYN9wwl_194.jpg   v_RTN1vaMyVwYN9wwl_388.jpg  v_RTN1vaMyVwYN9wwl_581.jpg  v_RTN1vaMyVwYN9wwl_775.jpg  v_RTN1vaMyVwYN9wwl_969.jpg
+v_RTN1vaMyVwYN9wwl_1159.jpg  v_RTN1vaMyVwYN9wwl_195.jpg   v_RTN1vaMyVwYN9wwl_389.jpg  v_RTN1vaMyVwYN9wwl_582.jpg  v_RTN1vaMyVwYN9wwl_776.jpg  v_RTN1vaMyVwYN9wwl_97.jpg
+v_RTN1vaMyVwYN9wwl_116.jpg   v_RTN1vaMyVwYN9wwl_196.jpg   v_RTN1vaMyVwYN9wwl_39.jpg   v_RTN1vaMyVwYN9wwl_583.jpg  v_RTN1vaMyVwYN9wwl_777.jpg  v_RTN1vaMyVwYN9wwl_970.jpg
+v_RTN1vaMyVwYN9wwl_1160.jpg  v_RTN1vaMyVwYN9wwl_197.jpg   v_RTN1vaMyVwYN9wwl_390.jpg  v_RTN1vaMyVwYN9wwl_584.jpg  v_RTN1vaMyVwYN9wwl_778.jpg  v_RTN1vaMyVwYN9wwl_971.jpg
+v_RTN1vaMyVwYN9wwl_1161.jpg  v_RTN1vaMyVwYN9wwl_198.jpg   v_RTN1vaMyVwYN9wwl_391.jpg  v_RTN1vaMyVwYN9wwl_585.jpg  v_RTN1vaMyVwYN9wwl_779.jpg  v_RTN1vaMyVwYN9wwl_972.jpg
+v_RTN1vaMyVwYN9wwl_1162.jpg  v_RTN1vaMyVwYN9wwl_199.jpg   v_RTN1vaMyVwYN9wwl_392.jpg  v_RTN1vaMyVwYN9wwl_586.jpg  v_RTN1vaMyVwYN9wwl_78.jpg   v_RTN1vaMyVwYN9wwl_973.jpg
+v_RTN1vaMyVwYN9wwl_1163.jpg  v_RTN1vaMyVwYN9wwl_2.jpg     v_RTN1vaMyVwYN9wwl_393.jpg  v_RTN1vaMyVwYN9wwl_587.jpg  v_RTN1vaMyVwYN9wwl_780.jpg  v_RTN1vaMyVwYN9wwl_974.jpg
+v_RTN1vaMyVwYN9wwl_1164.jpg  v_RTN1vaMyVwYN9wwl_20.jpg    v_RTN1vaMyVwYN9wwl_394.jpg  v_RTN1vaMyVwYN9wwl_588.jpg  v_RTN1vaMyVwYN9wwl_781.jpg  v_RTN1vaMyVwYN9wwl_975.jpg
+v_RTN1vaMyVwYN9wwl_1165.jpg  v_RTN1vaMyVwYN9wwl_200.jpg   v_RTN1vaMyVwYN9wwl_395.jpg  v_RTN1vaMyVwYN9wwl_589.jpg  v_RTN1vaMyVwYN9wwl_782.jpg  v_RTN1vaMyVwYN9wwl_976.jpg
+v_RTN1vaMyVwYN9wwl_1166.jpg  v_RTN1vaMyVwYN9wwl_201.jpg   v_RTN1vaMyVwYN9wwl_396.jpg  v_RTN1vaMyVwYN9wwl_59.jpg   v_RTN1vaMyVwYN9wwl_783.jpg  v_RTN1vaMyVwYN9wwl_977.jpg
+v_RTN1vaMyVwYN9wwl_1167.jpg  v_RTN1vaMyVwYN9wwl_202.jpg   v_RTN1vaMyVwYN9wwl_397.jpg  v_RTN1vaMyVwYN9wwl_590.jpg  v_RTN1vaMyVwYN9wwl_784.jpg  v_RTN1vaMyVwYN9wwl_978.jpg
+v_RTN1vaMyVwYN9wwl_1168.jpg  v_RTN1vaMyVwYN9wwl_203.jpg   v_RTN1vaMyVwYN9wwl_398.jpg  v_RTN1vaMyVwYN9wwl_591.jpg  v_RTN1vaMyVwYN9wwl_785.jpg  v_RTN1vaMyVwYN9wwl_979.jpg
+v_RTN1vaMyVwYN9wwl_1169.jpg  v_RTN1vaMyVwYN9wwl_204.jpg   v_RTN1vaMyVwYN9wwl_399.jpg  v_RTN1vaMyVwYN9wwl_592.jpg  v_RTN1vaMyVwYN9wwl_786.jpg  v_RTN1vaMyVwYN9wwl_98.jpg
+v_RTN1vaMyVwYN9wwl_117.jpg   v_RTN1vaMyVwYN9wwl_205.jpg   v_RTN1vaMyVwYN9wwl_4.jpg    v_RTN1vaMyVwYN9wwl_593.jpg  v_RTN1vaMyVwYN9wwl_787.jpg  v_RTN1vaMyVwYN9wwl_980.jpg
+v_RTN1vaMyVwYN9wwl_1170.jpg  v_RTN1vaMyVwYN9wwl_206.jpg   v_RTN1vaMyVwYN9wwl_40.jpg   v_RTN1vaMyVwYN9wwl_594.jpg  v_RTN1vaMyVwYN9wwl_788.jpg  v_RTN1vaMyVwYN9wwl_981.jpg
+v_RTN1vaMyVwYN9wwl_1171.jpg  v_RTN1vaMyVwYN9wwl_207.jpg   v_RTN1vaMyVwYN9wwl_400.jpg  v_RTN1vaMyVwYN9wwl_595.jpg  v_RTN1vaMyVwYN9wwl_789.jpg  v_RTN1vaMyVwYN9wwl_982.jpg
+v_RTN1vaMyVwYN9wwl_1172.jpg  v_RTN1vaMyVwYN9wwl_208.jpg   v_RTN1vaMyVwYN9wwl_401.jpg  v_RTN1vaMyVwYN9wwl_596.jpg  v_RTN1vaMyVwYN9wwl_79.jpg   v_RTN1vaMyVwYN9wwl_983.jpg
+v_RTN1vaMyVwYN9wwl_1173.jpg  v_RTN1vaMyVwYN9wwl_209.jpg   v_RTN1vaMyVwYN9wwl_402.jpg  v_RTN1vaMyVwYN9wwl_597.jpg  v_RTN1vaMyVwYN9wwl_790.jpg  v_RTN1vaMyVwYN9wwl_984.jpg
+v_RTN1vaMyVwYN9wwl_1174.jpg  v_RTN1vaMyVwYN9wwl_21.jpg    v_RTN1vaMyVwYN9wwl_403.jpg  v_RTN1vaMyVwYN9wwl_598.jpg  v_RTN1vaMyVwYN9wwl_791.jpg  v_RTN1vaMyVwYN9wwl_985.jpg
+v_RTN1vaMyVwYN9wwl_1175.jpg  v_RTN1vaMyVwYN9wwl_210.jpg   v_RTN1vaMyVwYN9wwl_404.jpg  v_RTN1vaMyVwYN9wwl_599.jpg  v_RTN1vaMyVwYN9wwl_792.jpg  v_RTN1vaMyVwYN9wwl_986.jpg
+v_RTN1vaMyVwYN9wwl_1176.jpg  v_RTN1vaMyVwYN9wwl_211.jpg   v_RTN1vaMyVwYN9wwl_405.jpg  v_RTN1vaMyVwYN9wwl_6.jpg    v_RTN1vaMyVwYN9wwl_793.jpg  v_RTN1vaMyVwYN9wwl_987.jpg
+v_RTN1vaMyVwYN9wwl_1177.jpg  v_RTN1vaMyVwYN9wwl_212.jpg   v_RTN1vaMyVwYN9wwl_406.jpg  v_RTN1vaMyVwYN9wwl_60.jpg   v_RTN1vaMyVwYN9wwl_794.jpg  v_RTN1vaMyVwYN9wwl_988.jpg
+v_RTN1vaMyVwYN9wwl_1178.jpg  v_RTN1vaMyVwYN9wwl_213.jpg   v_RTN1vaMyVwYN9wwl_407.jpg  v_RTN1vaMyVwYN9wwl_600.jpg  v_RTN1vaMyVwYN9wwl_795.jpg  v_RTN1vaMyVwYN9wwl_989.jpg
+v_RTN1vaMyVwYN9wwl_1179.jpg  v_RTN1vaMyVwYN9wwl_214.jpg   v_RTN1vaMyVwYN9wwl_408.jpg  v_RTN1vaMyVwYN9wwl_601.jpg  v_RTN1vaMyVwYN9wwl_796.jpg  v_RTN1vaMyVwYN9wwl_99.jpg
+v_RTN1vaMyVwYN9wwl_118.jpg   v_RTN1vaMyVwYN9wwl_215.jpg   v_RTN1vaMyVwYN9wwl_409.jpg  v_RTN1vaMyVwYN9wwl_602.jpg  v_RTN1vaMyVwYN9wwl_797.jpg  v_RTN1vaMyVwYN9wwl_990.jpg
+v_RTN1vaMyVwYN9wwl_1180.jpg  v_RTN1vaMyVwYN9wwl_216.jpg   v_RTN1vaMyVwYN9wwl_41.jpg   v_RTN1vaMyVwYN9wwl_603.jpg  v_RTN1vaMyVwYN9wwl_798.jpg  v_RTN1vaMyVwYN9wwl_991.jpg
+v_RTN1vaMyVwYN9wwl_1181.jpg  v_RTN1vaMyVwYN9wwl_217.jpg   v_RTN1vaMyVwYN9wwl_410.jpg  v_RTN1vaMyVwYN9wwl_604.jpg  v_RTN1vaMyVwYN9wwl_799.jpg  v_RTN1vaMyVwYN9wwl_992.jpg
+v_RTN1vaMyVwYN9wwl_1182.jpg  v_RTN1vaMyVwYN9wwl_218.jpg   v_RTN1vaMyVwYN9wwl_411.jpg  v_RTN1vaMyVwYN9wwl_605.jpg  v_RTN1vaMyVwYN9wwl_8.jpg    v_RTN1vaMyVwYN9wwl_993.jpg
+v_RTN1vaMyVwYN9wwl_1183.jpg  v_RTN1vaMyVwYN9wwl_219.jpg   v_RTN1vaMyVwYN9wwl_412.jpg  v_RTN1vaMyVwYN9wwl_606.jpg  v_RTN1vaMyVwYN9wwl_80.jpg   v_RTN1vaMyVwYN9wwl_994.jpg
+v_RTN1vaMyVwYN9wwl_1184.jpg  v_RTN1vaMyVwYN9wwl_22.jpg    v_RTN1vaMyVwYN9wwl_413.jpg  v_RTN1vaMyVwYN9wwl_607.jpg  v_RTN1vaMyVwYN9wwl_800.jpg  v_RTN1vaMyVwYN9wwl_995.jpg
+v_RTN1vaMyVwYN9wwl_1185.jpg  v_RTN1vaMyVwYN9wwl_220.jpg   v_RTN1vaMyVwYN9wwl_414.jpg  v_RTN1vaMyVwYN9wwl_608.jpg  v_RTN1vaMyVwYN9wwl_801.jpg  v_RTN1vaMyVwYN9wwl_996.jpg
+v_RTN1vaMyVwYN9wwl_1186.jpg  v_RTN1vaMyVwYN9wwl_221.jpg   v_RTN1vaMyVwYN9wwl_415.jpg  v_RTN1vaMyVwYN9wwl_609.jpg  v_RTN1vaMyVwYN9wwl_802.jpg  v_RTN1vaMyVwYN9wwl_997.jpg
+v_RTN1vaMyVwYN9wwl_1187.jpg  v_RTN1vaMyVwYN9wwl_222.jpg   v_RTN1vaMyVwYN9wwl_416.jpg  v_RTN1vaMyVwYN9wwl_61.jpg   v_RTN1vaMyVwYN9wwl_803.jpg  v_RTN1vaMyVwYN9wwl_998.jpg
+v_RTN1vaMyVwYN9wwl_1188.jpg  v_RTN1vaMyVwYN9wwl_223.jpg   v_RTN1vaMyVwYN9wwl_417.jpg  v_RTN1vaMyVwYN9wwl_610.jpg  v_RTN1vaMyVwYN9wwl_804.jpg  v_RTN1vaMyVwYN9wwl_999.jpg
+v_RTN1vaMyVwYN9wwl_1189.jpg  v_RTN1vaMyVwYN9wwl_224.jpg   v_RTN1vaMyVwYN9wwl_418.jpg  v_RTN1vaMyVwYN9wwl_611.jpg  v_RTN1vaMyVwYN9wwl_805.jpg
+v_RTN1vaMyVwYN9wwl_119.jpg   v_RTN1vaMyVwYN9wwl_225.jpg   v_RTN1vaMyVwYN9wwl_419.jpg  v_RTN1vaMyVwYN9wwl_612.jpg  v_RTN1vaMyVwYN9wwl_806.jpg
+v_RTN1vaMyVwYN9wwl_1190.jpg  v_RTN1vaMyVwYN9wwl_226.jpg   v_RTN1vaMyVwYN9wwl_42.jpg   v_RTN1vaMyVwYN9wwl_613.jpg  v_RTN1vaMyVwYN9wwl_807.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl/
+Display all 1287 possibilities? (y or n)
+(aida-env) root@3788a43bcc3b:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl/subset/
+v_RTN1vaMyVwYN9wwl_999.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# find /data/jpgs -name 'v_RTN1vaMyVwYN9wwl_999.jpg'
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_999.jpg
+/data/jpgs/v_RTN1vaMyVwYN9wwl/v_RTN1vaMyVwYN9wwl_999.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# find /data/jpgs -name 'v_RTN1vaMyVwYN9wwl_998.jpg'
+/data/jpgs/v_RTN1vaMyVwYN9wwl/v_RTN1vaMyVwYN9wwl_998.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# cp /data/jpgs/v_RTN1vaMyVwYN9wwl/v_RTN1vaMyVwYN9wwl_998.jpg /data/jpgs/v_RTN1vaMyVwYN9wwl/subset/
+(aida-env) root@3788a43bcc3b:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl/subset/
+v_RTN1vaMyVwYN9wwl_998.jpg  v_RTN1vaMyVwYN9wwl_999.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# cp /data/jpgs/v_RTN1vaMyVwYN9wwl/v_RTN1vaMyVwYN9wwl_997.jpg /data/jpgs/v_RTN1vaMyVwYN9wwl/subset/
+(aida-env) root@3788a43bcc3b:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl/subset/
+v_RTN1vaMyVwYN9wwl_997.jpg  v_RTN1vaMyVwYN9wwl_998.jpg  v_RTN1vaMyVwYN9wwl_999.jpg
+(aida-env) root@3788a43bcc3b:/aida/src# cd ./datasets/
+(aida-env) root@3788a43bcc3b:/aida/src/datasets# ls
+latest
+(aida-env) root@3788a43bcc3b:/aida/src/datasets# rm -rf ./latest/
+(aida-env) root@3788a43bcc3b:/aida/src/datasets# cd ..
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /data/jpgs/v_RTN1vaMyVwYN9wwl datasets/latest --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-03-13 14:50:06.924403: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-13 14:50:08.707668: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-13 14:50:08.707815: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-13 14:50:09.435403: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-13 14:50:09.435522: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-13 14:50:09.435548: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-13 14:50:09.435877: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 4958 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_999.jpg
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_998.jpg
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_997.jpg
+Total number of images: 3
+Number of successfully aligned images: 3
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# ls ./datasets/latest/
+bounding_boxes_77194.txt  revision_info.txt  subset
+(aida-env) root@3788a43bcc3b:/aida/src#  
+(aida-env) root@3788a43bcc3b:/aida/src# 
+(aida-env) root@3788a43bcc3b:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/classifier.py CLASSIFY datasets/latest /data/models/facenet/20180402-114759/20180402-114759.pb /aida/src/models/google500_2_classifier.pkl classify2-output.pkl --batch_size 1000 > results/classify2-result.txt
+./src/classifier.py:59: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert(len(cls.image_paths)>0, 'There must be at least one image for each class in the dataset')
+2020-03-13 14:51:20.644519: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-13 14:51:22.467526: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-13 14:51:22.467663: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-13 14:51:23.198872: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-13 14:51:23.198995: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-13 14:51:23.199021: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-13 14:51:23.199368: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10232 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+WARNING:tensorflow:From /aida/src/src/facenet.py:381: FastGFile.__init__ (from tensorflow.python.platform.gfile) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.gfile.GFile.
+/root/conda/envs/aida-env/lib/python3.6/site-packages/sklearn/base.py:253: UserWarning: Trying to unpickle estimator SVC from version 0.19.2 when using version 0.20.3. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+(aida-env) root@3788a43bcc3b:/aida/src# find . -name 'classify2*'
+./results/classify2-result.txt
+./results/classify2-output.pkl.p
+(aida-env) root@3788a43bcc3b:/aida/src# cd ./results/
+(aida-env) root@3788a43bcc3b:/aida/src/results# ls -al
+total 52
+drwxr-xr-x 1 root root   107 Mar 13 14:51 .
+drwxr-xr-x 1 root root    80 Mar 13 14:46 ..
+-rw-r--r-- 1 root root   329 Mar 13 14:47 classify-result.txt
+-rw-r--r-- 1 root root 12848 Mar 13 14:51 classify2-output.pkl.p
+-rw-r--r-- 1 root root  1110 Mar 13 14:51 classify2-result.txt
+-rw-r--r-- 1 root root  1305 Feb 13 18:25 dupList.txt
+-rw-r--r-- 1 root root  1982 Feb 13 18:25 result_p1_50.txt
+-rw-r--r-- 1 root root   145 Feb 13 18:25 retrained_labels2.txt
+-rw-r--r-- 1 root root 12294 Feb 13 18:25 wikipage.txt
+(aida-env) root@3788a43bcc3b:/aida/src/results# cat ./classify2-result.txt 
+Number of classes: 1
+Number of images: 3
+Loading feature extraction model
+Model filename: /data/models/facenet/20180402-114759/20180402-114759.pb
+Calculating features for images
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_999_0.jpg
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_998_0.jpg
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_997_0.jpg
+Testing classifier
+Loaded classifier model from file "/aida/src/models/google500_2_classifier.pkl"
+[[ 0.07094236 -0.0561548  -0.05932708 ...  0.01786855 -0.03454225
+  -0.03218175]
+ [ 0.09732404 -0.01025737 -0.04969284 ... -0.0460568  -0.07602148
+  -0.01644905]
+ [ 0.09899738 -0.01863428 -0.06791516 ... -0.03427737 -0.0342103
+  -0.01618411]]
+(3, 399)
+[374, 22, 108, 241, 184]
+Vladimir Putin
+0.15677502395255777
+Andreyevsky
+0.0757151307132156
+Gianfranco Fini
+0.010249328740733721
+Najib Razak
+0.010080433698556417
+Laurent Fabius
+0.008181449909136732
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_999_0.jpg	rogozin	0.015
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_998_0.jpg	Vladimir Putin	0.157
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_997_0.jpg	Vladimir Putin	0.179
+Accuracy: 0.000
+(aida-env) root@3788a43bcc3b:/aida/src/results#
+
+
+
+
+
+$ docker build . --tag cu-fb
+...
+$ docker run -itd --gpus 1 --name aida-fb4 \
+>  -v /scratch/napiersk/columbia/brian/AIDA_code_brian/models/facenet/:/data/models/facenet/ \
+>  -v /scratch/napiersk/columbia/home/brian/facenet-master/datasets/m18_f/:/data/jpgs/ \
+>  cu-fb /bin/bash
+c7e3ef2c9f7e2cdf5100cd41fa3153182ebdb810af98721ca7c7a473151f6e09
+[napiersk@gaia01 aida_face_building]$ docker exec -it aida-fb4 /bin/bash
+(aida-env) root@c7e3ef2c9f7e:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /data/jpgs/v_RTN1vaMyVwYN9wwl datasets/latest --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-03-12 19:50:08.201558: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-12 19:50:10.024383: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-12 19:50:10.024518: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-12 19:50:10.741607: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-12 19:50:10.741716: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-12 19:50:10.741743: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-12 19:50:10.742093: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 4958 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_999.jpg
+Total number of images: 1
+Number of successfully aligned images: 1
+(aida-env) root@c7e3ef2c9f7e:/aida/src# echo $CUDA_VISIBLE_DEVICES
+
+(aida-env) root@c7e3ef2c9f7e:/aida/src# CUDA_VISIBLE_DEVICES=0 python ./src/classifier.py CLASSIFY datasets/latest /data/models/facenet/20180402-114759/20180402-114759.pb /aida/src/models/google500_2_classifier.pkl classify-output.pkl --batch_size 1000 > results/classify-result.txt
+./src/classifier.py:59: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert(len(cls.image_paths)>0, 'There must be at least one image for each class in the dataset')
+2020-03-12 19:51:03.983897: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-12 19:51:05.803158: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-12 19:51:05.803344: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-12 19:51:06.556526: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-12 19:51:06.556638: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-12 19:51:06.556666: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-12 19:51:06.557042: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10232 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+WARNING:tensorflow:From /aida/src/src/facenet.py:381: FastGFile.__init__ (from tensorflow.python.platform.gfile) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.gfile.GFile.
+Traceback (most recent call last):
+  File "./src/classifier.py", line 200, in <module>
+    main(parse_arguments(sys.argv[1:]))
+  File "./src/classifier.py", line 122, in main
+    for i in range(len(predictions[1])):
+IndexError: index 1 is out of bounds for axis 0 with size 1
+(aida-env) root@c7e3ef2c9f7e:/aida/src# nano -c ./src/classifier.py 
+(aida-env) root@c7e3ef2c9f7e:/aida/src# ls /data/jpgs/v_RTN1vaMyVwYN9wwl
+subset                       v_RTN1vaMyVwYN9wwl_1191.jpg  v_RTN1vaMyVwYN9wwl_227.jpg  v_RTN1vaMyVwYN9wwl_420.jpg  v_RTN1vaMyVwYN9wwl_614.jpg  v_RTN1vaMyVwYN9wwl_808.jpg
+v_RTN1vaMyVwYN9wwl_1.jpg     v_RTN1vaMyVwYN9wwl_1192.jpg  v_RTN1vaMyVwYN9wwl_228.jpg  v_RTN1vaMyVwYN9wwl_421.jpg  v_RTN1vaMyVwYN9wwl_615.jpg  v_RTN1vaMyVwYN9wwl_809.jpg
+v_RTN1vaMyVwYN9wwl_10.jpg    v_RTN1vaMyVwYN9wwl_1193.jpg  v_RTN1vaMyVwYN9wwl_229.jpg  v_RTN1vaMyVwYN9wwl_422.jpg  v_RTN1vaMyVwYN9wwl_616.jpg  v_RTN1vaMyVwYN9wwl_81.jpg
+v_RTN1vaMyVwYN9wwl_100.jpg   v_RTN1vaMyVwYN9wwl_1194.jpg  v_RTN1vaMyVwYN9wwl_23.jpg   v_RTN1vaMyVwYN9wwl_423.jpg  v_RTN1vaMyVwYN9wwl_617.jpg  v_RTN1vaMyVwYN9wwl_810.jpg
+v_RTN1vaMyVwYN9wwl_1000.jpg  v_RTN1vaMyVwYN9wwl_1195.jpg  v_RTN1vaMyVwYN9wwl_230.jpg  v_RTN1vaMyVwYN9wwl_424.jpg  v_RTN1vaMyVwYN9wwl_618.jpg  v_RTN1vaMyVwYN9wwl_811.jpg
+v_RTN1vaMyVwYN9wwl_1001.jpg  v_RTN1vaMyVwYN9wwl_1196.jpg  v_RTN1vaMyVwYN9wwl_231.jpg  v_RTN1vaMyVwYN9wwl_425.jpg  v_RTN1vaMyVwYN9wwl_619.jpg  v_RTN1vaMyVwYN9wwl_812.jpg
+v_RTN1vaMyVwYN9wwl_1002.jpg  v_RTN1vaMyVwYN9wwl_1197.jpg  v_RTN1vaMyVwYN9wwl_232.jpg  v_RTN1vaMyVwYN9wwl_426.jpg  v_RTN1vaMyVwYN9wwl_62.jpg   v_RTN1vaMyVwYN9wwl_813.jpg
+v_RTN1vaMyVwYN9wwl_1003.jpg  v_RTN1vaMyVwYN9wwl_1198.jpg  v_RTN1vaMyVwYN9wwl_233.jpg  v_RTN1vaMyVwYN9wwl_427.jpg  v_RTN1vaMyVwYN9wwl_620.jpg  v_RTN1vaMyVwYN9wwl_814.jpg
+v_RTN1vaMyVwYN9wwl_1004.jpg  v_RTN1vaMyVwYN9wwl_1199.jpg  v_RTN1vaMyVwYN9wwl_234.jpg  v_RTN1vaMyVwYN9wwl_428.jpg  v_RTN1vaMyVwYN9wwl_621.jpg  v_RTN1vaMyVwYN9wwl_815.jpg
+v_RTN1vaMyVwYN9wwl_1005.jpg  v_RTN1vaMyVwYN9wwl_12.jpg    v_RTN1vaMyVwYN9wwl_235.jpg  v_RTN1vaMyVwYN9wwl_429.jpg  v_RTN1vaMyVwYN9wwl_622.jpg  v_RTN1vaMyVwYN9wwl_816.jpg
+v_RTN1vaMyVwYN9wwl_1006.jpg  v_RTN1vaMyVwYN9wwl_120.jpg   v_RTN1vaMyVwYN9wwl_236.jpg  v_RTN1vaMyVwYN9wwl_43.jpg   v_RTN1vaMyVwYN9wwl_623.jpg  v_RTN1vaMyVwYN9wwl_817.jpg
+v_RTN1vaMyVwYN9wwl_1007.jpg  v_RTN1vaMyVwYN9wwl_1200.jpg  v_RTN1vaMyVwYN9wwl_237.jpg  v_RTN1vaMyVwYN9wwl_430.jpg  v_RTN1vaMyVwYN9wwl_624.jpg  v_RTN1vaMyVwYN9wwl_818.jpg
+v_RTN1vaMyVwYN9wwl_1008.jpg  v_RTN1vaMyVwYN9wwl_1201.jpg  v_RTN1vaMyVwYN9wwl_238.jpg  v_RTN1vaMyVwYN9wwl_431.jpg  v_RTN1vaMyVwYN9wwl_625.jpg  v_RTN1vaMyVwYN9wwl_819.jpg
+v_RTN1vaMyVwYN9wwl_1009.jpg  v_RTN1vaMyVwYN9wwl_1202.jpg  v_RTN1vaMyVwYN9wwl_239.jpg  v_RTN1vaMyVwYN9wwl_432.jpg  v_RTN1vaMyVwYN9wwl_626.jpg  v_RTN1vaMyVwYN9wwl_82.jpg
+v_RTN1vaMyVwYN9wwl_101.jpg   v_RTN1vaMyVwYN9wwl_1203.jpg  v_RTN1vaMyVwYN9wwl_24.jpg   v_RTN1vaMyVwYN9wwl_433.jpg  v_RTN1vaMyVwYN9wwl_627.jpg  v_RTN1vaMyVwYN9wwl_820.jpg
+v_RTN1vaMyVwYN9wwl_1010.jpg  v_RTN1vaMyVwYN9wwl_1204.jpg  v_RTN1vaMyVwYN9wwl_240.jpg  v_RTN1vaMyVwYN9wwl_434.jpg  v_RTN1vaMyVwYN9wwl_628.jpg  v_RTN1vaMyVwYN9wwl_821.jpg
+v_RTN1vaMyVwYN9wwl_1011.jpg  v_RTN1vaMyVwYN9wwl_1205.jpg  v_RTN1vaMyVwYN9wwl_241.jpg  v_RTN1vaMyVwYN9wwl_435.jpg  v_RTN1vaMyVwYN9wwl_629.jpg  v_RTN1vaMyVwYN9wwl_822.jpg
+v_RTN1vaMyVwYN9wwl_1012.jpg  v_RTN1vaMyVwYN9wwl_1206.jpg  v_RTN1vaMyVwYN9wwl_242.jpg  v_RTN1vaMyVwYN9wwl_436.jpg  v_RTN1vaMyVwYN9wwl_63.jpg   v_RTN1vaMyVwYN9wwl_823.jpg
+v_RTN1vaMyVwYN9wwl_1013.jpg  v_RTN1vaMyVwYN9wwl_1207.jpg  v_RTN1vaMyVwYN9wwl_243.jpg  v_RTN1vaMyVwYN9wwl_437.jpg  v_RTN1vaMyVwYN9wwl_630.jpg  v_RTN1vaMyVwYN9wwl_824.jpg
+v_RTN1vaMyVwYN9wwl_1014.jpg  v_RTN1vaMyVwYN9wwl_1208.jpg  v_RTN1vaMyVwYN9wwl_244.jpg  v_RTN1vaMyVwYN9wwl_438.jpg  v_RTN1vaMyVwYN9wwl_631.jpg  v_RTN1vaMyVwYN9wwl_825.jpg
+v_RTN1vaMyVwYN9wwl_1015.jpg  v_RTN1vaMyVwYN9wwl_1209.jpg  v_RTN1vaMyVwYN9wwl_245.jpg  v_RTN1vaMyVwYN9wwl_439.jpg  v_RTN1vaMyVwYN9wwl_632.jpg  v_RTN1vaMyVwYN9wwl_826.jpg
+v_RTN1vaMyVwYN9wwl_1016.jpg  v_RTN1vaMyVwYN9wwl_121.jpg   v_RTN1vaMyVwYN9wwl_246.jpg  v_RTN1vaMyVwYN9wwl_44.jpg   v_RTN1vaMyVwYN9wwl_633.jpg  v_RTN1vaMyVwYN9wwl_827.jpg
+v_RTN1vaMyVwYN9wwl_1017.jpg  v_RTN1vaMyVwYN9wwl_1210.jpg  v_RTN1vaMyVwYN9wwl_247.jpg  v_RTN1vaMyVwYN9wwl_440.jpg  v_RTN1vaMyVwYN9wwl_634.jpg  v_RTN1vaMyVwYN9wwl_828.jpg
+v_RTN1vaMyVwYN9wwl_1018.jpg  v_RTN1vaMyVwYN9wwl_1211.jpg  v_RTN1vaMyVwYN9wwl_248.jpg  v_RTN1vaMyVwYN9wwl_441.jpg  v_RTN1vaMyVwYN9wwl_635.jpg  v_RTN1vaMyVwYN9wwl_829.jpg
+v_RTN1vaMyVwYN9wwl_1019.jpg  v_RTN1vaMyVwYN9wwl_1212.jpg  v_RTN1vaMyVwYN9wwl_249.jpg  v_RTN1vaMyVwYN9wwl_442.jpg  v_RTN1vaMyVwYN9wwl_636.jpg  v_RTN1vaMyVwYN9wwl_83.jpg
+v_RTN1vaMyVwYN9wwl_102.jpg   v_RTN1vaMyVwYN9wwl_1213.jpg  v_RTN1vaMyVwYN9wwl_25.jpg   v_RTN1vaMyVwYN9wwl_443.jpg  v_RTN1vaMyVwYN9wwl_637.jpg  v_RTN1vaMyVwYN9wwl_830.jpg
+v_RTN1vaMyVwYN9wwl_1020.jpg  v_RTN1vaMyVwYN9wwl_1214.jpg  v_RTN1vaMyVwYN9wwl_250.jpg  v_RTN1vaMyVwYN9wwl_444.jpg  v_RTN1vaMyVwYN9wwl_638.jpg  v_RTN1vaMyVwYN9wwl_831.jpg
+v_RTN1vaMyVwYN9wwl_1021.jpg  v_RTN1vaMyVwYN9wwl_1215.jpg  v_RTN1vaMyVwYN9wwl_251.jpg  v_RTN1vaMyVwYN9wwl_445.jpg  v_RTN1vaMyVwYN9wwl_639.jpg  v_RTN1vaMyVwYN9wwl_832.jpg
+v_RTN1vaMyVwYN9wwl_1022.jpg  v_RTN1vaMyVwYN9wwl_1216.jpg  v_RTN1vaMyVwYN9wwl_252.jpg  v_RTN1vaMyVwYN9wwl_446.jpg  v_RTN1vaMyVwYN9wwl_64.jpg   v_RTN1vaMyVwYN9wwl_833.jpg
+v_RTN1vaMyVwYN9wwl_1023.jpg  v_RTN1vaMyVwYN9wwl_1217.jpg  v_RTN1vaMyVwYN9wwl_253.jpg  v_RTN1vaMyVwYN9wwl_447.jpg  v_RTN1vaMyVwYN9wwl_640.jpg  v_RTN1vaMyVwYN9wwl_834.jpg
+v_RTN1vaMyVwYN9wwl_1024.jpg  v_RTN1vaMyVwYN9wwl_1218.jpg  v_RTN1vaMyVwYN9wwl_254.jpg  v_RTN1vaMyVwYN9wwl_448.jpg  v_RTN1vaMyVwYN9wwl_641.jpg  v_RTN1vaMyVwYN9wwl_835.jpg
+v_RTN1vaMyVwYN9wwl_1025.jpg  v_RTN1vaMyVwYN9wwl_1219.jpg  v_RTN1vaMyVwYN9wwl_255.jpg  v_RTN1vaMyVwYN9wwl_449.jpg  v_RTN1vaMyVwYN9wwl_642.jpg  v_RTN1vaMyVwYN9wwl_836.jpg
+v_RTN1vaMyVwYN9wwl_1026.jpg  v_RTN1vaMyVwYN9wwl_122.jpg   v_RTN1vaMyVwYN9wwl_256.jpg  v_RTN1vaMyVwYN9wwl_45.jpg   v_RTN1vaMyVwYN9wwl_643.jpg  v_RTN1vaMyVwYN9wwl_837.jpg
+v_RTN1vaMyVwYN9wwl_1027.jpg  v_RTN1vaMyVwYN9wwl_1220.jpg  v_RTN1vaMyVwYN9wwl_257.jpg  v_RTN1vaMyVwYN9wwl_450.jpg  v_RTN1vaMyVwYN9wwl_644.jpg  v_RTN1vaMyVwYN9wwl_838.jpg
+v_RTN1vaMyVwYN9wwl_1028.jpg  v_RTN1vaMyVwYN9wwl_1221.jpg  v_RTN1vaMyVwYN9wwl_258.jpg  v_RTN1vaMyVwYN9wwl_451.jpg  v_RTN1vaMyVwYN9wwl_645.jpg  v_RTN1vaMyVwYN9wwl_839.jpg
+v_RTN1vaMyVwYN9wwl_1029.jpg  v_RTN1vaMyVwYN9wwl_1222.jpg  v_RTN1vaMyVwYN9wwl_259.jpg  v_RTN1vaMyVwYN9wwl_452.jpg  v_RTN1vaMyVwYN9wwl_646.jpg  v_RTN1vaMyVwYN9wwl_84.jpg
+v_RTN1vaMyVwYN9wwl_103.jpg   v_RTN1vaMyVwYN9wwl_1223.jpg  v_RTN1vaMyVwYN9wwl_26.jpg   v_RTN1vaMyVwYN9wwl_453.jpg  v_RTN1vaMyVwYN9wwl_647.jpg  v_RTN1vaMyVwYN9wwl_840.jpg
+v_RTN1vaMyVwYN9wwl_1030.jpg  v_RTN1vaMyVwYN9wwl_1224.jpg  v_RTN1vaMyVwYN9wwl_260.jpg  v_RTN1vaMyVwYN9wwl_454.jpg  v_RTN1vaMyVwYN9wwl_648.jpg  v_RTN1vaMyVwYN9wwl_841.jpg
+v_RTN1vaMyVwYN9wwl_1031.jpg  v_RTN1vaMyVwYN9wwl_1225.jpg  v_RTN1vaMyVwYN9wwl_261.jpg  v_RTN1vaMyVwYN9wwl_455.jpg  v_RTN1vaMyVwYN9wwl_649.jpg  v_RTN1vaMyVwYN9wwl_842.jpg
+v_RTN1vaMyVwYN9wwl_1032.jpg  v_RTN1vaMyVwYN9wwl_1226.jpg  v_RTN1vaMyVwYN9wwl_262.jpg  v_RTN1vaMyVwYN9wwl_456.jpg  v_RTN1vaMyVwYN9wwl_65.jpg   v_RTN1vaMyVwYN9wwl_843.jpg
+v_RTN1vaMyVwYN9wwl_1033.jpg  v_RTN1vaMyVwYN9wwl_1227.jpg  v_RTN1vaMyVwYN9wwl_263.jpg  v_RTN1vaMyVwYN9wwl_457.jpg  v_RTN1vaMyVwYN9wwl_650.jpg  v_RTN1vaMyVwYN9wwl_844.jpg
+v_RTN1vaMyVwYN9wwl_1034.jpg  v_RTN1vaMyVwYN9wwl_1228.jpg  v_RTN1vaMyVwYN9wwl_264.jpg  v_RTN1vaMyVwYN9wwl_458.jpg  v_RTN1vaMyVwYN9wwl_651.jpg  v_RTN1vaMyVwYN9wwl_845.jpg
+v_RTN1vaMyVwYN9wwl_1035.jpg  v_RTN1vaMyVwYN9wwl_1229.jpg  v_RTN1vaMyVwYN9wwl_265.jpg  v_RTN1vaMyVwYN9wwl_459.jpg  v_RTN1vaMyVwYN9wwl_652.jpg  v_RTN1vaMyVwYN9wwl_846.jpg
+v_RTN1vaMyVwYN9wwl_1036.jpg  v_RTN1vaMyVwYN9wwl_123.jpg   v_RTN1vaMyVwYN9wwl_266.jpg  v_RTN1vaMyVwYN9wwl_46.jpg   v_RTN1vaMyVwYN9wwl_653.jpg  v_RTN1vaMyVwYN9wwl_847.jpg
+v_RTN1vaMyVwYN9wwl_1037.jpg  v_RTN1vaMyVwYN9wwl_1230.jpg  v_RTN1vaMyVwYN9wwl_267.jpg  v_RTN1vaMyVwYN9wwl_460.jpg  v_RTN1vaMyVwYN9wwl_654.jpg  v_RTN1vaMyVwYN9wwl_848.jpg
+v_RTN1vaMyVwYN9wwl_1038.jpg  v_RTN1vaMyVwYN9wwl_1231.jpg  v_RTN1vaMyVwYN9wwl_268.jpg  v_RTN1vaMyVwYN9wwl_461.jpg  v_RTN1vaMyVwYN9wwl_655.jpg  v_RTN1vaMyVwYN9wwl_849.jpg
+v_RTN1vaMyVwYN9wwl_1039.jpg  v_RTN1vaMyVwYN9wwl_1232.jpg  v_RTN1vaMyVwYN9wwl_269.jpg  v_RTN1vaMyVwYN9wwl_462.jpg  v_RTN1vaMyVwYN9wwl_656.jpg  v_RTN1vaMyVwYN9wwl_85.jpg
+v_RTN1vaMyVwYN9wwl_104.jpg   v_RTN1vaMyVwYN9wwl_1233.jpg  v_RTN1vaMyVwYN9wwl_27.jpg   v_RTN1vaMyVwYN9wwl_463.jpg  v_RTN1vaMyVwYN9wwl_657.jpg  v_RTN1vaMyVwYN9wwl_850.jpg
+v_RTN1vaMyVwYN9wwl_1040.jpg  v_RTN1vaMyVwYN9wwl_1234.jpg  v_RTN1vaMyVwYN9wwl_270.jpg  v_RTN1vaMyVwYN9wwl_464.jpg  v_RTN1vaMyVwYN9wwl_658.jpg  v_RTN1vaMyVwYN9wwl_851.jpg
+v_RTN1vaMyVwYN9wwl_1041.jpg  v_RTN1vaMyVwYN9wwl_1235.jpg  v_RTN1vaMyVwYN9wwl_271.jpg  v_RTN1vaMyVwYN9wwl_465.jpg  v_RTN1vaMyVwYN9wwl_659.jpg  v_RTN1vaMyVwYN9wwl_852.jpg
+v_RTN1vaMyVwYN9wwl_1042.jpg  v_RTN1vaMyVwYN9wwl_1236.jpg  v_RTN1vaMyVwYN9wwl_272.jpg  v_RTN1vaMyVwYN9wwl_466.jpg  v_RTN1vaMyVwYN9wwl_66.jpg   v_RTN1vaMyVwYN9wwl_853.jpg
+v_RTN1vaMyVwYN9wwl_1043.jpg  v_RTN1vaMyVwYN9wwl_1237.jpg  v_RTN1vaMyVwYN9wwl_273.jpg  v_RTN1vaMyVwYN9wwl_467.jpg  v_RTN1vaMyVwYN9wwl_660.jpg  v_RTN1vaMyVwYN9wwl_854.jpg
+v_RTN1vaMyVwYN9wwl_1044.jpg  v_RTN1vaMyVwYN9wwl_1238.jpg  v_RTN1vaMyVwYN9wwl_274.jpg  v_RTN1vaMyVwYN9wwl_468.jpg  v_RTN1vaMyVwYN9wwl_661.jpg  v_RTN1vaMyVwYN9wwl_855.jpg
+v_RTN1vaMyVwYN9wwl_1045.jpg  v_RTN1vaMyVwYN9wwl_1239.jpg  v_RTN1vaMyVwYN9wwl_275.jpg  v_RTN1vaMyVwYN9wwl_469.jpg  v_RTN1vaMyVwYN9wwl_662.jpg  v_RTN1vaMyVwYN9wwl_856.jpg
+v_RTN1vaMyVwYN9wwl_1046.jpg  v_RTN1vaMyVwYN9wwl_124.jpg   v_RTN1vaMyVwYN9wwl_276.jpg  v_RTN1vaMyVwYN9wwl_47.jpg   v_RTN1vaMyVwYN9wwl_663.jpg  v_RTN1vaMyVwYN9wwl_857.jpg
+v_RTN1vaMyVwYN9wwl_1047.jpg  v_RTN1vaMyVwYN9wwl_1240.jpg  v_RTN1vaMyVwYN9wwl_277.jpg  v_RTN1vaMyVwYN9wwl_470.jpg  v_RTN1vaMyVwYN9wwl_664.jpg  v_RTN1vaMyVwYN9wwl_858.jpg
+v_RTN1vaMyVwYN9wwl_1048.jpg  v_RTN1vaMyVwYN9wwl_1241.jpg  v_RTN1vaMyVwYN9wwl_278.jpg  v_RTN1vaMyVwYN9wwl_471.jpg  v_RTN1vaMyVwYN9wwl_665.jpg  v_RTN1vaMyVwYN9wwl_859.jpg
+v_RTN1vaMyVwYN9wwl_1049.jpg  v_RTN1vaMyVwYN9wwl_1242.jpg  v_RTN1vaMyVwYN9wwl_279.jpg  v_RTN1vaMyVwYN9wwl_472.jpg  v_RTN1vaMyVwYN9wwl_666.jpg  v_RTN1vaMyVwYN9wwl_86.jpg
+v_RTN1vaMyVwYN9wwl_105.jpg   v_RTN1vaMyVwYN9wwl_1243.jpg  v_RTN1vaMyVwYN9wwl_28.jpg   v_RTN1vaMyVwYN9wwl_473.jpg  v_RTN1vaMyVwYN9wwl_667.jpg  v_RTN1vaMyVwYN9wwl_860.jpg
+v_RTN1vaMyVwYN9wwl_1050.jpg  v_RTN1vaMyVwYN9wwl_1244.jpg  v_RTN1vaMyVwYN9wwl_280.jpg  v_RTN1vaMyVwYN9wwl_474.jpg  v_RTN1vaMyVwYN9wwl_668.jpg  v_RTN1vaMyVwYN9wwl_861.jpg
+v_RTN1vaMyVwYN9wwl_1051.jpg  v_RTN1vaMyVwYN9wwl_1245.jpg  v_RTN1vaMyVwYN9wwl_281.jpg  v_RTN1vaMyVwYN9wwl_475.jpg  v_RTN1vaMyVwYN9wwl_669.jpg  v_RTN1vaMyVwYN9wwl_862.jpg
+v_RTN1vaMyVwYN9wwl_1052.jpg  v_RTN1vaMyVwYN9wwl_1246.jpg  v_RTN1vaMyVwYN9wwl_282.jpg  v_RTN1vaMyVwYN9wwl_476.jpg  v_RTN1vaMyVwYN9wwl_67.jpg   v_RTN1vaMyVwYN9wwl_863.jpg
+v_RTN1vaMyVwYN9wwl_1053.jpg  v_RTN1vaMyVwYN9wwl_1247.jpg  v_RTN1vaMyVwYN9wwl_283.jpg  v_RTN1vaMyVwYN9wwl_477.jpg  v_RTN1vaMyVwYN9wwl_670.jpg  v_RTN1vaMyVwYN9wwl_864.jpg
+v_RTN1vaMyVwYN9wwl_1054.jpg  v_RTN1vaMyVwYN9wwl_1248.jpg  v_RTN1vaMyVwYN9wwl_284.jpg  v_RTN1vaMyVwYN9wwl_478.jpg  v_RTN1vaMyVwYN9wwl_671.jpg  v_RTN1vaMyVwYN9wwl_865.jpg
+v_RTN1vaMyVwYN9wwl_1055.jpg  v_RTN1vaMyVwYN9wwl_1249.jpg  v_RTN1vaMyVwYN9wwl_285.jpg  v_RTN1vaMyVwYN9wwl_479.jpg  v_RTN1vaMyVwYN9wwl_672.jpg  v_RTN1vaMyVwYN9wwl_866.jpg
+v_RTN1vaMyVwYN9wwl_1056.jpg  v_RTN1vaMyVwYN9wwl_125.jpg   v_RTN1vaMyVwYN9wwl_286.jpg  v_RTN1vaMyVwYN9wwl_48.jpg   v_RTN1vaMyVwYN9wwl_673.jpg  v_RTN1vaMyVwYN9wwl_867.jpg
+v_RTN1vaMyVwYN9wwl_1057.jpg  v_RTN1vaMyVwYN9wwl_1250.jpg  v_RTN1vaMyVwYN9wwl_287.jpg  v_RTN1vaMyVwYN9wwl_480.jpg  v_RTN1vaMyVwYN9wwl_674.jpg  v_RTN1vaMyVwYN9wwl_868.jpg
+v_RTN1vaMyVwYN9wwl_1058.jpg  v_RTN1vaMyVwYN9wwl_1251.jpg  v_RTN1vaMyVwYN9wwl_288.jpg  v_RTN1vaMyVwYN9wwl_481.jpg  v_RTN1vaMyVwYN9wwl_675.jpg  v_RTN1vaMyVwYN9wwl_869.jpg
+v_RTN1vaMyVwYN9wwl_1059.jpg  v_RTN1vaMyVwYN9wwl_1252.jpg  v_RTN1vaMyVwYN9wwl_289.jpg  v_RTN1vaMyVwYN9wwl_482.jpg  v_RTN1vaMyVwYN9wwl_676.jpg  v_RTN1vaMyVwYN9wwl_87.jpg
+v_RTN1vaMyVwYN9wwl_106.jpg   v_RTN1vaMyVwYN9wwl_1253.jpg  v_RTN1vaMyVwYN9wwl_29.jpg   v_RTN1vaMyVwYN9wwl_483.jpg  v_RTN1vaMyVwYN9wwl_677.jpg  v_RTN1vaMyVwYN9wwl_870.jpg
+v_RTN1vaMyVwYN9wwl_1060.jpg  v_RTN1vaMyVwYN9wwl_1254.jpg  v_RTN1vaMyVwYN9wwl_290.jpg  v_RTN1vaMyVwYN9wwl_484.jpg  v_RTN1vaMyVwYN9wwl_678.jpg  v_RTN1vaMyVwYN9wwl_871.jpg
+v_RTN1vaMyVwYN9wwl_1061.jpg  v_RTN1vaMyVwYN9wwl_1255.jpg  v_RTN1vaMyVwYN9wwl_291.jpg  v_RTN1vaMyVwYN9wwl_485.jpg  v_RTN1vaMyVwYN9wwl_679.jpg  v_RTN1vaMyVwYN9wwl_872.jpg
+v_RTN1vaMyVwYN9wwl_1062.jpg  v_RTN1vaMyVwYN9wwl_1256.jpg  v_RTN1vaMyVwYN9wwl_292.jpg  v_RTN1vaMyVwYN9wwl_486.jpg  v_RTN1vaMyVwYN9wwl_68.jpg   v_RTN1vaMyVwYN9wwl_873.jpg
+v_RTN1vaMyVwYN9wwl_1063.jpg  v_RTN1vaMyVwYN9wwl_1257.jpg  v_RTN1vaMyVwYN9wwl_293.jpg  v_RTN1vaMyVwYN9wwl_487.jpg  v_RTN1vaMyVwYN9wwl_680.jpg  v_RTN1vaMyVwYN9wwl_874.jpg
+v_RTN1vaMyVwYN9wwl_1064.jpg  v_RTN1vaMyVwYN9wwl_1258.jpg  v_RTN1vaMyVwYN9wwl_294.jpg  v_RTN1vaMyVwYN9wwl_488.jpg  v_RTN1vaMyVwYN9wwl_681.jpg  v_RTN1vaMyVwYN9wwl_875.jpg
+v_RTN1vaMyVwYN9wwl_1065.jpg  v_RTN1vaMyVwYN9wwl_1259.jpg  v_RTN1vaMyVwYN9wwl_295.jpg  v_RTN1vaMyVwYN9wwl_489.jpg  v_RTN1vaMyVwYN9wwl_682.jpg  v_RTN1vaMyVwYN9wwl_876.jpg
+v_RTN1vaMyVwYN9wwl_1066.jpg  v_RTN1vaMyVwYN9wwl_126.jpg   v_RTN1vaMyVwYN9wwl_296.jpg  v_RTN1vaMyVwYN9wwl_49.jpg   v_RTN1vaMyVwYN9wwl_683.jpg  v_RTN1vaMyVwYN9wwl_877.jpg
+v_RTN1vaMyVwYN9wwl_1067.jpg  v_RTN1vaMyVwYN9wwl_1260.jpg  v_RTN1vaMyVwYN9wwl_297.jpg  v_RTN1vaMyVwYN9wwl_490.jpg  v_RTN1vaMyVwYN9wwl_684.jpg  v_RTN1vaMyVwYN9wwl_878.jpg
+v_RTN1vaMyVwYN9wwl_1068.jpg  v_RTN1vaMyVwYN9wwl_1261.jpg  v_RTN1vaMyVwYN9wwl_298.jpg  v_RTN1vaMyVwYN9wwl_491.jpg  v_RTN1vaMyVwYN9wwl_685.jpg  v_RTN1vaMyVwYN9wwl_879.jpg
+v_RTN1vaMyVwYN9wwl_1069.jpg  v_RTN1vaMyVwYN9wwl_1262.jpg  v_RTN1vaMyVwYN9wwl_299.jpg  v_RTN1vaMyVwYN9wwl_492.jpg  v_RTN1vaMyVwYN9wwl_686.jpg  v_RTN1vaMyVwYN9wwl_88.jpg
+v_RTN1vaMyVwYN9wwl_107.jpg   v_RTN1vaMyVwYN9wwl_1263.jpg  v_RTN1vaMyVwYN9wwl_3.jpg    v_RTN1vaMyVwYN9wwl_493.jpg  v_RTN1vaMyVwYN9wwl_687.jpg  v_RTN1vaMyVwYN9wwl_880.jpg
+v_RTN1vaMyVwYN9wwl_1070.jpg  v_RTN1vaMyVwYN9wwl_1264.jpg  v_RTN1vaMyVwYN9wwl_30.jpg   v_RTN1vaMyVwYN9wwl_494.jpg  v_RTN1vaMyVwYN9wwl_688.jpg  v_RTN1vaMyVwYN9wwl_881.jpg
+v_RTN1vaMyVwYN9wwl_1071.jpg  v_RTN1vaMyVwYN9wwl_1265.jpg  v_RTN1vaMyVwYN9wwl_300.jpg  v_RTN1vaMyVwYN9wwl_495.jpg  v_RTN1vaMyVwYN9wwl_689.jpg  v_RTN1vaMyVwYN9wwl_882.jpg
+v_RTN1vaMyVwYN9wwl_1072.jpg  v_RTN1vaMyVwYN9wwl_1266.jpg  v_RTN1vaMyVwYN9wwl_301.jpg  v_RTN1vaMyVwYN9wwl_496.jpg  v_RTN1vaMyVwYN9wwl_69.jpg   v_RTN1vaMyVwYN9wwl_883.jpg
+v_RTN1vaMyVwYN9wwl_1073.jpg  v_RTN1vaMyVwYN9wwl_1267.jpg  v_RTN1vaMyVwYN9wwl_302.jpg  v_RTN1vaMyVwYN9wwl_497.jpg  v_RTN1vaMyVwYN9wwl_690.jpg  v_RTN1vaMyVwYN9wwl_884.jpg
+v_RTN1vaMyVwYN9wwl_1074.jpg  v_RTN1vaMyVwYN9wwl_1268.jpg  v_RTN1vaMyVwYN9wwl_303.jpg  v_RTN1vaMyVwYN9wwl_498.jpg  v_RTN1vaMyVwYN9wwl_691.jpg  v_RTN1vaMyVwYN9wwl_885.jpg
+v_RTN1vaMyVwYN9wwl_1075.jpg  v_RTN1vaMyVwYN9wwl_1269.jpg  v_RTN1vaMyVwYN9wwl_304.jpg  v_RTN1vaMyVwYN9wwl_499.jpg  v_RTN1vaMyVwYN9wwl_692.jpg  v_RTN1vaMyVwYN9wwl_886.jpg
+v_RTN1vaMyVwYN9wwl_1076.jpg  v_RTN1vaMyVwYN9wwl_127.jpg   v_RTN1vaMyVwYN9wwl_305.jpg  v_RTN1vaMyVwYN9wwl_5.jpg    v_RTN1vaMyVwYN9wwl_693.jpg  v_RTN1vaMyVwYN9wwl_887.jpg
+v_RTN1vaMyVwYN9wwl_1077.jpg  v_RTN1vaMyVwYN9wwl_1270.jpg  v_RTN1vaMyVwYN9wwl_306.jpg  v_RTN1vaMyVwYN9wwl_50.jpg   v_RTN1vaMyVwYN9wwl_694.jpg  v_RTN1vaMyVwYN9wwl_888.jpg
+v_RTN1vaMyVwYN9wwl_1078.jpg  v_RTN1vaMyVwYN9wwl_1271.jpg  v_RTN1vaMyVwYN9wwl_307.jpg  v_RTN1vaMyVwYN9wwl_500.jpg  v_RTN1vaMyVwYN9wwl_695.jpg  v_RTN1vaMyVwYN9wwl_889.jpg
+v_RTN1vaMyVwYN9wwl_1079.jpg  v_RTN1vaMyVwYN9wwl_1272.jpg  v_RTN1vaMyVwYN9wwl_308.jpg  v_RTN1vaMyVwYN9wwl_501.jpg  v_RTN1vaMyVwYN9wwl_696.jpg  v_RTN1vaMyVwYN9wwl_89.jpg
+v_RTN1vaMyVwYN9wwl_108.jpg   v_RTN1vaMyVwYN9wwl_1273.jpg  v_RTN1vaMyVwYN9wwl_309.jpg  v_RTN1vaMyVwYN9wwl_502.jpg  v_RTN1vaMyVwYN9wwl_697.jpg  v_RTN1vaMyVwYN9wwl_890.jpg
+v_RTN1vaMyVwYN9wwl_1080.jpg  v_RTN1vaMyVwYN9wwl_1274.jpg  v_RTN1vaMyVwYN9wwl_31.jpg   v_RTN1vaMyVwYN9wwl_503.jpg  v_RTN1vaMyVwYN9wwl_698.jpg  v_RTN1vaMyVwYN9wwl_891.jpg
+v_RTN1vaMyVwYN9wwl_1081.jpg  v_RTN1vaMyVwYN9wwl_1275.jpg  v_RTN1vaMyVwYN9wwl_310.jpg  v_RTN1vaMyVwYN9wwl_504.jpg  v_RTN1vaMyVwYN9wwl_699.jpg  v_RTN1vaMyVwYN9wwl_892.jpg
+v_RTN1vaMyVwYN9wwl_1082.jpg  v_RTN1vaMyVwYN9wwl_1276.jpg  v_RTN1vaMyVwYN9wwl_311.jpg  v_RTN1vaMyVwYN9wwl_505.jpg  v_RTN1vaMyVwYN9wwl_7.jpg    v_RTN1vaMyVwYN9wwl_893.jpg
+v_RTN1vaMyVwYN9wwl_1083.jpg  v_RTN1vaMyVwYN9wwl_1277.jpg  v_RTN1vaMyVwYN9wwl_312.jpg  v_RTN1vaMyVwYN9wwl_506.jpg  v_RTN1vaMyVwYN9wwl_70.jpg   v_RTN1vaMyVwYN9wwl_894.jpg
+v_RTN1vaMyVwYN9wwl_1084.jpg  v_RTN1vaMyVwYN9wwl_1278.jpg  v_RTN1vaMyVwYN9wwl_313.jpg  v_RTN1vaMyVwYN9wwl_507.jpg  v_RTN1vaMyVwYN9wwl_700.jpg  v_RTN1vaMyVwYN9wwl_895.jpg
+v_RTN1vaMyVwYN9wwl_1085.jpg  v_RTN1vaMyVwYN9wwl_1279.jpg  v_RTN1vaMyVwYN9wwl_314.jpg  v_RTN1vaMyVwYN9wwl_508.jpg  v_RTN1vaMyVwYN9wwl_701.jpg  v_RTN1vaMyVwYN9wwl_896.jpg
+v_RTN1vaMyVwYN9wwl_1086.jpg  v_RTN1vaMyVwYN9wwl_128.jpg   v_RTN1vaMyVwYN9wwl_315.jpg  v_RTN1vaMyVwYN9wwl_509.jpg  v_RTN1vaMyVwYN9wwl_702.jpg  v_RTN1vaMyVwYN9wwl_897.jpg
+v_RTN1vaMyVwYN9wwl_1087.jpg  v_RTN1vaMyVwYN9wwl_1280.jpg  v_RTN1vaMyVwYN9wwl_316.jpg  v_RTN1vaMyVwYN9wwl_51.jpg   v_RTN1vaMyVwYN9wwl_703.jpg  v_RTN1vaMyVwYN9wwl_898.jpg
+v_RTN1vaMyVwYN9wwl_1088.jpg  v_RTN1vaMyVwYN9wwl_1281.jpg  v_RTN1vaMyVwYN9wwl_317.jpg  v_RTN1vaMyVwYN9wwl_510.jpg  v_RTN1vaMyVwYN9wwl_704.jpg  v_RTN1vaMyVwYN9wwl_899.jpg
+v_RTN1vaMyVwYN9wwl_1089.jpg  v_RTN1vaMyVwYN9wwl_1282.jpg  v_RTN1vaMyVwYN9wwl_318.jpg  v_RTN1vaMyVwYN9wwl_511.jpg  v_RTN1vaMyVwYN9wwl_705.jpg  v_RTN1vaMyVwYN9wwl_9.jpg
+v_RTN1vaMyVwYN9wwl_109.jpg   v_RTN1vaMyVwYN9wwl_1283.jpg  v_RTN1vaMyVwYN9wwl_319.jpg  v_RTN1vaMyVwYN9wwl_512.jpg  v_RTN1vaMyVwYN9wwl_706.jpg  v_RTN1vaMyVwYN9wwl_90.jpg
+v_RTN1vaMyVwYN9wwl_1090.jpg  v_RTN1vaMyVwYN9wwl_1284.jpg  v_RTN1vaMyVwYN9wwl_32.jpg   v_RTN1vaMyVwYN9wwl_513.jpg  v_RTN1vaMyVwYN9wwl_707.jpg  v_RTN1vaMyVwYN9wwl_900.jpg
+v_RTN1vaMyVwYN9wwl_1091.jpg  v_RTN1vaMyVwYN9wwl_1285.jpg  v_RTN1vaMyVwYN9wwl_320.jpg  v_RTN1vaMyVwYN9wwl_514.jpg  v_RTN1vaMyVwYN9wwl_708.jpg  v_RTN1vaMyVwYN9wwl_901.jpg
+v_RTN1vaMyVwYN9wwl_1092.jpg  v_RTN1vaMyVwYN9wwl_1286.jpg  v_RTN1vaMyVwYN9wwl_321.jpg  v_RTN1vaMyVwYN9wwl_515.jpg  v_RTN1vaMyVwYN9wwl_709.jpg  v_RTN1vaMyVwYN9wwl_902.jpg
+v_RTN1vaMyVwYN9wwl_1093.jpg  v_RTN1vaMyVwYN9wwl_129.jpg   v_RTN1vaMyVwYN9wwl_322.jpg  v_RTN1vaMyVwYN9wwl_516.jpg  v_RTN1vaMyVwYN9wwl_71.jpg   v_RTN1vaMyVwYN9wwl_903.jpg
+v_RTN1vaMyVwYN9wwl_1094.jpg  v_RTN1vaMyVwYN9wwl_13.jpg    v_RTN1vaMyVwYN9wwl_323.jpg  v_RTN1vaMyVwYN9wwl_517.jpg  v_RTN1vaMyVwYN9wwl_710.jpg  v_RTN1vaMyVwYN9wwl_904.jpg
+v_RTN1vaMyVwYN9wwl_1095.jpg  v_RTN1vaMyVwYN9wwl_130.jpg   v_RTN1vaMyVwYN9wwl_324.jpg  v_RTN1vaMyVwYN9wwl_518.jpg  v_RTN1vaMyVwYN9wwl_711.jpg  v_RTN1vaMyVwYN9wwl_905.jpg
+v_RTN1vaMyVwYN9wwl_1096.jpg  v_RTN1vaMyVwYN9wwl_131.jpg   v_RTN1vaMyVwYN9wwl_325.jpg  v_RTN1vaMyVwYN9wwl_519.jpg  v_RTN1vaMyVwYN9wwl_712.jpg  v_RTN1vaMyVwYN9wwl_906.jpg
+v_RTN1vaMyVwYN9wwl_1097.jpg  v_RTN1vaMyVwYN9wwl_132.jpg   v_RTN1vaMyVwYN9wwl_326.jpg  v_RTN1vaMyVwYN9wwl_52.jpg   v_RTN1vaMyVwYN9wwl_713.jpg  v_RTN1vaMyVwYN9wwl_907.jpg
+v_RTN1vaMyVwYN9wwl_1098.jpg  v_RTN1vaMyVwYN9wwl_133.jpg   v_RTN1vaMyVwYN9wwl_327.jpg  v_RTN1vaMyVwYN9wwl_520.jpg  v_RTN1vaMyVwYN9wwl_714.jpg  v_RTN1vaMyVwYN9wwl_908.jpg
+v_RTN1vaMyVwYN9wwl_1099.jpg  v_RTN1vaMyVwYN9wwl_134.jpg   v_RTN1vaMyVwYN9wwl_328.jpg  v_RTN1vaMyVwYN9wwl_521.jpg  v_RTN1vaMyVwYN9wwl_715.jpg  v_RTN1vaMyVwYN9wwl_909.jpg
+v_RTN1vaMyVwYN9wwl_11.jpg    v_RTN1vaMyVwYN9wwl_135.jpg   v_RTN1vaMyVwYN9wwl_329.jpg  v_RTN1vaMyVwYN9wwl_522.jpg  v_RTN1vaMyVwYN9wwl_716.jpg  v_RTN1vaMyVwYN9wwl_91.jpg
+v_RTN1vaMyVwYN9wwl_110.jpg   v_RTN1vaMyVwYN9wwl_136.jpg   v_RTN1vaMyVwYN9wwl_33.jpg   v_RTN1vaMyVwYN9wwl_523.jpg  v_RTN1vaMyVwYN9wwl_717.jpg  v_RTN1vaMyVwYN9wwl_910.jpg
+v_RTN1vaMyVwYN9wwl_1100.jpg  v_RTN1vaMyVwYN9wwl_137.jpg   v_RTN1vaMyVwYN9wwl_330.jpg  v_RTN1vaMyVwYN9wwl_524.jpg  v_RTN1vaMyVwYN9wwl_718.jpg  v_RTN1vaMyVwYN9wwl_911.jpg
+v_RTN1vaMyVwYN9wwl_1101.jpg  v_RTN1vaMyVwYN9wwl_138.jpg   v_RTN1vaMyVwYN9wwl_331.jpg  v_RTN1vaMyVwYN9wwl_525.jpg  v_RTN1vaMyVwYN9wwl_719.jpg  v_RTN1vaMyVwYN9wwl_912.jpg
+v_RTN1vaMyVwYN9wwl_1102.jpg  v_RTN1vaMyVwYN9wwl_139.jpg   v_RTN1vaMyVwYN9wwl_332.jpg  v_RTN1vaMyVwYN9wwl_526.jpg  v_RTN1vaMyVwYN9wwl_72.jpg   v_RTN1vaMyVwYN9wwl_913.jpg
+v_RTN1vaMyVwYN9wwl_1103.jpg  v_RTN1vaMyVwYN9wwl_14.jpg    v_RTN1vaMyVwYN9wwl_333.jpg  v_RTN1vaMyVwYN9wwl_527.jpg  v_RTN1vaMyVwYN9wwl_720.jpg  v_RTN1vaMyVwYN9wwl_914.jpg
+v_RTN1vaMyVwYN9wwl_1104.jpg  v_RTN1vaMyVwYN9wwl_140.jpg   v_RTN1vaMyVwYN9wwl_334.jpg  v_RTN1vaMyVwYN9wwl_528.jpg  v_RTN1vaMyVwYN9wwl_721.jpg  v_RTN1vaMyVwYN9wwl_915.jpg
+v_RTN1vaMyVwYN9wwl_1105.jpg  v_RTN1vaMyVwYN9wwl_141.jpg   v_RTN1vaMyVwYN9wwl_335.jpg  v_RTN1vaMyVwYN9wwl_529.jpg  v_RTN1vaMyVwYN9wwl_722.jpg  v_RTN1vaMyVwYN9wwl_916.jpg
+v_RTN1vaMyVwYN9wwl_1106.jpg  v_RTN1vaMyVwYN9wwl_142.jpg   v_RTN1vaMyVwYN9wwl_336.jpg  v_RTN1vaMyVwYN9wwl_53.jpg   v_RTN1vaMyVwYN9wwl_723.jpg  v_RTN1vaMyVwYN9wwl_917.jpg
+v_RTN1vaMyVwYN9wwl_1107.jpg  v_RTN1vaMyVwYN9wwl_143.jpg   v_RTN1vaMyVwYN9wwl_337.jpg  v_RTN1vaMyVwYN9wwl_530.jpg  v_RTN1vaMyVwYN9wwl_724.jpg  v_RTN1vaMyVwYN9wwl_918.jpg
+v_RTN1vaMyVwYN9wwl_1108.jpg  v_RTN1vaMyVwYN9wwl_144.jpg   v_RTN1vaMyVwYN9wwl_338.jpg  v_RTN1vaMyVwYN9wwl_531.jpg  v_RTN1vaMyVwYN9wwl_725.jpg  v_RTN1vaMyVwYN9wwl_919.jpg
+v_RTN1vaMyVwYN9wwl_1109.jpg  v_RTN1vaMyVwYN9wwl_145.jpg   v_RTN1vaMyVwYN9wwl_339.jpg  v_RTN1vaMyVwYN9wwl_532.jpg  v_RTN1vaMyVwYN9wwl_726.jpg  v_RTN1vaMyVwYN9wwl_92.jpg
+v_RTN1vaMyVwYN9wwl_111.jpg   v_RTN1vaMyVwYN9wwl_146.jpg   v_RTN1vaMyVwYN9wwl_34.jpg   v_RTN1vaMyVwYN9wwl_533.jpg  v_RTN1vaMyVwYN9wwl_727.jpg  v_RTN1vaMyVwYN9wwl_920.jpg
+v_RTN1vaMyVwYN9wwl_1110.jpg  v_RTN1vaMyVwYN9wwl_147.jpg   v_RTN1vaMyVwYN9wwl_340.jpg  v_RTN1vaMyVwYN9wwl_534.jpg  v_RTN1vaMyVwYN9wwl_728.jpg  v_RTN1vaMyVwYN9wwl_921.jpg
+v_RTN1vaMyVwYN9wwl_1111.jpg  v_RTN1vaMyVwYN9wwl_148.jpg   v_RTN1vaMyVwYN9wwl_341.jpg  v_RTN1vaMyVwYN9wwl_535.jpg  v_RTN1vaMyVwYN9wwl_729.jpg  v_RTN1vaMyVwYN9wwl_922.jpg
+v_RTN1vaMyVwYN9wwl_1112.jpg  v_RTN1vaMyVwYN9wwl_149.jpg   v_RTN1vaMyVwYN9wwl_342.jpg  v_RTN1vaMyVwYN9wwl_536.jpg  v_RTN1vaMyVwYN9wwl_73.jpg   v_RTN1vaMyVwYN9wwl_923.jpg
+v_RTN1vaMyVwYN9wwl_1113.jpg  v_RTN1vaMyVwYN9wwl_15.jpg    v_RTN1vaMyVwYN9wwl_343.jpg  v_RTN1vaMyVwYN9wwl_537.jpg  v_RTN1vaMyVwYN9wwl_730.jpg  v_RTN1vaMyVwYN9wwl_924.jpg
+v_RTN1vaMyVwYN9wwl_1114.jpg  v_RTN1vaMyVwYN9wwl_150.jpg   v_RTN1vaMyVwYN9wwl_344.jpg  v_RTN1vaMyVwYN9wwl_538.jpg  v_RTN1vaMyVwYN9wwl_731.jpg  v_RTN1vaMyVwYN9wwl_925.jpg
+v_RTN1vaMyVwYN9wwl_1115.jpg  v_RTN1vaMyVwYN9wwl_151.jpg   v_RTN1vaMyVwYN9wwl_345.jpg  v_RTN1vaMyVwYN9wwl_539.jpg  v_RTN1vaMyVwYN9wwl_732.jpg  v_RTN1vaMyVwYN9wwl_926.jpg
+v_RTN1vaMyVwYN9wwl_1116.jpg  v_RTN1vaMyVwYN9wwl_152.jpg   v_RTN1vaMyVwYN9wwl_346.jpg  v_RTN1vaMyVwYN9wwl_54.jpg   v_RTN1vaMyVwYN9wwl_733.jpg  v_RTN1vaMyVwYN9wwl_927.jpg
+v_RTN1vaMyVwYN9wwl_1117.jpg  v_RTN1vaMyVwYN9wwl_153.jpg   v_RTN1vaMyVwYN9wwl_347.jpg  v_RTN1vaMyVwYN9wwl_540.jpg  v_RTN1vaMyVwYN9wwl_734.jpg  v_RTN1vaMyVwYN9wwl_928.jpg
+v_RTN1vaMyVwYN9wwl_1118.jpg  v_RTN1vaMyVwYN9wwl_154.jpg   v_RTN1vaMyVwYN9wwl_348.jpg  v_RTN1vaMyVwYN9wwl_541.jpg  v_RTN1vaMyVwYN9wwl_735.jpg  v_RTN1vaMyVwYN9wwl_929.jpg
+v_RTN1vaMyVwYN9wwl_1119.jpg  v_RTN1vaMyVwYN9wwl_155.jpg   v_RTN1vaMyVwYN9wwl_349.jpg  v_RTN1vaMyVwYN9wwl_542.jpg  v_RTN1vaMyVwYN9wwl_736.jpg  v_RTN1vaMyVwYN9wwl_93.jpg
+v_RTN1vaMyVwYN9wwl_112.jpg   v_RTN1vaMyVwYN9wwl_156.jpg   v_RTN1vaMyVwYN9wwl_35.jpg   v_RTN1vaMyVwYN9wwl_543.jpg  v_RTN1vaMyVwYN9wwl_737.jpg  v_RTN1vaMyVwYN9wwl_930.jpg
+v_RTN1vaMyVwYN9wwl_1120.jpg  v_RTN1vaMyVwYN9wwl_157.jpg   v_RTN1vaMyVwYN9wwl_350.jpg  v_RTN1vaMyVwYN9wwl_544.jpg  v_RTN1vaMyVwYN9wwl_738.jpg  v_RTN1vaMyVwYN9wwl_931.jpg
+v_RTN1vaMyVwYN9wwl_1121.jpg  v_RTN1vaMyVwYN9wwl_158.jpg   v_RTN1vaMyVwYN9wwl_351.jpg  v_RTN1vaMyVwYN9wwl_545.jpg  v_RTN1vaMyVwYN9wwl_739.jpg  v_RTN1vaMyVwYN9wwl_932.jpg
+v_RTN1vaMyVwYN9wwl_1122.jpg  v_RTN1vaMyVwYN9wwl_159.jpg   v_RTN1vaMyVwYN9wwl_352.jpg  v_RTN1vaMyVwYN9wwl_546.jpg  v_RTN1vaMyVwYN9wwl_74.jpg   v_RTN1vaMyVwYN9wwl_933.jpg
+v_RTN1vaMyVwYN9wwl_1123.jpg  v_RTN1vaMyVwYN9wwl_16.jpg    v_RTN1vaMyVwYN9wwl_353.jpg  v_RTN1vaMyVwYN9wwl_547.jpg  v_RTN1vaMyVwYN9wwl_740.jpg  v_RTN1vaMyVwYN9wwl_934.jpg
+v_RTN1vaMyVwYN9wwl_1124.jpg  v_RTN1vaMyVwYN9wwl_160.jpg   v_RTN1vaMyVwYN9wwl_354.jpg  v_RTN1vaMyVwYN9wwl_548.jpg  v_RTN1vaMyVwYN9wwl_741.jpg  v_RTN1vaMyVwYN9wwl_935.jpg
+v_RTN1vaMyVwYN9wwl_1125.jpg  v_RTN1vaMyVwYN9wwl_161.jpg   v_RTN1vaMyVwYN9wwl_355.jpg  v_RTN1vaMyVwYN9wwl_549.jpg  v_RTN1vaMyVwYN9wwl_742.jpg  v_RTN1vaMyVwYN9wwl_936.jpg
+v_RTN1vaMyVwYN9wwl_1126.jpg  v_RTN1vaMyVwYN9wwl_162.jpg   v_RTN1vaMyVwYN9wwl_356.jpg  v_RTN1vaMyVwYN9wwl_55.jpg   v_RTN1vaMyVwYN9wwl_743.jpg  v_RTN1vaMyVwYN9wwl_937.jpg
+v_RTN1vaMyVwYN9wwl_1127.jpg  v_RTN1vaMyVwYN9wwl_163.jpg   v_RTN1vaMyVwYN9wwl_357.jpg  v_RTN1vaMyVwYN9wwl_550.jpg  v_RTN1vaMyVwYN9wwl_744.jpg  v_RTN1vaMyVwYN9wwl_938.jpg
+v_RTN1vaMyVwYN9wwl_1128.jpg  v_RTN1vaMyVwYN9wwl_164.jpg   v_RTN1vaMyVwYN9wwl_358.jpg  v_RTN1vaMyVwYN9wwl_551.jpg  v_RTN1vaMyVwYN9wwl_745.jpg  v_RTN1vaMyVwYN9wwl_939.jpg
+v_RTN1vaMyVwYN9wwl_1129.jpg  v_RTN1vaMyVwYN9wwl_165.jpg   v_RTN1vaMyVwYN9wwl_359.jpg  v_RTN1vaMyVwYN9wwl_552.jpg  v_RTN1vaMyVwYN9wwl_746.jpg  v_RTN1vaMyVwYN9wwl_94.jpg
+v_RTN1vaMyVwYN9wwl_113.jpg   v_RTN1vaMyVwYN9wwl_166.jpg   v_RTN1vaMyVwYN9wwl_36.jpg   v_RTN1vaMyVwYN9wwl_553.jpg  v_RTN1vaMyVwYN9wwl_747.jpg  v_RTN1vaMyVwYN9wwl_940.jpg
+v_RTN1vaMyVwYN9wwl_1130.jpg  v_RTN1vaMyVwYN9wwl_167.jpg   v_RTN1vaMyVwYN9wwl_360.jpg  v_RTN1vaMyVwYN9wwl_554.jpg  v_RTN1vaMyVwYN9wwl_748.jpg  v_RTN1vaMyVwYN9wwl_941.jpg
+v_RTN1vaMyVwYN9wwl_1131.jpg  v_RTN1vaMyVwYN9wwl_168.jpg   v_RTN1vaMyVwYN9wwl_361.jpg  v_RTN1vaMyVwYN9wwl_555.jpg  v_RTN1vaMyVwYN9wwl_749.jpg  v_RTN1vaMyVwYN9wwl_942.jpg
+v_RTN1vaMyVwYN9wwl_1132.jpg  v_RTN1vaMyVwYN9wwl_169.jpg   v_RTN1vaMyVwYN9wwl_362.jpg  v_RTN1vaMyVwYN9wwl_556.jpg  v_RTN1vaMyVwYN9wwl_75.jpg   v_RTN1vaMyVwYN9wwl_943.jpg
+v_RTN1vaMyVwYN9wwl_1133.jpg  v_RTN1vaMyVwYN9wwl_17.jpg    v_RTN1vaMyVwYN9wwl_363.jpg  v_RTN1vaMyVwYN9wwl_557.jpg  v_RTN1vaMyVwYN9wwl_750.jpg  v_RTN1vaMyVwYN9wwl_944.jpg
+v_RTN1vaMyVwYN9wwl_1134.jpg  v_RTN1vaMyVwYN9wwl_170.jpg   v_RTN1vaMyVwYN9wwl_364.jpg  v_RTN1vaMyVwYN9wwl_558.jpg  v_RTN1vaMyVwYN9wwl_751.jpg  v_RTN1vaMyVwYN9wwl_945.jpg
+v_RTN1vaMyVwYN9wwl_1135.jpg  v_RTN1vaMyVwYN9wwl_171.jpg   v_RTN1vaMyVwYN9wwl_365.jpg  v_RTN1vaMyVwYN9wwl_559.jpg  v_RTN1vaMyVwYN9wwl_752.jpg  v_RTN1vaMyVwYN9wwl_946.jpg
+v_RTN1vaMyVwYN9wwl_1136.jpg  v_RTN1vaMyVwYN9wwl_172.jpg   v_RTN1vaMyVwYN9wwl_366.jpg  v_RTN1vaMyVwYN9wwl_56.jpg   v_RTN1vaMyVwYN9wwl_753.jpg  v_RTN1vaMyVwYN9wwl_947.jpg
+v_RTN1vaMyVwYN9wwl_1137.jpg  v_RTN1vaMyVwYN9wwl_173.jpg   v_RTN1vaMyVwYN9wwl_367.jpg  v_RTN1vaMyVwYN9wwl_560.jpg  v_RTN1vaMyVwYN9wwl_754.jpg  v_RTN1vaMyVwYN9wwl_948.jpg
+v_RTN1vaMyVwYN9wwl_1138.jpg  v_RTN1vaMyVwYN9wwl_174.jpg   v_RTN1vaMyVwYN9wwl_368.jpg  v_RTN1vaMyVwYN9wwl_561.jpg  v_RTN1vaMyVwYN9wwl_755.jpg  v_RTN1vaMyVwYN9wwl_949.jpg
+v_RTN1vaMyVwYN9wwl_1139.jpg  v_RTN1vaMyVwYN9wwl_175.jpg   v_RTN1vaMyVwYN9wwl_369.jpg  v_RTN1vaMyVwYN9wwl_562.jpg  v_RTN1vaMyVwYN9wwl_756.jpg  v_RTN1vaMyVwYN9wwl_95.jpg
+v_RTN1vaMyVwYN9wwl_114.jpg   v_RTN1vaMyVwYN9wwl_176.jpg   v_RTN1vaMyVwYN9wwl_37.jpg   v_RTN1vaMyVwYN9wwl_563.jpg  v_RTN1vaMyVwYN9wwl_757.jpg  v_RTN1vaMyVwYN9wwl_950.jpg
+v_RTN1vaMyVwYN9wwl_1140.jpg  v_RTN1vaMyVwYN9wwl_177.jpg   v_RTN1vaMyVwYN9wwl_370.jpg  v_RTN1vaMyVwYN9wwl_564.jpg  v_RTN1vaMyVwYN9wwl_758.jpg  v_RTN1vaMyVwYN9wwl_951.jpg
+v_RTN1vaMyVwYN9wwl_1141.jpg  v_RTN1vaMyVwYN9wwl_178.jpg   v_RTN1vaMyVwYN9wwl_371.jpg  v_RTN1vaMyVwYN9wwl_565.jpg  v_RTN1vaMyVwYN9wwl_759.jpg  v_RTN1vaMyVwYN9wwl_952.jpg
+v_RTN1vaMyVwYN9wwl_1142.jpg  v_RTN1vaMyVwYN9wwl_179.jpg   v_RTN1vaMyVwYN9wwl_372.jpg  v_RTN1vaMyVwYN9wwl_566.jpg  v_RTN1vaMyVwYN9wwl_76.jpg   v_RTN1vaMyVwYN9wwl_953.jpg
+v_RTN1vaMyVwYN9wwl_1143.jpg  v_RTN1vaMyVwYN9wwl_18.jpg    v_RTN1vaMyVwYN9wwl_373.jpg  v_RTN1vaMyVwYN9wwl_567.jpg  v_RTN1vaMyVwYN9wwl_760.jpg  v_RTN1vaMyVwYN9wwl_954.jpg
+v_RTN1vaMyVwYN9wwl_1144.jpg  v_RTN1vaMyVwYN9wwl_180.jpg   v_RTN1vaMyVwYN9wwl_374.jpg  v_RTN1vaMyVwYN9wwl_568.jpg  v_RTN1vaMyVwYN9wwl_761.jpg  v_RTN1vaMyVwYN9wwl_955.jpg
+v_RTN1vaMyVwYN9wwl_1145.jpg  v_RTN1vaMyVwYN9wwl_181.jpg   v_RTN1vaMyVwYN9wwl_375.jpg  v_RTN1vaMyVwYN9wwl_569.jpg  v_RTN1vaMyVwYN9wwl_762.jpg  v_RTN1vaMyVwYN9wwl_956.jpg
+v_RTN1vaMyVwYN9wwl_1146.jpg  v_RTN1vaMyVwYN9wwl_182.jpg   v_RTN1vaMyVwYN9wwl_376.jpg  v_RTN1vaMyVwYN9wwl_57.jpg   v_RTN1vaMyVwYN9wwl_763.jpg  v_RTN1vaMyVwYN9wwl_957.jpg
+v_RTN1vaMyVwYN9wwl_1147.jpg  v_RTN1vaMyVwYN9wwl_183.jpg   v_RTN1vaMyVwYN9wwl_377.jpg  v_RTN1vaMyVwYN9wwl_570.jpg  v_RTN1vaMyVwYN9wwl_764.jpg  v_RTN1vaMyVwYN9wwl_958.jpg
+v_RTN1vaMyVwYN9wwl_1148.jpg  v_RTN1vaMyVwYN9wwl_184.jpg   v_RTN1vaMyVwYN9wwl_378.jpg  v_RTN1vaMyVwYN9wwl_571.jpg  v_RTN1vaMyVwYN9wwl_765.jpg  v_RTN1vaMyVwYN9wwl_959.jpg
+v_RTN1vaMyVwYN9wwl_1149.jpg  v_RTN1vaMyVwYN9wwl_185.jpg   v_RTN1vaMyVwYN9wwl_379.jpg  v_RTN1vaMyVwYN9wwl_572.jpg  v_RTN1vaMyVwYN9wwl_766.jpg  v_RTN1vaMyVwYN9wwl_96.jpg
+v_RTN1vaMyVwYN9wwl_115.jpg   v_RTN1vaMyVwYN9wwl_186.jpg   v_RTN1vaMyVwYN9wwl_38.jpg   v_RTN1vaMyVwYN9wwl_573.jpg  v_RTN1vaMyVwYN9wwl_767.jpg  v_RTN1vaMyVwYN9wwl_960.jpg
+v_RTN1vaMyVwYN9wwl_1150.jpg  v_RTN1vaMyVwYN9wwl_187.jpg   v_RTN1vaMyVwYN9wwl_380.jpg  v_RTN1vaMyVwYN9wwl_574.jpg  v_RTN1vaMyVwYN9wwl_768.jpg  v_RTN1vaMyVwYN9wwl_961.jpg
+v_RTN1vaMyVwYN9wwl_1151.jpg  v_RTN1vaMyVwYN9wwl_188.jpg   v_RTN1vaMyVwYN9wwl_381.jpg  v_RTN1vaMyVwYN9wwl_575.jpg  v_RTN1vaMyVwYN9wwl_769.jpg  v_RTN1vaMyVwYN9wwl_962.jpg
+v_RTN1vaMyVwYN9wwl_1152.jpg  v_RTN1vaMyVwYN9wwl_189.jpg   v_RTN1vaMyVwYN9wwl_382.jpg  v_RTN1vaMyVwYN9wwl_576.jpg  v_RTN1vaMyVwYN9wwl_77.jpg   v_RTN1vaMyVwYN9wwl_963.jpg
+v_RTN1vaMyVwYN9wwl_1153.jpg  v_RTN1vaMyVwYN9wwl_19.jpg    v_RTN1vaMyVwYN9wwl_383.jpg  v_RTN1vaMyVwYN9wwl_577.jpg  v_RTN1vaMyVwYN9wwl_770.jpg  v_RTN1vaMyVwYN9wwl_964.jpg
+v_RTN1vaMyVwYN9wwl_1154.jpg  v_RTN1vaMyVwYN9wwl_190.jpg   v_RTN1vaMyVwYN9wwl_384.jpg  v_RTN1vaMyVwYN9wwl_578.jpg  v_RTN1vaMyVwYN9wwl_771.jpg  v_RTN1vaMyVwYN9wwl_965.jpg
+v_RTN1vaMyVwYN9wwl_1155.jpg  v_RTN1vaMyVwYN9wwl_191.jpg   v_RTN1vaMyVwYN9wwl_385.jpg  v_RTN1vaMyVwYN9wwl_579.jpg  v_RTN1vaMyVwYN9wwl_772.jpg  v_RTN1vaMyVwYN9wwl_966.jpg
+v_RTN1vaMyVwYN9wwl_1156.jpg  v_RTN1vaMyVwYN9wwl_192.jpg   v_RTN1vaMyVwYN9wwl_386.jpg  v_RTN1vaMyVwYN9wwl_58.jpg   v_RTN1vaMyVwYN9wwl_773.jpg  v_RTN1vaMyVwYN9wwl_967.jpg
+v_RTN1vaMyVwYN9wwl_1157.jpg  v_RTN1vaMyVwYN9wwl_193.jpg   v_RTN1vaMyVwYN9wwl_387.jpg  v_RTN1vaMyVwYN9wwl_580.jpg  v_RTN1vaMyVwYN9wwl_774.jpg  v_RTN1vaMyVwYN9wwl_968.jpg
+v_RTN1vaMyVwYN9wwl_1158.jpg  v_RTN1vaMyVwYN9wwl_194.jpg   v_RTN1vaMyVwYN9wwl_388.jpg  v_RTN1vaMyVwYN9wwl_581.jpg  v_RTN1vaMyVwYN9wwl_775.jpg  v_RTN1vaMyVwYN9wwl_969.jpg
+v_RTN1vaMyVwYN9wwl_1159.jpg  v_RTN1vaMyVwYN9wwl_195.jpg   v_RTN1vaMyVwYN9wwl_389.jpg  v_RTN1vaMyVwYN9wwl_582.jpg  v_RTN1vaMyVwYN9wwl_776.jpg  v_RTN1vaMyVwYN9wwl_97.jpg
+v_RTN1vaMyVwYN9wwl_116.jpg   v_RTN1vaMyVwYN9wwl_196.jpg   v_RTN1vaMyVwYN9wwl_39.jpg   v_RTN1vaMyVwYN9wwl_583.jpg  v_RTN1vaMyVwYN9wwl_777.jpg  v_RTN1vaMyVwYN9wwl_970.jpg
+v_RTN1vaMyVwYN9wwl_1160.jpg  v_RTN1vaMyVwYN9wwl_197.jpg   v_RTN1vaMyVwYN9wwl_390.jpg  v_RTN1vaMyVwYN9wwl_584.jpg  v_RTN1vaMyVwYN9wwl_778.jpg  v_RTN1vaMyVwYN9wwl_971.jpg
+v_RTN1vaMyVwYN9wwl_1161.jpg  v_RTN1vaMyVwYN9wwl_198.jpg   v_RTN1vaMyVwYN9wwl_391.jpg  v_RTN1vaMyVwYN9wwl_585.jpg  v_RTN1vaMyVwYN9wwl_779.jpg  v_RTN1vaMyVwYN9wwl_972.jpg
+v_RTN1vaMyVwYN9wwl_1162.jpg  v_RTN1vaMyVwYN9wwl_199.jpg   v_RTN1vaMyVwYN9wwl_392.jpg  v_RTN1vaMyVwYN9wwl_586.jpg  v_RTN1vaMyVwYN9wwl_78.jpg   v_RTN1vaMyVwYN9wwl_973.jpg
+v_RTN1vaMyVwYN9wwl_1163.jpg  v_RTN1vaMyVwYN9wwl_2.jpg     v_RTN1vaMyVwYN9wwl_393.jpg  v_RTN1vaMyVwYN9wwl_587.jpg  v_RTN1vaMyVwYN9wwl_780.jpg  v_RTN1vaMyVwYN9wwl_974.jpg
+v_RTN1vaMyVwYN9wwl_1164.jpg  v_RTN1vaMyVwYN9wwl_20.jpg    v_RTN1vaMyVwYN9wwl_394.jpg  v_RTN1vaMyVwYN9wwl_588.jpg  v_RTN1vaMyVwYN9wwl_781.jpg  v_RTN1vaMyVwYN9wwl_975.jpg
+v_RTN1vaMyVwYN9wwl_1165.jpg  v_RTN1vaMyVwYN9wwl_200.jpg   v_RTN1vaMyVwYN9wwl_395.jpg  v_RTN1vaMyVwYN9wwl_589.jpg  v_RTN1vaMyVwYN9wwl_782.jpg  v_RTN1vaMyVwYN9wwl_976.jpg
+v_RTN1vaMyVwYN9wwl_1166.jpg  v_RTN1vaMyVwYN9wwl_201.jpg   v_RTN1vaMyVwYN9wwl_396.jpg  v_RTN1vaMyVwYN9wwl_59.jpg   v_RTN1vaMyVwYN9wwl_783.jpg  v_RTN1vaMyVwYN9wwl_977.jpg
+v_RTN1vaMyVwYN9wwl_1167.jpg  v_RTN1vaMyVwYN9wwl_202.jpg   v_RTN1vaMyVwYN9wwl_397.jpg  v_RTN1vaMyVwYN9wwl_590.jpg  v_RTN1vaMyVwYN9wwl_784.jpg  v_RTN1vaMyVwYN9wwl_978.jpg
+v_RTN1vaMyVwYN9wwl_1168.jpg  v_RTN1vaMyVwYN9wwl_203.jpg   v_RTN1vaMyVwYN9wwl_398.jpg  v_RTN1vaMyVwYN9wwl_591.jpg  v_RTN1vaMyVwYN9wwl_785.jpg  v_RTN1vaMyVwYN9wwl_979.jpg
+v_RTN1vaMyVwYN9wwl_1169.jpg  v_RTN1vaMyVwYN9wwl_204.jpg   v_RTN1vaMyVwYN9wwl_399.jpg  v_RTN1vaMyVwYN9wwl_592.jpg  v_RTN1vaMyVwYN9wwl_786.jpg  v_RTN1vaMyVwYN9wwl_98.jpg
+v_RTN1vaMyVwYN9wwl_117.jpg   v_RTN1vaMyVwYN9wwl_205.jpg   v_RTN1vaMyVwYN9wwl_4.jpg    v_RTN1vaMyVwYN9wwl_593.jpg  v_RTN1vaMyVwYN9wwl_787.jpg  v_RTN1vaMyVwYN9wwl_980.jpg
+v_RTN1vaMyVwYN9wwl_1170.jpg  v_RTN1vaMyVwYN9wwl_206.jpg   v_RTN1vaMyVwYN9wwl_40.jpg   v_RTN1vaMyVwYN9wwl_594.jpg  v_RTN1vaMyVwYN9wwl_788.jpg  v_RTN1vaMyVwYN9wwl_981.jpg
+v_RTN1vaMyVwYN9wwl_1171.jpg  v_RTN1vaMyVwYN9wwl_207.jpg   v_RTN1vaMyVwYN9wwl_400.jpg  v_RTN1vaMyVwYN9wwl_595.jpg  v_RTN1vaMyVwYN9wwl_789.jpg  v_RTN1vaMyVwYN9wwl_982.jpg
+v_RTN1vaMyVwYN9wwl_1172.jpg  v_RTN1vaMyVwYN9wwl_208.jpg   v_RTN1vaMyVwYN9wwl_401.jpg  v_RTN1vaMyVwYN9wwl_596.jpg  v_RTN1vaMyVwYN9wwl_79.jpg   v_RTN1vaMyVwYN9wwl_983.jpg
+v_RTN1vaMyVwYN9wwl_1173.jpg  v_RTN1vaMyVwYN9wwl_209.jpg   v_RTN1vaMyVwYN9wwl_402.jpg  v_RTN1vaMyVwYN9wwl_597.jpg  v_RTN1vaMyVwYN9wwl_790.jpg  v_RTN1vaMyVwYN9wwl_984.jpg
+v_RTN1vaMyVwYN9wwl_1174.jpg  v_RTN1vaMyVwYN9wwl_21.jpg    v_RTN1vaMyVwYN9wwl_403.jpg  v_RTN1vaMyVwYN9wwl_598.jpg  v_RTN1vaMyVwYN9wwl_791.jpg  v_RTN1vaMyVwYN9wwl_985.jpg
+v_RTN1vaMyVwYN9wwl_1175.jpg  v_RTN1vaMyVwYN9wwl_210.jpg   v_RTN1vaMyVwYN9wwl_404.jpg  v_RTN1vaMyVwYN9wwl_599.jpg  v_RTN1vaMyVwYN9wwl_792.jpg  v_RTN1vaMyVwYN9wwl_986.jpg
+v_RTN1vaMyVwYN9wwl_1176.jpg  v_RTN1vaMyVwYN9wwl_211.jpg   v_RTN1vaMyVwYN9wwl_405.jpg  v_RTN1vaMyVwYN9wwl_6.jpg    v_RTN1vaMyVwYN9wwl_793.jpg  v_RTN1vaMyVwYN9wwl_987.jpg
+v_RTN1vaMyVwYN9wwl_1177.jpg  v_RTN1vaMyVwYN9wwl_212.jpg   v_RTN1vaMyVwYN9wwl_406.jpg  v_RTN1vaMyVwYN9wwl_60.jpg   v_RTN1vaMyVwYN9wwl_794.jpg  v_RTN1vaMyVwYN9wwl_988.jpg
+v_RTN1vaMyVwYN9wwl_1178.jpg  v_RTN1vaMyVwYN9wwl_213.jpg   v_RTN1vaMyVwYN9wwl_407.jpg  v_RTN1vaMyVwYN9wwl_600.jpg  v_RTN1vaMyVwYN9wwl_795.jpg  v_RTN1vaMyVwYN9wwl_989.jpg
+v_RTN1vaMyVwYN9wwl_1179.jpg  v_RTN1vaMyVwYN9wwl_214.jpg   v_RTN1vaMyVwYN9wwl_408.jpg  v_RTN1vaMyVwYN9wwl_601.jpg  v_RTN1vaMyVwYN9wwl_796.jpg  v_RTN1vaMyVwYN9wwl_99.jpg
+v_RTN1vaMyVwYN9wwl_118.jpg   v_RTN1vaMyVwYN9wwl_215.jpg   v_RTN1vaMyVwYN9wwl_409.jpg  v_RTN1vaMyVwYN9wwl_602.jpg  v_RTN1vaMyVwYN9wwl_797.jpg  v_RTN1vaMyVwYN9wwl_990.jpg
+v_RTN1vaMyVwYN9wwl_1180.jpg  v_RTN1vaMyVwYN9wwl_216.jpg   v_RTN1vaMyVwYN9wwl_41.jpg   v_RTN1vaMyVwYN9wwl_603.jpg  v_RTN1vaMyVwYN9wwl_798.jpg  v_RTN1vaMyVwYN9wwl_991.jpg
+v_RTN1vaMyVwYN9wwl_1181.jpg  v_RTN1vaMyVwYN9wwl_217.jpg   v_RTN1vaMyVwYN9wwl_410.jpg  v_RTN1vaMyVwYN9wwl_604.jpg  v_RTN1vaMyVwYN9wwl_799.jpg  v_RTN1vaMyVwYN9wwl_992.jpg
+v_RTN1vaMyVwYN9wwl_1182.jpg  v_RTN1vaMyVwYN9wwl_218.jpg   v_RTN1vaMyVwYN9wwl_411.jpg  v_RTN1vaMyVwYN9wwl_605.jpg  v_RTN1vaMyVwYN9wwl_8.jpg    v_RTN1vaMyVwYN9wwl_993.jpg
+v_RTN1vaMyVwYN9wwl_1183.jpg  v_RTN1vaMyVwYN9wwl_219.jpg   v_RTN1vaMyVwYN9wwl_412.jpg  v_RTN1vaMyVwYN9wwl_606.jpg  v_RTN1vaMyVwYN9wwl_80.jpg   v_RTN1vaMyVwYN9wwl_994.jpg
+v_RTN1vaMyVwYN9wwl_1184.jpg  v_RTN1vaMyVwYN9wwl_22.jpg    v_RTN1vaMyVwYN9wwl_413.jpg  v_RTN1vaMyVwYN9wwl_607.jpg  v_RTN1vaMyVwYN9wwl_800.jpg  v_RTN1vaMyVwYN9wwl_995.jpg
+v_RTN1vaMyVwYN9wwl_1185.jpg  v_RTN1vaMyVwYN9wwl_220.jpg   v_RTN1vaMyVwYN9wwl_414.jpg  v_RTN1vaMyVwYN9wwl_608.jpg  v_RTN1vaMyVwYN9wwl_801.jpg  v_RTN1vaMyVwYN9wwl_996.jpg
+v_RTN1vaMyVwYN9wwl_1186.jpg  v_RTN1vaMyVwYN9wwl_221.jpg   v_RTN1vaMyVwYN9wwl_415.jpg  v_RTN1vaMyVwYN9wwl_609.jpg  v_RTN1vaMyVwYN9wwl_802.jpg  v_RTN1vaMyVwYN9wwl_997.jpg
+v_RTN1vaMyVwYN9wwl_1187.jpg  v_RTN1vaMyVwYN9wwl_222.jpg   v_RTN1vaMyVwYN9wwl_416.jpg  v_RTN1vaMyVwYN9wwl_61.jpg   v_RTN1vaMyVwYN9wwl_803.jpg  v_RTN1vaMyVwYN9wwl_998.jpg
+v_RTN1vaMyVwYN9wwl_1188.jpg  v_RTN1vaMyVwYN9wwl_223.jpg   v_RTN1vaMyVwYN9wwl_417.jpg  v_RTN1vaMyVwYN9wwl_610.jpg  v_RTN1vaMyVwYN9wwl_804.jpg  v_RTN1vaMyVwYN9wwl_999.jpg
+v_RTN1vaMyVwYN9wwl_1189.jpg  v_RTN1vaMyVwYN9wwl_224.jpg   v_RTN1vaMyVwYN9wwl_418.jpg  v_RTN1vaMyVwYN9wwl_611.jpg  v_RTN1vaMyVwYN9wwl_805.jpg
+v_RTN1vaMyVwYN9wwl_119.jpg   v_RTN1vaMyVwYN9wwl_225.jpg   v_RTN1vaMyVwYN9wwl_419.jpg  v_RTN1vaMyVwYN9wwl_612.jpg  v_RTN1vaMyVwYN9wwl_806.jpg
+v_RTN1vaMyVwYN9wwl_1190.jpg  v_RTN1vaMyVwYN9wwl_226.jpg   v_RTN1vaMyVwYN9wwl_42.jpg   v_RTN1vaMyVwYN9wwl_613.jpg  v_RTN1vaMyVwYN9wwl_807.jpg
+(aida-env) root@c7e3ef2c9f7e:/aida/src# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ docker build . --tag cu-fb
+$ docker run -itd -v /scratch/napiersk/columbia/home/brian/facenet-master/datasets/m18_f/:/data/jpgs/ --gpus 1  --name aida-fb cu-fb /bin/bash
+
+
+#  CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /data/jpgs/v_RTN1vaMyVwYN9wwl datasets/latest --image_size 160 --margin 32
+Creating networks and loading parameters
+2020-03-02 21:15:53.183579: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2020-03-02 21:15:55.015821: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:3b:00.0
+totalMemory: 10.76GiB freeMemory: 10.60GiB
+2020-03-02 21:15:55.015952: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-03-02 21:15:55.809315: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-02 21:15:55.809631: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-03-02 21:15:55.809764: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-03-02 21:15:55.810154: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 4958 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:3b:00.0, compute capability: 7.5)
+/data/jpgs/v_RTN1vaMyVwYN9wwl/subset/v_RTN1vaMyVwYN9wwl_999.jpg
+Total number of images: 1
+Number of successfully aligned images: 1
+(aida-env) root@5443d9578c63:/aida/src# ls ./datasets/latest/
+bounding_boxes_54218.txt  revision_info.txt  subset
+(aida-env) root@5443d9578c63:/aida/src# cat ./datasets/latest/bounding_boxes_54218.txt 
+datasets/latest/subset/v_RTN1vaMyVwYN9wwl_999_0.jpg 651 218 805 390
+(aida-env) root@5443d9578c63:/aida/src# cat ./datasets/latest/revision_info.txt        
+arguments: ./src/align/align_dataset_mtcnn.py /data/jpgs/v_RTN1vaMyVwYN9wwl datasets/latest --image_size 160 --margin 32
+--------------------
+tensorflow version: 1.12.0
+--------------------
+git hash: b'ebc8ae2ad8c7d4aac99ab0e93e6fc49f0e27b19e'
+--------------------
+b'diff --git a/aida-env.txt b/aida-env.txt\nindex f812807..9a04b6a 100644\n--- a/aida-env.txt\n+++ b/aida-env.txt\n@@ -1,5 +1,7 @@\n numpy=1.16.2\n opencv\n+pillow\n scikit-learn\n+scipy=1.2.1\n tensorflow-gpu=1.12.0'(aida-env) root@5443d9578c63:/aida/src# ls ./datasets/latest/subset/
+v_RTN1vaMyVwYN9wwl_999_0.jpg
+(aida-env) root@5443d9578c63:/aida/src# 
+
+
+
+docker run -itd -v /scratch/napiersk/columbia/home/brian/facenet-master/datasets/m18_f/:/data/jpgs/ --gpus 1  --name cu-fb-data cu-fb /bin/bash 
+
+
+docker run -itd -v /scratch/napiersk/columbia/brian/AIDA_code_brian/results/:/home/brian/facenet-master/results/ -v /scratch/napiersk/columbia/brian/m18_imgs/:/home/brian/facenet-master/datasets/m18/m18/ -v /scratch/napiersk/columbia/brian/LDC2018E80_LORELEI_Background_KB/data/:/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/ --gpus 1 --name cu-fb-brian cu-fb /bin/bash
+
+
+CUDA_VISIBLE_DEVICES=0 python ./src/align/align_dataset_mtcnn.py /home/brian/facenet-master/datasets/m18/m18 datasets/output-dir --image_size 160 --margin 32
+CUDA_VISIBLE_DEVICES=1 python ./src/align/align_dataset_mtcnn.py /home/brian/facenet-master/datasets/m18/m18 datasets/output-dir --image_size 160 --margin 32
+
+data in /home/brian/facenet-master/results/   is the same as the files in AIDA_code_brian/results
+AIDA_code_brian.tar.gz
+map /scratch/napiersk/columbia/brian/AIDA_code_brian/results
+[napiersk@gaia01 aida_face_building]$ echo to /home/brian/facenet-master/results
+
+/home/brian/facenet-master/datasets/m18/m18/  maps to the image folder I sent you yesterday.
+m18_imgs.zip
+map /scratch/napiersk/columbia/brian/m18_imgs
+to /home/brian/facenet-master/datasets/m18/m18
+
+/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/entities.tab  is the file in google drive https://drive.google.com/file/d/1qv16111cbYcgGVcCoG8Db4WUR1qhWBMY/view?usp=sharing
+entities.tab.tar.gz -> entities.tab
+map /scratch/napiersk/columbia/brian/LDC2018E80_LORELEI_Background_KB/data
+to /home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data
+

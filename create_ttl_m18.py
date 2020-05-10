@@ -2,21 +2,22 @@ dataName = 'm18'
 dataName2 = 'm18_f'
 import sys
 
-parent_file = argv[1]#'/home/brian/facenet-master/results/parent_'+dataName+'.tab' 
-video_frame_mapping = argv[2]#'/dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42 \
+parent_file = sys.argv[1]#'/home/brian/facenet-master/results/parent_'+dataName+'.tab' 
+video_frame_mapping = sys.argv[2]#'/dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42 \
 #_AIDA_Phase_1_Evaluation_Source_Data_V1.0/docs/masterShotBoundary.msb'
-face_img_result =  argv[3] + '.p'#= '/home/brian/facenet-master/results/result_'+dataName+'.p'
-face_frame_result = argv[4] + '.p'#= '/home/brian/facenet-master/results/result_'+dataName2+'.p'
-bbox_img = argv[5] + '.pickle' #'/home/brian/facenet-master/results/bbox_'+dataName+'.pickle'
-bbox_frame = argv[6] + '.pickle'#'/home/brian/facenet-master/results/bbox_'+dataName2+'.pickle'
-az_obj_graph = argv[7]#'/home/brian/facenet-master/results/rdf_graphs_34.pkl'
-az_obj_jpg = argv[8]#'/home/brian/facenet-master/results/det_results_merged_34a_jpg.pkl'
-az_obj_kf = argv[9]#'/home/brian/facenet-master/results/det_results_merged_34b_kf.pkl'
-Lorelei_path = argv[10]#'/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/entities.tab'
-flag_result = argv[11]#'/home/brian/tensorflow-retrain-sample/flag_m18_2.pickle'
-landmark_result = argv[12]#'/home/brian/tensorflow/models/research/delf/delf/python/examples/result_dic_m18_new.p'
-RPI_entity = argv[13]#'/home/brian/facenet-master/results/PT003_r1.pickle'
-input_img_path = argv[14]#'/home/brian/facenet-master/datasets/m18/m18/'
+face_img_result =  sys.argv[3] + '.p'#= '/home/brian/facenet-master/results/result_'+dataName+'.p'
+face_frame_result = sys.argv[4] + '.p'#= '/home/brian/facenet-master/results/result_'+dataName2+'.p'
+bbox_img = sys.argv[5] + '.pickle' #'/home/brian/facenet-master/results/bbox_'+dataName+'.pickle'
+bbox_frame = sys.argv[6] + '.pickle'#'/home/brian/facenet-master/results/bbox_'+dataName2+'.pickle'
+az_obj_graph = sys.argv[7]#'/home/brian/facenet-master/results/rdf_graphs_34.pkl'
+az_obj_jpg = sys.argv[8]#'/home/brian/facenet-master/results/det_results_merged_34a_jpg.pkl'
+az_obj_kf = sys.argv[9]#'/home/brian/facenet-master/results/det_results_merged_34b_kf.pkl'
+Lorelei_path = sys.argv[10]#'/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/entities.tab'
+flag_result = sys.argv[11]#'/home/brian/tensorflow-retrain-sample/flag_m18_2.pickle'
+landmark_result = sys.argv[12]#'/home/brian/tensorflow/models/research/delf/delf/python/examples/result_dic_m18_new.p'
+RPI_entity = sys.argv[13]#'/home/brian/facenet-master/results/PT003_r1.pickle'
+input_img_path = sys.argv[14]#'/home/brian/facenet-master/datasets/m18/m18/'
+free_base = sys.argv[15]#'/home/brian/facenet-master/datasets/m18/m18/'
 outputN = 'm18_auto'
 
 import time
@@ -45,7 +46,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 import sys
 #sys.path.append("/dvmm-filer2/projects/AIDA/alireza/tools/AIDA-Interchange-Format/python/aida_interchange")
-sys.path.append("/home/brian/AIDA-Interchange-Format/python")
+sys.path.append("AIDA-Interchange-Format/python")
 from rdflib import URIRef
 from rdflib.namespace import ClosedNamespace
 
@@ -58,7 +59,7 @@ for line in file1:
     nameSet2.add(data)
 
 #print p1Set
-file1 = open('results/wikipage.txt')    
+file1 = open('results/wikipage.txt', encoding="utf-8")    
 nameDic = {}
 nameSet = set()
 
@@ -73,7 +74,7 @@ for line in file1:
 
 #if dataName == 'dry3':
 child = defaultdict(list)
-file5= open(parent_file)
+file5= open(parent_file, encoding="utf-8")
 i = 0
 for line in file5:
     i+=1
@@ -87,15 +88,7 @@ with open(bbox_img, 'rb') as handle:
 with open(bbox_frame, 'rb') as handle:
     bb_2 = pickle.load(handle)
 
-# coding: utf-8
-# -*- coding: utf-8 -*-
-def isEnglish(s):
-    try:
-        s.encode(encoding='utf-8').decode('ascii')
-    except UnicodeDecodeError:
 
-# coding: utf-8
-# -*- coding: utf-8 -*-
 def isEnglish(s):
     try:
         s.encode(encoding='utf-8').decode('ascii')
@@ -116,10 +109,12 @@ VIS_ONTOLOGY2 = ClosedNamespace(
     terms=[str(value) for value in nameSet2]
 )
 
-from aida_interchange.Bounding_Box import Bounding_Box
-from aida_interchange.aida_rdf_ontologies import SEEDLING_TYPES_NIST
-from aida_interchange.LDCTimeComponent import LDCTimeComponent, LDCTimeType
+from io import BytesIO
+from rdflib import URIRef, Graph
 from aida_interchange import aifutils
+from aida_interchange.bounding_box import Bounding_Box
+from aida_interchange.aida_rdf_ontologies import SEEDLING_TYPES_NIST
+from aida_interchange.ldc_time_component import LDCTimeComponent, LDCTimeType
 
 with open(face_img_result, 'rb') as handle:
     result = pickle.load(handle, encoding="latin1")
@@ -203,7 +198,7 @@ for x,y in entity_dict.items():
 import json
 #from pprint import pprint
 
-with open('results/freebase_links_f2w.json') as f:
+with open(free_base) as f:
     data = json.load(f)
 free = {}
 for x, y in data.items():
@@ -212,7 +207,7 @@ i=0
 from collections import defaultdict
 id2Name = defaultdict(list)
 name2ID = {}
-file1 = open(Lorelei_path)
+file1 = open(Lorelei_path, encoding="utf-8")
 for line in file1:
     data = line.split('\t')
     i+=1
@@ -236,21 +231,31 @@ VIS_ONTOLOGY_L = ClosedNamespace(
 
 with open(flag_result, 'rb') as handle:
     flag_dict_s = pickle.load(handle)
-with open(landmark_result, 'rb') as handle:
-    landmark_dict2 = pickle.load(handle, encoding="latin1")
-
+with open(landmark_result, 'rb') as f:
+    landmark_dict2 = pickle.load(f,encoding='utf-8')
+    #u = pickle._Unpickler(f)
+    #u.encoding = 'latin1'
+    #landmark_dict2 = u.load()
 landmark_dict = {}
 for x,y in landmark_dict2.items():
-    landmark_dict[x] = y[0]
+    try:
+        #print(x)
+        print(y)
+        landmark_dict[x] = y
+    except:
+        aaaaa=0
+        #print('error')
+
 landmark_id = {}
 landmarkSet = set()
 count=0
 for x,y in landmark_dict.items():
-    #print x,y
-    if y not in landmarkSet:
+    #print (x,y)
+    if y not in landmarkSet and y!='':
         landmarkSet.add(y)
         landmark_id[y] = count
         count+=1
+#print(landmark_dict)
 print(landmark_id)
     #break
 #building_dry = ['IC0011UWP','IC0011VOR','IC0011WXU','IC0011XEN','IC0011XEO','IC0014YXH','IC0014ZPU']
@@ -258,7 +263,7 @@ print(landmark_id)
 #nameSet_b.add('Maidan_Nezalezhnosti')
 VIS_ONTOLOGY_b = ClosedNamespace(
     uri=URIRef("http://dbpedia.org/resource/"),
-    terms=[str(value) for value,_ in landmarkSet]
+    terms=[str(value) for value in landmarkSet]
 )
 print (VIS_ONTOLOGY_L.term('vladimir_pesevski'))
 #print ID2name[5601538]
@@ -334,210 +339,7 @@ def bb_intersection_over_union(boxA, boxB):
 
     # return the intersection over union value
     return iou
-        data = x.split('/')[-1]
-        data2 = data.split('_')
-        key = x.split('/')[-2]
-        
-        if videoDic[key] not in chi:
-            continue
-        #print "video"
-        In = 1
-        i = data2[-1][:-4]
-        frame = data[:-len(data2[-1])-1]
-        frameNum = frame.split('_')[-1]
 
-        name = "http://www.columbia.edu/AIDA/DVMM/Entities/FaceDetection/RUN00010/Keyframe/"+\
-        str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)
-        entity = aifutils.make_entity(g, name, sys)
-
-        if str(videoDic[key])+'_'+str(frameNum) in ODF_result.keys():
-            first_cluster = 1
-
-            for n in range(len(ODF_result[str(videoDic[key])+'_'+str(frameNum)])):
-      
-                if ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['label'] in person_label:     
-
-                    boxA = ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['bbox']
-                    boxB = (int(bb_2[x][0]),int(bb_2[x][1]),int(bb_2[x][2]),int(bb_2[x][3]))
-                    IOA = bb_intersection_over_union(boxA, boxB)
-                    if IOA > 0.9:
-    
-                        eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/Keyframe/"+str(videoDic[key])+'_'+str(frameNum)+"/"+str(n)
-                        if n in entity_dic2[str(videoDic[key])+'_'+str(frameNum)]:
-                        #if eid in entity_dict.keys():
-                            score = IOA
-                            #print x
-                            #print entity_dict[eid]
-                            #print n
-
-                            if first_cluster == 1:
-
-                                first_cluster = 0
-                                clusterName = aifutils.make_cluster_with_prototype(g, \
-                                "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/Keyframe/"+\
-                                str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)+'/'+\
-                                str(person_c_n),entity, sys)
-                                #aifutils.mark_as_possible_cluster_member(g, \
-                                #    entity,clusterName, score, sys)
-
-                            aifutils.mark_as_possible_cluster_member(g, \
-                                    entity_dict[eid],clusterName, score, sys)
-            if first_cluster == 0:
-                person_c_n+=1
-
-        #txn.put("Columbia/DVMM/TypeAssertion/FaceID/RUN00003/"+str(key)+'/'+str(i), value[i][4]);
-        #featureDic[entity] = y[2]
-        featureDic[key] = y[2]
-
-        #entityList.append(key)
-        l,t,r,d = bb_2[x]
-        if (r-l)*(d-t)>3600:
-            entityList.append(entity)
-            arrayList.append(y[2])
-        #if first == 1:
-        #    new_array = [y[2]]
-        #    first = 0
-        #else:
-        #    new_array = np.concatenate((new_array, [y[2]]), axis=0)
-        feature = {}
-        feature['columbia_vector_faceID_FaceNet'] = y[2].tolist()
-        json_data = json.dumps(feature)
-        aifutils.mark_private_data(g, entity, json_data, sys)
-        #labelrdf = VIS_ONTOLOGY.term(i_id)
-        #Dscore = value[i][7]
-        #if Dscore>1:
-        Dscore=1
-        #type_assertion = aifutils.mark_type(g, "Columbia/DVMM/TypeAssertion/FaceRecognition/RUN00003/"+str(i_id)+"/"+str(i)+"/1", 
-        type_assertion = aifutils.mark_type(g, "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceDetection/RUN00010/Keyframe/"+\
-            str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, AIDA_PROGRAM_ONTOLOGY2.term('PER'), sys, Dscore)
-            #str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, AIDA_PROGRAM_ONTOLOGY2.Entity, sys, Dscore)
-        #print bb[x][1]
-        bb2 = Bounding_Box((bb_2[x][0], bb_2[x][1]), (bb_2[x][2], bb_2[x][3]))
-        #aifutils.mark_image_justification(g, [entity, type_assertion], key, bb2, sys, 1)
-        justif = aifutils.mark_keyframe_video_justification(g, [entity, type_assertion], videoDic[key], \
-                                                            str(videoDic[key])+'_'+str(frameNum), bb2, sys, 1)
-        aifutils.add_source_document_to_justification(g, justif, parent)
-        aifutils.mark_informative_justification(g, entity, justif)
-        
-        chi_set.add(key)
-        parent_set.add(parent)
-        if y[0].replace(' ','_') not in nameSet or nameDic[y[0].replace(' ','_')] not in p1Set or float(y[1])<0.04 or y[0].replace(' ','_') == 'Ban_Ki-moon':
-            continue
-        else:
-            #nameCount2+=1
-            person_set.add(y[0])
-            doc_N.add(parent)
-            img_N.add(key)
-            #if float(y[1])*10>1:
-            #    score = 1-random.random()/10
-            #else:
-            #    score = float(y[1])*10
-            score = sigmoid(float(y[1])*10)
-            #place_of_birth_in_louisville_cluster = aifutils.mark_as_possible_cluster_member(g, \
-            #    entity,clusterDic[nameDic[y[0].replace(' ','_')]], score, sys)
-            NameDetected.add(nameDic[y[0].replace(' ','_')])
-            entity_key = nameDic[y[0].replace(' ','_')]
-            type_assertion = aifutils.mark_type(g, \
-            "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceID/"\
-            +str(index_category[entity_key])+'/'+entity_key, entityDic[entity_key], AIDA_PROGRAM_ONTOLOGY2.term('PER'), sys, 1)
-            justif = aifutils.mark_keyframe_video_justification(g, [entityDic[nameDic[y[0].replace(' ','_')]], type_assertion], videoDic[key], \
-                                                            str(videoDic[key])+'_'+str(frameNum), bb2, sys, score)
-            aifutils.add_source_document_to_justification(g, justif, parent)
-            aifutils.mark_informative_justification(g, entityDic[nameDic[y[0].replace(' ','_')]], justif)
-
-    #dbscan_run(arrayList,entityList)
-    new_array = np.array(arrayList)
-    
-    if len(arrayList)>1 :
-
-        # Compute DBSCAN
-        #if __name__ == '__main__':
-        db = DBSCAN(eps=0.55, min_samples=2).fit(new_array)
-        core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-        core_samples_mask[db.core_sample_indices_] = True
-        labels = db.labels_
-        #print labels
-        # Number of clusters in labels, ignoring noise if present.
-        n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-        #print entityList
-            #print('Estimated number of clusters: %d' % n_clusters_)
-
-        clusterNameDic = {}
-
-        firstMem = [0 for i in range(n_clusters_)]
-        firstArray = {}
-        for i in range(len(labels)):
-            if labels[i] == -1:
-                continue
-            #print len(labels)
-            #print len(entityList)
-            #score = 1
-            if firstMem[labels[i]] == 0:
-                firstMem[labels[i]] = 1
-                firstArray[labels[i]] = new_array[i]
-                clusterNameDic[labels[i]] = aifutils.make_cluster_with_prototype(g, \
-                    "http://www.columbia.edu/AIDA/DVMM/Clusters/FaceCoreference/RUN00010/"+\
-                    str(labels[i]),entityList[i], sys)
-                #print entityList[a][j]
-            else:
-                dist = np.linalg.norm(firstArray[labels[i]]- new_array[i])
-                if dist>1:
-                    score = 0.001
-                else:
-                    score = 1-dist/2
-                #score = sigmoid(dist)
-                #print score
-                aifutils.mark_as_possible_cluster_member(g, \
-                    entityList[i],clusterNameDic[labels[i]], score, sys)
-
-    sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Face/FaceNet")
-    for key, value in index_category.items():
-        if key not in NameDetected:
-            continue
-        key = key.replace(' ','_')
-        
-        #print name2ID[]
-        new_key = key.lower().replace('_',' ')
-        #print new_key
-        try:
-            #print RPI[parent].keys()
-            #print name2ID[new_key]
-            if name2ID[new_key] in RPI[parent].keys():
-                print (new_key)
-                #print parent
-                cluster = aifutils.make_cluster_with_prototype(g, \
-                    "http://www.columbia.edu/AIDA/DVMM/Clusters/NamedPersonCoreference/"+\
-                    str(value)+'/'+key,entityDic[key], sys)
-                score = 1 
-                #aifutils.mark_as_possible_cluster_member(g, ,cluster, score, sys)
-                for i in range(len(RPI[parent][name2ID[new_key]])):
-                    aifutils.mark_as_possible_cluster_member(g, \
-                        RPI[parent][name2ID[new_key]][i],cluster, score, sys)
-        except KeyError:
-            a = 0
-    
-    directory = 'ttl/'+outputN+'/'
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    with open(directory+parent+'.ttl', 'w') as fout:
-        serialization = BytesIO()
-        # need .buffer because serialize will write bytes, not str
-        g.serialize(destination=serialization, format='turtle')
-        fout.write(serialization.getvalue().decode('utf-8'))
-        
-pool = mp.Pool(processes=40)
-
-res = pool.map(transferAIF, child.keys())
-
-end = time.time()
-print(end - start)
-print (nameCount2)
-print (len(chi_set))
-print (len(parent_set))
-print (len(person_set))
-print (len(total_key))
-print (len(doc_N))
-print (len(img_N))
 import random
 import multiprocessing as mp
 from scipy import spatial

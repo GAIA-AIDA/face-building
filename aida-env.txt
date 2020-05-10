@@ -1,12 +1,7 @@
-cudatoolkit
-cudnn
-lmdb
 numpy=1.16.2
 opencv
 pillow
-rdflib=4.2.2
-scikit-image
 scikit-learn=0.20.3
 scipy=1.2.1
-tensorflow-gpu=1.14.0
+tensorflow-gpu=1.12.0
 

@@ -13,7 +13,7 @@ import pickle
 #with open('pickle/country_flag_all.pickle', 'rb') as handle:
 #print "This is the name of the script: ", sys.argv[0]
 flag_dir_name = sys.argv[1]
-with open(sys.argv[2], 'rb') as handle:
+with open(sys.argv[2]+'.pickle', 'rb') as handle:
     OD_result = pickle.load(handle)
 
 
@@ -21,7 +21,7 @@ with open(sys.argv[2], 'rb') as handle:
 
 
 for x,y in OD_result.items():
-    print x
+    print (x)
     break
 
 
@@ -29,7 +29,7 @@ for x,y in OD_result.items():
 
 
 i=0
-get_ipython().run_line_magic('pylab', 'inline')
+#get_ipython().run_line_magic('pylab', 'inline')
 import matplotlib
 matplotlib.use("Pdf")
 from matplotlib import pyplot as plt
@@ -46,7 +46,7 @@ import cv2
 bbox = {}
 for x,y in OD_result.items():
     i+=1
-    print x
+    print (x)
     image = Image.open(x)
     #print image
   #print image_path

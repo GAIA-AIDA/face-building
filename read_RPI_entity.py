@@ -1,4 +1,4 @@
-nk(graph):
+def get_DB2link(graph):
     '''
     A function that gets graph and loads information in it.
     '''
@@ -39,9 +39,9 @@ from rdflib import Graph, plugin, URIRef, Literal, BNode, RDF
 import os, sys
 
 import pickle
-UIUC_path = argv[1]
-UIUC_out = argv[2]
-path_pref = UIUC_path+'/PT003_r1.pickle'
+UIUC_path = sys.argv[1]
+UIUC_out = sys.argv[2]
+path_pref = UIUC_path#+'/PT003_r1.pickle'
 RPI_AIF_path = path_pref + ''
 #nist_ont_pref = 'https://tac.nist.gov/tracks/SM-KBP/2018/ontologies/InterchangeOntology#'
 nist_ont_pref = 'https://tac.nist.gov/tracks/SM-KBP/2019/ontologies/InterchangeOntology#'

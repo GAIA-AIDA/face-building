@@ -4,8 +4,8 @@ import tensorflow as tf
 import pickle
 from collections import defaultdict
 flag_dict = defaultdict(list)
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from glob import glob
 # change this as you see fit
 import sys
@@ -19,10 +19,10 @@ for name in glob(input_folder+'/*'):
 
     # Loads label file, strips off carriage return
     label_lines = [line.rstrip() for line 
-                       in tf.gfile.GFile("retrained_labels2.txt")]
+                       in tf.gfile.GFile("results/retrained_labels2.txt")]
 
     # Unpersists graph from file
-    with tf.gfile.FastGFile("retrained_graph2.pb", 'rb') as f:
+    with tf.gfile.FastGFile("src/retrained_graph2.pb", 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         tf.import_graph_def(graph_def, name='')

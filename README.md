@@ -1,3 +1,6 @@
+# DEPRECATED
+SEE https://github.com/GAIA-AIDA/face-building
+
 ## AIDA code documents (Face, Flag, Landmark, ttl file generator)
 Source provided by Brian Chen.
 
@@ -84,29 +87,34 @@ $ docker exec -it aida-face /bin/bash
 
 #initailize
 python src/ldcc.py jpg_ldcc jpg_path
-python src/ldcc.py kfrm_ldcc kfrm_path 
+python src/ldcc_f.py kfrm_ldcc kfrm_path 
 
 # Face
 # CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/align/align_dataset_mtcnn.py jpg_path face_det_jpg --image_size 160 --margin 32
 # CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/align/align_dataset_mtcnn.py kfrm_path face_det_kf --image_size 160 --margin 32
-# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY face_det_jpg face_model_path+'facenet/20180402-114759/20180402-114759.pb' face_model_path+'google500_2_classifier.pkl' face_class_jpg --batch_size 1000 > face_class_jpg+'.txt'
-# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY face_det_kf face_model_path+'facenet/20180402-114759/20180402-114759.pb' face_model_path+'google500_2_classifier.pkl' face_class_kf --batch_size 1000 > face_class_kf+'.txt'
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY face_det_jpg face_model_path+'facenet/20180402-114759/20180402-114759.pb' face_model_path'google500_2_classifier.pkl' face_class_jpg --batch_size 1000 > face_class_jpg+'.txt'
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY face_det_kf face_model_path'facenet/20180402-114759/20180402-114759.pb' face_model_path'google500_2_classifier.pkl' face_class_kf --batch_size 1000 > face_class_kf'.txt'
 # python src/bbox.py face_det_jpg bbox_jpg
 # python src/bbox.py face_det_jpg bbox_kf
 
 # Landmark & Flag
-# python obj_preprocess.py jpg_path working_path+'m18' working_path+'building_list'
-# python save_flag_crop.py flag_det_results working_path+'m18'
-# python src/label_image.py flag_det_results flag_class_results
-# python CUDA_VISIBLE_DEVICES=0 python extract_features.py \
+# (obj_preprocess.py should be run in the /aida/models/research/object_detection folder)
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python [path to obj_preprocess]/obj_preprocess.py jpg_path working_path+'m18' working_path+'building_list'
+
+# python object_detection/save_to_crop.py flag_det_results working_path+'m18'
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/label_image.py flag_det_results'/m18' flag_class_results
+
+# (extract_features.py and match2.py should be run in the /aida/src/delf/delf/delf/examples folder)
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python extract_features.py \
   --config_path delf_config_example.pbtxt \
-  --list_images_path working_path+'building_list' \
-  --output_dir working_path+'building_feature'
-# python match2.py working_path+'building_feature' landmark_results
+  --list_images_path /aida/src/'building_list' \
+  --output_dir /aida/src/'building_feature'
+
+# python match2.py /aida/src/'building_feature' landmark_results
 
 # Create ttl
 # python read_RPI_entity.py txt_mention_ttl_path RPI_entity_out
-# python create_ttl_m18.py parent_child_tab kfrm_msb face_class_jpg face_class_kf bbox_jpg bbox_kf det_results_path_graph det_results_path_img det_results_path_kfrm Lorelei flag_class_results landmark_results RPI_entity_out jpg_path
+# python create_ttl_m18.py parent_child_tab kfrm_msb face_class_jpg face_class_kf bbox_jpg bbox_kf det_results_path_graph det_results_path_img det_results_path_kfrm Lorelei flag_class_results landmark_results RPI_entity_out jpg_path free_base
 # TODO: copy resulting ttl files out.
 
 ```

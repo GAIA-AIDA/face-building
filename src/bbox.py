@@ -6,12 +6,12 @@ import sys
 inputdir = sys.argv[1]
 outputName = sys.argv[2]
 from glob import glob
-
+#print(inputdir)
 i=0
 bbox = {}
-for name in glob('datasets/m18_a/bounding_boxes_*'):
+for name in glob(inputdir+'bounding_boxes_*'):
 	file1 = open(name)
-	
+	#print(name)
 	for line in file1:
 		i+=1
 		#if i == 10:
@@ -20,7 +20,7 @@ for name in glob('datasets/m18_a/bounding_boxes_*'):
 		data = line.split()
 		#print data
 		if len(data)>1:
-			#print data
+			#print (data)
 			if data[-1][-1] == 'g':
 				continue		
 
