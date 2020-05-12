@@ -18,7 +18,8 @@ landmark_result = sys.argv[12]#'/home/brian/tensorflow/models/research/delf/delf
 RPI_entity = sys.argv[13]#'/home/brian/facenet-master/results/PT003_r1.pickle'
 input_img_path = sys.argv[14]#'/home/brian/facenet-master/datasets/m18/m18/'
 free_base = sys.argv[15]#'/home/brian/facenet-master/datasets/m18/m18/'
-outputN = 'm18_auto'
+ttl_out = sys.argv[16]#'/home/brian/facenet-master/datasets/m18/m18/'
+#outputN = 'm18_vision'
 
 import time
 
@@ -906,7 +907,7 @@ def transferAIF(parent):
         except KeyError:
             a = 0
 
-    directory = 'ttl/'+outputN+'/'
+    directory = ttl_out+'/'
     if not os.path.exists(directory):
         os.makedirs(directory)
     with open(directory+parent+'.ttl', 'w') as fout:
