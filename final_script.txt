@@ -1,5 +1,6 @@
 
-$ docker run --gpus 8 -it -v /dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0:/aida/src/m18_data -v /dvmm-filer2/projects/AIDA/data/columbia_data_root:/aida/src/columbia_data_root  brian271828/brian_aida:0510
+$ docker run --gpus 8 -it -v /dvmm-filer2/projects/AIDA/data/ldc_eval_m18/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0:/aida/src/m18_data -v /dvmm-filer2/projects/AIDA/data/columbia_data_root:/aida/src/columbia_data_root -e CUDA_VISIBLE_DEVICES=${GPU_ID} brian271828/brian_aida:0510
+
 $ MODELS=columbia_data_root/columbia_recognition_models
 $ OUTPUT=columbia_data_root/columbia_vision_shared
 $ GPU_ID=""
