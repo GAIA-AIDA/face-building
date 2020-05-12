@@ -42,7 +42,7 @@ class Vae(object):
         # force in-place updates of mean and variance estimates
         'updates_collections': None,
         # Moving averages ends up in the trainable variables collection
-        'variables_collections': [ tf.GraphKeys.TRAINABLE_VARIABLES ],
+        'variables_collections': [ tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES ],
     }
   
     def encoder(self, images, is_training):
@@ -55,4 +55,3 @@ class Vae(object):
 
     def get_image_size(self):
         return self.image_size
-        

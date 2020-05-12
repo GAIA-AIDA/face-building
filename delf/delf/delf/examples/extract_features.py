@@ -27,7 +27,7 @@ import os
 import sys
 import time
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from google.protobuf import text_format
 from tensorflow.python.platform import app

@@ -12,7 +12,7 @@ import os
 import six.moves.urllib as urllib
 import sys
 import tarfile
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import zipfile
 import os
 
@@ -65,9 +65,9 @@ from object_detection.utils import ops as utils_ops
 # In[3]:
 
 
-from utils import label_map_util
+from object_detection.utils import label_map_util
 
-from utils import visualization_utils as vis_util
+from object_detection.utils import visualization_utils as vis_util
 
 
 # # Model preparation 
@@ -258,14 +258,15 @@ with graph.as_default():
       # Run inference
       #for image_path in glob('/home/brian/google-images-download/google_images_download/country_flag_s/U.S._flag_on_building/*.jpg'):
       #for image_path in glob('/home/brian/google-images-download/google_images_download/north_korea_flag/*/*.jpg'):
-      for image_path in glob(folder_path+'/*/*.jpg'):
+      for image_path in glob(folder_path+'*.jpg'):
       #for image_path in glob('/home/brian/facenet-master/datasets/ldc_isi_dryrun3/*.jpg'):
           #if 'HC000SYGW.jpg' not in image_path:
           #      continue
+          print (image_path)
           image = Image.open(image_path)
           start_time = time.time()
 
-          print (image_path)
+          #print (image_path)
           # the array based representation of the image will be used later in order to prepare the
           # result image with boxes and labels on it.
           image_np = load_image_into_numpy_array(image)

@@ -79,18 +79,18 @@ def main(args):
         
     
     with tf.Graph().as_default():
-        tf.set_random_seed(args.seed)
+        tf.compat.v1.set_random_seed(args.seed)
         global_step = tf.Variable(0, trainable=False)
 
         # Placeholder for the learning rate
-        learning_rate_placeholder = tf.placeholder(tf.float32, name='learning_rate')
+        learning_rate_placeholder = tf.compat.v1.placeholder(tf.float32, name='learning_rate')
         
-        batch_size_placeholder = tf.placeholder(tf.int32, name='batch_size')
+        batch_size_placeholder = tf.compat.v1.placeholder(tf.int32, name='batch_size')
         
-        phase_train_placeholder = tf.placeholder(tf.bool, name='phase_train')
+        phase_train_placeholder = tf.compat.v1.placeholder(tf.bool, name='phase_train')
         
-        image_paths_placeholder = tf.placeholder(tf.string, shape=(None,3), name='image_paths')
-        labels_placeholder = tf.placeholder(tf.int64, shape=(None,3), name='labels')
+        image_paths_placeholder = tf.compat.v1.placeholder(tf.string, shape=(None,3), name='image_paths')
+        labels_placeholder = tf.compat.v1.placeholder(tf.int64, shape=(None,3), name='labels')
         
         input_queue = data_flow_ops.FIFOQueue(capacity=100000,
                                     dtypes=[tf.string, tf.int64],
@@ -104,13 +104,13 @@ def main(args):
             filenames, label = input_queue.dequeue()
             images = []
             for filename in tf.unstack(filenames):
-                file_contents = tf.read_file(filename)
+                file_contents = tf.io.read_file(filename)
                 image = tf.image.decode_image(file_contents, channels=3)
                 
                 if args.random_crop:
-                    image = tf.random_crop(image, [args.image_size, args.image_size, 3])
+                    image = tf.image.random_crop(image, [args.image_size, args.image_size, 3])
                 else:
-                    image = tf.image.resize_image_with_crop_or_pad(image, args.image_size, args.image_size)
+                    image = tf.image.resize_with_crop_or_pad(image, args.image_size, args.image_size)
                 if args.random_flip:
                     image = tf.image.random_flip_left_right(image)
     
@@ -119,7 +119,7 @@ def main(args):
                 images.append(tf.image.per_image_standardization(image))
             images_and_labels.append([images, label])
     
-        image_batch, labels_batch = tf.train.batch_join(
+        image_batch, labels_batch = tf.compat.v1.train.batch_join(
             images_and_labels, batch_size=batch_size_placeholder, 
             shapes=[(args.image_size, args.image_size, 3), ()], enqueue_many=True,
             capacity=4 * nrof_preprocess_threads * args.batch_size,
@@ -138,35 +138,35 @@ def main(args):
         anchor, positive, negative = tf.unstack(tf.reshape(embeddings, [-1,3,args.embedding_size]), 3, 1)
         triplet_loss = facenet.triplet_loss(anchor, positive, negative, args.alpha)
         
-        learning_rate = tf.train.exponential_decay(learning_rate_placeholder, global_step,
+        learning_rate = tf.compat.v1.train.exponential_decay(learning_rate_placeholder, global_step,
             args.learning_rate_decay_epochs*args.epoch_size, args.learning_rate_decay_factor, staircase=True)
-        tf.summary.scalar('learning_rate', learning_rate)
+        tf.compat.v1.summary.scalar('learning_rate', learning_rate)
 
         # Calculate the total losses
-        regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+        regularization_losses = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.REGULARIZATION_LOSSES)
         total_loss = tf.add_n([triplet_loss] + regularization_losses, name='total_loss')
 
         # Build a Graph that trains the model with one batch of examples and updates the model parameters
         train_op = facenet.train(total_loss, global_step, args.optimizer, 
-            learning_rate, args.moving_average_decay, tf.global_variables())
+            learning_rate, args.moving_average_decay, tf.compat.v1.global_variables())
         
         # Create a saver
-        saver = tf.train.Saver(tf.trainable_variables(), max_to_keep=3)
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables(), max_to_keep=3)
 
         # Build the summary operation based on the TF collection of Summaries.
-        summary_op = tf.summary.merge_all()
+        summary_op = tf.compat.v1.summary.merge_all()
 
         # Start running operations on the Graph.
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))        
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options))        
 
         # Initialize variables
-        sess.run(tf.global_variables_initializer(), feed_dict={phase_train_placeholder:True})
-        sess.run(tf.local_variables_initializer(), feed_dict={phase_train_placeholder:True})
+        sess.run(tf.compat.v1.global_variables_initializer(), feed_dict={phase_train_placeholder:True})
+        sess.run(tf.compat.v1.local_variables_initializer(), feed_dict={phase_train_placeholder:True})
 
-        summary_writer = tf.summary.FileWriter(log_dir, sess.graph)
+        summary_writer = tf.compat.v1.summary.FileWriter(log_dir, sess.graph)
         coord = tf.train.Coordinator()
-        tf.train.start_queue_runners(coord=coord, sess=sess)
+        tf.compat.v1.train.start_queue_runners(coord=coord, sess=sess)
 
         with sess.as_default():
 
@@ -245,7 +245,7 @@ def train(args, sess, dataset, epoch, image_paths_placeholder, labels_placeholde
         i = 0
         emb_array = np.zeros((nrof_examples, embedding_size))
         loss_array = np.zeros((nrof_triplets,))
-        summary = tf.Summary()
+        summary = tf.compat.v1.Summary()
         step = 0
         while i < nrof_batches:
             start_time = time.time()
@@ -369,7 +369,7 @@ def evaluate(sess, image_paths, embeddings, labels_batch, image_paths_placeholde
     print('Validation rate: %2.5f+-%2.5f @ FAR=%2.5f' % (val, val_std, far))
     lfw_time = time.time() - start_time
     # Add validation loss and accuracy to summary
-    summary = tf.Summary()
+    summary = tf.compat.v1.Summary()
     #pylint: disable=maybe-no-member
     summary.value.add(tag='lfw/accuracy', simple_value=np.mean(accuracy))
     summary.value.add(tag='lfw/val_rate', simple_value=val)
@@ -394,7 +394,7 @@ def save_variables_and_metagraph(sess, saver, summary_writer, model_dir, model_n
         saver.export_meta_graph(metagraph_filename)
         save_time_metagraph = time.time() - start_time
         print('Metagraph saved in %.2f seconds' % save_time_metagraph)
-    summary = tf.Summary()
+    summary = tf.compat.v1.Summary()
     #pylint: disable=maybe-no-member
     summary.value.add(tag='time/save_variables', simple_value=save_time_variables)
     summary.value.add(tag='time/save_metagraph', simple_value=save_time_metagraph)

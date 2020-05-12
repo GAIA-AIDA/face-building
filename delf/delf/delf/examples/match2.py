@@ -107,7 +107,7 @@ def count_i(land_name):
 			#print(maxNum)
 			score = int(sum(inliers))
 			#file1.write(name+'\t'+str(sum(inliers))+'\n')	
-			maxName = num2name[number]	
+			#maxName = num2name[number]	
 			num = name.split('/')[-1].split('.')[0]  
 			if score>35 and score>maxNum:
 				maxNum = score

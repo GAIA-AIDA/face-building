@@ -63,27 +63,27 @@ def main(args):
     facenet.store_revision_info(src_path, model_dir, ' '.join(sys.argv))
     
     with tf.Graph().as_default():
-        tf.set_random_seed(args.seed)
+        tf.compat.v1.set_random_seed(args.seed)
         global_step = tf.Variable(0, trainable=False)
         
         train_set = facenet.get_dataset(args.data_dir)
         image_list, _ = facenet.get_image_paths_and_labels(train_set)
         
         # Create the input queue
-        input_queue = tf.train.string_input_producer(image_list, shuffle=True)
+        input_queue = tf.compat.v1.train.string_input_producer(image_list, shuffle=True)
     
         nrof_preprocess_threads = 4
         image_per_thread = []
         for _ in range(nrof_preprocess_threads):
-            file_contents = tf.read_file(input_queue.dequeue())
+            file_contents = tf.io.read_file(input_queue.dequeue())
             image = tf.image.decode_image(file_contents, channels=3)
-            image = tf.image.resize_image_with_crop_or_pad(image, args.input_image_size, args.input_image_size)
+            image = tf.image.resize_with_crop_or_pad(image, args.input_image_size, args.input_image_size)
             image.set_shape((args.input_image_size, args.input_image_size, 3))
             image = tf.cast(image, tf.float32)
             #pylint: disable=no-member
             image_per_thread.append([image])
     
-        images = tf.train.batch_join(
+        images = tf.compat.v1.train.batch_join(
             image_per_thread, batch_size=args.batch_size,
             capacity=4 * nrof_preprocess_threads * args.batch_size,
             allow_smaller_final_batch=False)
@@ -92,12 +92,12 @@ def main(args):
         images_norm = (images-img_mean) / img_stddev
 
         # Resize to appropriate size for the encoder 
-        images_norm_resize = tf.image.resize_images(images_norm, (gen_image_size,gen_image_size))
+        images_norm_resize = tf.image.resize(images_norm, (gen_image_size,gen_image_size))
         
         # Create encoder network
         mean, log_variance = vae.encoder(images_norm_resize, True)
         
-        epsilon = tf.random_normal((tf.shape(mean)[0], args.latent_var_size))
+        epsilon = tf.random.normal((tf.shape(input=mean)[0], args.latent_var_size))
         std = tf.exp(log_variance/2)
         latent_var = mean + epsilon * std
         
@@ -109,12 +109,12 @@ def main(args):
         
         # Create reconstruction loss
         if args.reconstruction_loss_type=='PLAIN':
-            images_resize = tf.image.resize_images(images, (gen_image_size,gen_image_size))
-            reconstruction_loss = tf.reduce_mean(tf.reduce_sum(tf.pow(images_resize - reconstructed,2)))
+            images_resize = tf.image.resize(images, (gen_image_size,gen_image_size))
+            reconstruction_loss = tf.reduce_mean(input_tensor=tf.reduce_sum(input_tensor=tf.pow(images_resize - reconstructed,2)))
         elif args.reconstruction_loss_type=='PERCEPTUAL':
             network = importlib.import_module(args.model_def)
 
-            reconstructed_norm_resize = tf.image.resize_images(reconstructed_norm, (args.input_image_size,args.input_image_size))
+            reconstructed_norm_resize = tf.image.resize(reconstructed_norm, (args.input_image_size,args.input_image_size))
 
             # Stack images from both the input batch and the reconstructed batch in a new tensor 
             shp = [-1] + images_norm.get_shape().as_list()[1:]
@@ -130,7 +130,7 @@ def main(args):
             for feature_name in feature_names:
                 feature_flat = slim.flatten(end_points[feature_name])
                 image_feature, reconstructed_feature = tf.unstack(tf.reshape(feature_flat, [2,args.batch_size,-1]), num=2, axis=0)
-                reconstruction_loss = tf.reduce_mean(tf.reduce_sum(tf.pow(image_feature-reconstructed_feature, 2)), name=feature_name+'_loss')
+                reconstruction_loss = tf.reduce_mean(input_tensor=tf.reduce_sum(input_tensor=tf.pow(image_feature-reconstructed_feature, 2)), name=feature_name+'_loss')
                 reconstruction_loss_list.append(reconstruction_loss)
             # Sum up the losses in for the different features
             reconstruction_loss = tf.add_n(reconstruction_loss_list, 'reconstruction_loss')
@@ -139,15 +139,15 @@ def main(args):
         
         # Create KL divergence loss
         kl_loss = kl_divergence_loss(mean, log_variance)
-        kl_loss_mean = tf.reduce_mean(kl_loss)
+        kl_loss_mean = tf.reduce_mean(input_tensor=kl_loss)
         
         total_loss = args.alfa*kl_loss_mean + args.beta*reconstruction_loss
         
-        learning_rate = tf.train.exponential_decay(args.initial_learning_rate, global_step,
+        learning_rate = tf.compat.v1.train.exponential_decay(args.initial_learning_rate, global_step,
             args.learning_rate_decay_steps, args.learning_rate_decay_factor, staircase=True)
         
         # Calculate gradients and make sure not to include parameters for the perceptual loss model
-        opt = tf.train.AdamOptimizer(learning_rate)
+        opt = tf.compat.v1.train.AdamOptimizer(learning_rate)
         grads = opt.compute_gradients(total_loss, var_list=get_variables_to_train())
         
         # Apply gradients
@@ -156,18 +156,18 @@ def main(args):
             train_op = tf.no_op(name='train')
 
         # Create a saver
-        saver = tf.train.Saver(tf.trainable_variables(), max_to_keep=3)
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables(), max_to_keep=3)
         
-        facenet_saver = tf.train.Saver(get_facenet_variables_to_restore())
+        facenet_saver = tf.compat.v1.train.Saver(get_facenet_variables_to_restore())
 
         # Start running operations on the Graph
         gpu_memory_fraction = 1.0
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
-        sess.run(tf.global_variables_initializer())
-        sess.run(tf.local_variables_initializer())
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+        sess.run(tf.compat.v1.global_variables_initializer())
+        sess.run(tf.compat.v1.local_variables_initializer())
         coord = tf.train.Coordinator()
-        tf.train.start_queue_runners(coord=coord, sess=sess)
+        tf.compat.v1.train.start_queue_runners(coord=coord, sess=sess)
 
         with sess.as_default():
             
@@ -218,21 +218,21 @@ def main(args):
 
 def get_variables_to_train():
     train_variables = []
-    for var in tf.trainable_variables():
+    for var in tf.compat.v1.trainable_variables():
         if 'Inception' not in var.name:
             train_variables.append(var)
     return train_variables
 
 def get_facenet_variables_to_restore():
     facenet_variables = []
-    for var in tf.global_variables():
+    for var in tf.compat.v1.global_variables():
         if var.name.startswith('Inception'):
             if 'Adam' not in var.name:
                 facenet_variables.append(var)
     return facenet_variables
 
 def kl_divergence_loss(mean, log_variance):
-    kl = 0.5 * tf.reduce_sum( tf.exp(log_variance) + tf.square(mean) - 1.0 - log_variance, reduction_indices = 1)
+    kl = 0.5 * tf.reduce_sum( input_tensor=tf.exp(log_variance) + tf.square(mean) - 1.0 - log_variance, axis = 1)
     return kl
 
 def parse_arguments(argv):

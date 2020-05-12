@@ -49,20 +49,20 @@ def main(args):
     gen_image_size = vae.get_image_size()
 
     with tf.Graph().as_default():
-        tf.set_random_seed(args.seed)
+        tf.compat.v1.set_random_seed(args.seed)
         
-        images = tf.placeholder(tf.float32, shape=(None,gen_image_size,gen_image_size,3), name='input')
+        images = tf.compat.v1.placeholder(tf.float32, shape=(None,gen_image_size,gen_image_size,3), name='input')
         
         # Normalize
         images_norm = (images-img_mean) / img_stddev
 
         # Resize to appropriate size for the encoder 
-        images_norm_resize = tf.image.resize_images(images_norm, (gen_image_size,gen_image_size))
+        images_norm_resize = tf.image.resize(images_norm, (gen_image_size,gen_image_size))
         
         # Create encoder network
         mean, log_variance = vae.encoder(images_norm_resize, True)
         
-        epsilon = tf.random_normal((tf.shape(mean)[0], args.latent_var_size))
+        epsilon = tf.random.normal((tf.shape(input=mean)[0], args.latent_var_size))
         std = tf.exp(log_variance/2)
         latent_var = mean + epsilon * std
         
@@ -73,16 +73,16 @@ def main(args):
         reconstructed = (reconstructed_norm*img_stddev) + img_mean
 
         # Create a saver
-        saver = tf.train.Saver(tf.trainable_variables(), max_to_keep=3)
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables(), max_to_keep=3)
         
         # Start running operations on the Graph
         gpu_memory_fraction = 1.0
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
-        sess.run(tf.global_variables_initializer())
-        sess.run(tf.local_variables_initializer())
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+        sess.run(tf.compat.v1.global_variables_initializer())
+        sess.run(tf.compat.v1.local_variables_initializer())
         coord = tf.train.Coordinator()
-        tf.train.start_queue_runners(coord=coord, sess=sess)
+        tf.compat.v1.train.start_queue_runners(coord=coord, sess=sess)
         
 
         with sess.as_default():

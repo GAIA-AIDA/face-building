@@ -40,12 +40,12 @@ def inference(images, keep_probability, phase_train=True,  # @UnusedVariable
         # force in-place updates of mean and variance estimates
         'updates_collections': None,
         # Moving averages ends up in the trainable variables collection
-        'variables_collections': [ tf.GraphKeys.TRAINABLE_VARIABLES ],
+        'variables_collections': [ tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES ],
     }
     
     with slim.arg_scope([slim.conv2d, slim.fully_connected],
-                        weights_initializer=tf.truncated_normal_initializer(stddev=0.1),
-                        weights_regularizer=slim.l2_regularizer(weight_decay),
+                        weights_initializer=tf.compat.v1.truncated_normal_initializer(stddev=0.1),
+                        weights_regularizer=tf.keras.regularizers.l2(0.5 * (weight_decay)),
                         normalizer_fn=slim.batch_norm,
                         normalizer_params=batch_norm_params):
         size = np.prod(images.get_shape()[1:].as_list())

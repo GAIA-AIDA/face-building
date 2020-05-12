@@ -1,13 +1,40 @@
 
-python src/bbox.py m18_data/m18_a/ bbox_jpg
-
-python src/bbox.py m18_data/m18_f_a/ bbox_kf
+docker run --gpus 8 -it -v /dvmm-filer2/projects/AIDA/data/ldc_eval_m18:/aida/src/m18_data brian271828/brian_aida:0509
 
 
-python match2.py /aida/src/building_feature/ /aida/src/m18_data/feature_all/ /aida/src/landmark_results
+# python src/ldcc.py m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/data/jpg/jpg/ m18_data/m18/
+# python src/ldcc_f.py m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/data/video_shot_boundaries/representative_frames/ m18_data/m18_f/
 
+# Face
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/align/align_dataset_mtcnn.py m18_data/m18/ m18_data/m18_a/ --image_size 160 --margin 32
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/align/align_dataset_mtcnn.py m18_data/m18_f/ m18_data/m18_f_a/ --image_size 160 --margin 32
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY m18_data/m18_a/ /models/facenet/20180402-114759/20180402-114759.pb m18_data/google500_2_classifier.pkl face_class_jpg --batch_size 1000 
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/classifier.py CLASSIFY m18_data/m18_f_a/ /models/facenet/20180402-114759/20180402-114759.pb m18_data/google500_2_classifier.pkl face_class_kf --batch_size 1000 
 
+# python src/bbox.py m18_data/m18_a/ bbox_jpg
+# python src/bbox.py m18_data/m18_f_a/ bbox_kf
 
+# Landmark & Flag
+# (obj_preprocess.py should be run in the /aida/models/research/object_detection folder)
+cd /aida/models/research/
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
+cd /aida/models/research/object_detection
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python /aida/src/object_detection/obj_preprocess.py /aida/src/m18_data/m18/ /aida/src/m18_flag /aida/src/building_list
+# cd /aida/src
+# python object_detection/save_to_crop.py /aida/src/flag_det_results /aida/src/m18_flag
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python src/label_image.py flag_det_results/m18 flag_class_results
 
+# (extract_features.py and match2.py should be run in the /aida/src/delf/delf/delf/examples folder)
+# cd /aida/src/delf/delf/delf/examples
+# CUDA_VISIBLE_DEVICES=${AVAILABLE_GPU} python extract_features.py \
+  --config_path delf_config_example.pbtxt \
+  --list_images_path /aida/src/building_list.txt \
+  --output_dir /aida/src/building_feature
 
-python create_ttl_m18.py m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/docs/parent_children.sorted.tab m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/docs/masterShotBoundary.msb results/face_class_jpg results/face_class_kf results/bbox_jpg results/bbox_kf m18_data/rdf_graphs_34.pkl m18_data/det_results_merged_34a_jpg.pkl m18_data/det_results_merged_34b_kf.pkl m18_data/LDC2018E80_LORELEI_Background_KB/data/entities.tab flag_class_results.pickle landmark_results.p RPI_entity_out.pickle m18_data/m18/ m18_data/freebase_links_f2w.json 
+# python match2.py /aida/src/building_feature/ /aida/src/m18_data/feature_all/ /aida/src/landmark_results
+
+cd /aida/src
+# Create ttl
+# python read_RPI_entity.py txt_mention_ttl_path RPI_entity_out
+
+# python create_ttl_m18.py m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/docs/parent_children.sorted.tab m18_data/LDC2019E42_AIDA_Phase_1_Evaluation_Source_Data_V1.0/docs/masterShotBoundary.msb results/face_class_jpg results/face_class_kf results/bbox_jpg results/bbox_kf m18_data/rdf_graphs_34.pkl m18_data/det_results_merged_34a_jpg.pkl m18_data/det_results_merged_34b_kf.pkl m18_data/LDC2018E80_LORELEI_Background_KB/data/entities.tab flag_class_results.pickle landmark_results.p RPI_entity_out.pickle m18_data/m18/ m18_data/freebase_links_f2w.json 

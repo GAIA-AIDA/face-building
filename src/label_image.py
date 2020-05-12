@@ -15,19 +15,19 @@ for name in glob(input_folder+'/*'):
     image_path = name#sys.argv[1]
     print (name)
     # Read in the image_data
-    image_data = tf.gfile.FastGFile(image_path, 'rb').read()
+    image_data = tf.compat.v1.gfile.FastGFile(image_path, 'rb').read()
 
     # Loads label file, strips off carriage return
     label_lines = [line.rstrip() for line 
-                       in tf.gfile.GFile("results/retrained_labels2.txt")]
+                       in tf.io.gfile.GFile("results/retrained_labels2.txt")]
 
     # Unpersists graph from file
-    with tf.gfile.FastGFile("src/retrained_graph2.pb", 'rb') as f:
-        graph_def = tf.GraphDef()
+    with tf.compat.v1.gfile.FastGFile("src/retrained_graph2.pb", 'rb') as f:
+        graph_def = tf.compat.v1.GraphDef()
         graph_def.ParseFromString(f.read())
         tf.import_graph_def(graph_def, name='')
 
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
         # Feed the image_data as input to the graph and get first prediction
         softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
         

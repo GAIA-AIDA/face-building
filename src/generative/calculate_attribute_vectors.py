@@ -53,7 +53,7 @@ def main(args):
     gen_image_size = vae.get_image_size()
 
     with tf.Graph().as_default():
-        tf.set_random_seed(args.seed)
+        tf.compat.v1.set_random_seed(args.seed)
         
         image_list = facenet.get_image_paths(os.path.expanduser(args.data_dir))
         
@@ -68,15 +68,15 @@ def main(args):
             
         # Create the input queue
         index_list = range(len(image_list))
-        input_queue = tf.train.slice_input_producer([image_list, attribs_list, index_list], num_epochs=1, shuffle=False)        
+        input_queue = tf.compat.v1.train.slice_input_producer([image_list, attribs_list, index_list], num_epochs=1, shuffle=False)        
         
         nrof_preprocess_threads = 4
         image_per_thread = []
         for _ in range(nrof_preprocess_threads):
             filename = input_queue[0]
-            file_contents = tf.read_file(filename)
+            file_contents = tf.io.read_file(filename)
             image = tf.image.decode_image(file_contents, channels=3)
-            image = tf.image.resize_image_with_crop_or_pad(image, 160, 160)
+            image = tf.image.resize_with_crop_or_pad(image, 160, 160)
             #image = tf.image.resize_images(image, (64,64))
             image.set_shape((args.image_size, args.image_size, 3))
             attrib = input_queue[1]
@@ -84,7 +84,7 @@ def main(args):
             image = tf.cast(image, tf.float32)
             image_per_thread.append([image, attrib, input_queue[2]])
     
-        images, attribs, indices = tf.train.batch_join(
+        images, attribs, indices = tf.compat.v1.train.batch_join(
             image_per_thread, batch_size=args.batch_size, 
             shapes=[(args.image_size, args.image_size, 3), (nrof_attributes,), ()], enqueue_many=False,
             capacity=4 * nrof_preprocess_threads * args.batch_size,
@@ -94,26 +94,26 @@ def main(args):
         images_norm = (images-img_mean) / img_stddev
 
         # Resize to appropriate size for the encoder 
-        images_norm_resize = tf.image.resize_images(images_norm, (gen_image_size,gen_image_size))
+        images_norm_resize = tf.image.resize(images_norm, (gen_image_size,gen_image_size))
         
         # Create encoder network
         mean, log_variance = vae.encoder(images_norm_resize, True)
         
-        epsilon = tf.random_normal((tf.shape(mean)[0], args.latent_var_size))
+        epsilon = tf.random.normal((tf.shape(input=mean)[0], args.latent_var_size))
         std = tf.exp(log_variance/2)
         latent_var = mean + epsilon * std
         
         # Create a saver
-        saver = tf.train.Saver(tf.trainable_variables(), max_to_keep=3)
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.trainable_variables(), max_to_keep=3)
         
         # Start running operations on the Graph
         gpu_memory_fraction = 1.0
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
-        sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
-        sess.run(tf.global_variables_initializer())
-        sess.run(tf.local_variables_initializer())
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
+        sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+        sess.run(tf.compat.v1.global_variables_initializer())
+        sess.run(tf.compat.v1.local_variables_initializer())
         coord = tf.train.Coordinator()
-        tf.train.start_queue_runners(coord=coord, sess=sess)
+        tf.compat.v1.train.start_queue_runners(coord=coord, sess=sess)
         
 
         with sess.as_default():
