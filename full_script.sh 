@@ -1,7 +1,7 @@
 echo CU Entity Recogntion begin...
 
 MODELS=columbia_recognition_models
-OUTPUT=/output/columbia_vision_shared
+OUTPUT=/output
 
 python src/ldcc.py m18_data/data/jpg/jpg/ ${MODELS}/m18/
 python src/ldcc_f.py m18_data/data/video_shot_boundaries/representative_frames/ ${MODELS}/m18_f/
