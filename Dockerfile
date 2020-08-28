@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.2-base-ubuntu16.04
+FROM nvidia/cuda:10.1-base-ubuntu16.04
 
 LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
 
@@ -24,7 +24,8 @@ ENV PYTHONPATH "/aida/src/:/aida/src/src/:/home/brian/facenet-master/:/aida/mode
 WORKDIR /aida/src/
 
 COPY aida-env.txt ./
-RUN conda create --name aida-env --file ./aida-env.txt python=3.6
+RUN conda create --name aida-env --file ./aida-env.txt 
+#python=3.6
 
 WORKDIR	/aida/models/research/slim/
 RUN /bin/bash -c ". activate aida-env && pip install -e ."
@@ -72,6 +73,14 @@ WORKDIR /shared/cu_FFL_shared/jpg/jpg/
 ENV JPG_PATH="/shared/cu_FFL_shared/jpg/jpg/"
 ENV ZIP_PATH="/corpus/data/jpg/"
 ENV LDCC_PATH="/corpus/data/jpg/jpg/"
+
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/root/conda/envs/aida-env/lib
+RUN echo ${LD_LIBRARY_PATH}
+RUN ln -s /root/conda/envs/aida-env/lib/libcublas.so.10.0.130 /root/conda/envs/aida-env/lib/libcublas.so.10
+RUN ln -s /root/conda/envs/aida-env/lib/libcusparse.so.10.0.130 /root/conda/envs/aida-env/lib/libcusparse.so.10
+RUN ln -s /root/conda/envs/aida-env/lib/libcurand.so.10.0.130 /root/conda/envs/aida-env/lib/libcurand.so.10
+RUN ln -s /root/conda/envs/aida-env/lib/libcusolver.so.10.0.130 /root/conda/envs/aida-env/lib/libcusolver.so.10
+RUN ln -s /root/conda/envs/aida-env/lib/libcufft.so.10.0.145 /root/conda/envs/aida-env/lib/libcufft.so.10
 
 WORKDIR /aida/src
 

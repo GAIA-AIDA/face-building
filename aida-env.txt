@@ -1,6 +1,6 @@
 imageio
 matplotlib
-numpy
+numpy=1.16.2
 opencv
 pillow
 python-lmdb
