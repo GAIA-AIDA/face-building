@@ -14,15 +14,33 @@ ENV PATH="/root/conda/bin:${PATH}"
 RUN echo $PATH
 RUN conda update -n base -c defaults conda && conda -V && conda install setuptools && conda config --add channels conda-forge && conda install -c conda-forge rdflib lmdb
 
+WORKDIR /aida/
+RUN git clone https://github.com/tensorflow/models
+
 WORKDIR /home/brian/facenet-master/
 RUN git clone https://github.com/davidsandberg/facenet.git
 RUN ls -al /home/brian/facenet-master/
-ENV PYTHONPATH "/aida/src/:/aida/src/src/:/home/brian/facenet-master/:/aida/src/delf/delf/protos/"
+ENV PYTHONPATH "/aida/src/:/aida/src/src/:/home/brian/facenet-master/:/aida/models/research/"
 WORKDIR /aida/src/
 
 COPY aida-env.txt ./
 RUN conda create --name aida-env --file ./aida-env.txt python=3.6
-#RUN conda create --name aida-env --file ./aida-env.txt 
+
+WORKDIR	/aida/models/research/slim/
+RUN /bin/bash -c ". activate aida-env && pip install -e ."
+
+RUN tree -d -L 3 /aida/models/research/
+RUN echo ${PYTHONPATH}
+
+WORKDIR /aida/models/research/
+RUN /bin/bash -c ". activate aida-env && protoc object_detection/protos/*.proto --python_out=."
+#RUN /bin/bash -c ". activate aida-env && pip install -e ."
+
+WORKDIR /aida/models/research/delf/
+RUN /bin/bash -c ". activate aida-env && protoc delf/protos/*.proto --python_out=."
+RUN /bin/bash -c ". activate aida-env && pip install -e ."
+
+WORKDIR /aida/src/
 RUN echo "source activate aida-env" >> ~/.bashrc
 COPY check-imports.py ./
 RUN /bin/bash -c ". activate aida-env && python check-imports.py"
@@ -38,19 +56,10 @@ WORKDIR /models/facenet/
 COPY ./.bigfiles/ .
 RUN tree /models
 
-# NOTE:
-#WORKDIR /aida/src/columbia_data_root/columbia_recognition_models/
-#COPY ./.models/ .
-#WORKDIR /models/columbia_recognition_models/
-#ENV MODELS="/models/"
-#COPY ./.models/ .
-
 WORKDIR /aida/src/columbia_recognition_models/
 COPY ./.models/ .
-#columbia_recognition_models/google500_2_classifier.pkl
+# NOTE: ./.models/ needs to contain google500_2_classifier.pkl
 RUN tree /aida/src/columbia_recognition_models
-
-
 RUN tree /models
 
 WORKDIR /output/
