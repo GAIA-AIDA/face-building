@@ -66,13 +66,13 @@ RUN tree /models
 WORKDIR /output/
 ENV OUTPUT="/output/"
 
-WORKDIR /shared/cu_objdet_results/
+#WORKDIR /shared/cu_objdet_results/
 ENV SHARED="/shared/"
 
-WORKDIR /shared/cu_FFL_shared/jpg/jpg/
-ENV JPG_PATH="/shared/cu_FFL_shared/jpg/jpg/"
-ENV ZIP_PATH="/corpus/data/jpg/"
-ENV LDCC_PATH="/corpus/data/jpg/jpg/"
+#WORKDIR /shared/cu_FFL_shared/jpg/jpg/
+#ENV JPG_PATH="/shared/cu_FFL_shared/jpg/jpg/"
+#ENV ZIP_PATH="/corpus/data/jpg/"
+#ENV LDCC_PATH="/corpus/data/jpg/jpg/"
 
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/root/conda/envs/aida-env/lib
 RUN echo ${LD_LIBRARY_PATH}
