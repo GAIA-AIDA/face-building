@@ -1,6 +1,8 @@
-FROM nvidia/cuda:10.1-base-ubuntu16.04
+FROM nvidia/cuda:10.1-devel-ubuntu16.04
 
 LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
+
+RUN which nvcc
 
 # Create app directory
 WORKDIR /aida/src/
@@ -53,14 +55,15 @@ WORKDIR /corpus/
 ENV CORPUS="/corpus/"
 
 # NOTE: ./.bigfiles/20180402-114759 should contain model files not in github
-WORKDIR /models/facenet/
-COPY ./.bigfiles/ .
-RUN tree /models
+#WORKDIR /models/facenet/
+#COPY ./.bigfiles/ .
+#RUN tree /models
+#WORKDIR /aida/src/columbia_recognition_models/
 
-WORKDIR /aida/src/columbia_recognition_models/
+WORKDIR /models/
 COPY ./.models/ .
 # NOTE: ./.models/ needs to contain google500_2_classifier.pkl
-RUN tree /aida/src/columbia_recognition_models
+# RUN tree /aida/src/columbia_recognition_models
 RUN tree /models
 
 WORKDIR /output/
