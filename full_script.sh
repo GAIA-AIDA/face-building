@@ -2,7 +2,7 @@ echo CU Entity Recognition begin...
 
 MODELS=/models
 ###MODELS=columbia_recognition_models
-OUTPUT=/output
+OUTPUT=/output/WORKING/
 
 echo CU ldcc convert...
 python src/ldcc.py /corpus/data/jpg/jpg/ ${MODELS}/m18/
@@ -12,8 +12,8 @@ echo CU align...
 python src/align/align_dataset_mtcnn.py ${MODELS}/m18/ ${MODELS}/m18_a/ --image_size 160 --margin 32
 python src/align/align_dataset_mtcnn.py ${MODELS}/m18_f/ ${MODELS}/m18_f_a/ --image_size 160 --margin 32
 echo CU classify...
-python src/classifier.py CLASSIFY ${MODELS}/m18_a/ ${MODELS}/facenet/20180402-114759/20180402-114759.pb ${MODELS}/google500_2_classifier.pkl face_class_jpg --batch_size 1000 
-python src/classifier.py CLASSIFY ${MODELS}/m18_f_a/ ${MODELS}/facenet/20180402-114759/20180402-114759.pb ${MODELS}/google500_2_classifier.pkl face_class_kf --batch_size 1000 
+python src/classifier.py CLASSIFY ${MODELS}/m18_a/ ${MODELS}/facenet/20180402-114759/20180402-114759.pb ${MODELS}/m36_classifier.pkl face_class_jpg --batch_size 1000 
+python src/classifier.py CLASSIFY ${MODELS}/m18_f_a/ ${MODELS}/facenet/20180402-114759/20180402-114759.pb ${MODELS}/m36_classifier.pkl face_class_kf --batch_size 1000 
 echo CU bbox...
 python src/bbox.py ${MODELS}/m18_a/ bbox_jpg
 python src/bbox.py ${MODELS}/m18_f_a/ bbox_kf
@@ -41,9 +41,19 @@ python match2.py /aida/src/building_feature/ /aida/src/${MODELS}/feature_all/ /a
 
 cd /aida/src
 echo CU read_RPI_entity...
-python read_RPI_entity.py ${OUTPUT}/m18_PT003_r1 RPI_entity_out
+python read_RPI_entity.py ${OUTPUT}/uiuc_ttl_results RPI_entity_out
 
-echo CU create_ttl_m18...
-python create_ttl_m18.py /corpus/docs/parent_children.sorted.tab /corpus/docs/masterShotBoundary.msb results/face_class_jpg results/face_class_kf results/bbox_jpg results/bbox_kf ${OUTPUT}/cu_objdet_results/rdf_graphs_34.pkl ${OUTPUT}/cu_objdet_results/det_results_merged_34a_jpg.pkl ${OUTPUT}/cu_objdet_results/det_results_merged_34b_kf.pkl ${MODELS}/LDC2018E80_LORELEI_Background_KB/data/entities.tab flag_class_results.pickle landmark_results.p RPI_entity_out.pickle ${MODELS}/m18/ ${MODELS}/freebase_links_f2w.json ${OUTPUT}/m18_vision
+echo CU create_ttl_m36...
+python create_ttl_m36_dry.py \
+/corpus/docs/parent_children.tab \
+/corpus/docs/masterShotBoundary.msb \
+results/face_class_jpg results/face_class_kf results/bbox_jpg results/bbox_kf \
+${OUTPUT}/cu_objdet_results/rdf_graphs_34.pkl ${OUTPUT}/cu_objdet_results/det_results_merged_34a_jpg.pkl ${OUTPUT}/cu_objdet_results/det_results_merged_34b_kf.pkl \
+${MODELS}/LDC2020E27_AIDA_Phase_2_Practice_Topics_Reference_Knowledge_Base_V1.1/data/entities.tab \
+flag_class_results.pickle landmark_results.p \
+RPI_entity_out.pickle \
+${MODELS}/m18/ \
+${MODELS}/freebase_links_f2w.json \
+${OUTPUT}/m36_vision
 
 echo CU Entity Recognition finished!
