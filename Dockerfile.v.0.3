@@ -1,0 +1,13 @@
+FROM brian271828/brian_aida:0702
+LABEL maintainer "Dan Napierski (ISI) <dan.napierski@toptal.com>"
+
+WORKDIR /aida/src/
+COPY ./create_ttl_m36_dry.py ./
+COPY ./full_script.sh ./
+
+LABEL name="AIDA Face and Building Detection"
+LABEL version=0
+LABEL revision=3
+
+RUN chmod +x ./full_script.sh
+CMD [ "/bin/bash", "" ]
