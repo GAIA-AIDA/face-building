@@ -13,13 +13,13 @@ az_obj_graph = sys.argv[7]#'/home/brian/facenet-master/results/rdf_graphs_34.pkl
 az_obj_jpg = sys.argv[8]#'/home/brian/facenet-master/results/det_results_merged_34a_jpg.pkl'
 az_obj_kf = sys.argv[9]#'/home/brian/facenet-master/results/det_results_merged_34b_kf.pkl'
 Lorelei_path = sys.argv[10]#'/home/brian/facenet-master/LDC2018E80_LORELEI_Background_KB/data/entities.tab'
-flag_result = sys.argv[11]#'/home/brian/tensorflow-retrain-sample/flag_m18_2.pickle'
-landmark_result = sys.argv[12]#'/home/brian/tensorflow/models/research/delf/delf/python/examples/result_dic_m18_new.p'
-RPI_entity = sys.argv[13]#'/home/brian/facenet-master/results/PT003_r1.pickle'
-input_img_path = sys.argv[14]#'/home/brian/facenet-master/datasets/m18/m18/'
-ttl_out = sys.argv[15]#'/home/brian/facenet-master/datasets/m18/m18/'
+#flag_result = sys.argv[11]#'/home/brian/tensorflow-retrain-sample/flag_m18_2.pickle'
+#landmark_result = sys.argv[12]#'/home/brian/tensorflow/models/research/delf/delf/python/examples/result_dic_m18_new.p'
+RPI_entity = sys.argv[11]#'/home/brian/facenet-master/results/PT003_r1.pickle'
+#input_img_path = sys.argv[14]#'/home/brian/facenet-master/datasets/m18/m18/'
+ttl_out = sys.argv[12]#'/home/brian/facenet-master/datasets/m18/m18/'
 #outputN = 'm18_vision'
-
+print(ttl_out)  
 import time
 
 start = time.time()
@@ -95,7 +95,7 @@ with open(face_frame_result, 'rb') as handle:
 #if dataName == 'dry3':
 with open(az_obj_graph , 'rb') as handle:
     (kb_dict, entity_dict, event_dict) = pickle.load(handle)
-
+#print(kb_dict)
 with open(az_obj_jpg , 'rb') as handle:
     OD_result = pickle.load(handle)
 
@@ -153,23 +153,6 @@ for name in nameSet:
     category_index[i] = {'id': i, 'name': name}
     index_category[name] = i
 
-category_index_f = {}
-index_category_f = {}
-i=0
-nameSet_c = set()
-retrain_label = 'results/retrained_labels2.txt'
-file_c = open(retrain_label)
-for line in file_c:
-    data = line.replace('\n','')
-    #print data
-    if isEnglish(data):
-        nameSet_c.add(data)
-    
-for name in nameSet_c:
-    i+=1
-    category_index_f[i] = {'id': i, 'name': name}
-    index_category_f[name.replace(' ','_')] = i
-#print(index_category_f)
 entity_dic2 = defaultdict(list)
 for x,y in entity_dict.items():
     data = x.split('/')
@@ -200,7 +183,7 @@ for line in file1:
 #    name2ID = pickle.load(handle)
     
 
-
+"""
 with open(flag_result, 'rb') as handle:
     flag_dict_s = pickle.load(handle)
 with open(landmark_result, 'rb') as f:
@@ -233,7 +216,7 @@ for x,y in landmark_dict.items():
 #building_dry = ['IC0011UWP','IC0011VOR','IC0011WXU','IC0011XEN','IC0011XEO','IC0014YXH','IC0014ZPU']
 #nameSet_b =set()
 #nameSet_b.add('Maidan_Nezalezhnosti')
-
+"""
 
 #print ID2name[5601538]
 import pickle
@@ -297,162 +280,62 @@ kb_dict_bf = {}
 directory = ttl_out#+'/'
 if not os.path.exists(directory):
     os.makedirs(directory)
+print(directory)
 
-#for parent, chi in child.items():
-    
-    #print parent
-#    docNum+=1
-    #(parent, chi) = chi_2
+def link_to_obj(key, g, entity,x,person_c_n):
+    sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Face/FaceNet")
+
+    person_label = ['/m/01g317','/m/04yx4','/m/03bt1vf','/m/01bl7v','/m/05r655','/m/04hgtk','/m/01bgsw']
+    first_cluster = 1
+    if key in OD_result.keys():
+        for n in range(len(OD_result[key])):
+
+            #print OD_result[key][n]['label']
+            if OD_result[key][n]['label'] in person_label:
+                #print OD_result[key][n]['label']
+                boxA = OD_result[key][n]['bbox']
+                boxB = (int(bb[x][0]),int(bb[x][1]),int(bb[x][2]),int(bb[x][3]))
+                IOA = bb_intersection_over_union(boxA, boxB)
+                if IOA > 0.9:
+
+                    eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/JPG/"+key+"/"+str(n)
+                    #print entity_dic2[key]
+                    #print n
+                    if n in entity_dic2[key]:
+                    #if eid in entity_dict.keys():
+                        score = IOA
+
+                        #eid_list.append(eid)
+                        if first_cluster == 1:
+
+                            first_cluster = 0
+                            clusterName = aifutils.make_cluster_with_prototype(g, \
+                            "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/JPG/"\
+                            +key+"/"+str(n)+"/"+str(person_c_n),entity, sys)
+
+                        aifutils.mark_as_possible_cluster_member(g, \
+                                entity_dict[eid],clusterName, score, sys)
+
+        if first_cluster == 0:
+
+            person_c_n+=1
+    return person_c_n, g
+
     
 def transferAIF(parent):
     chi = child[parent]
     
     if parent in kb_dict.keys():
+        print(parent)
         g = kb_dict[parent]
         g.bind('ldcOnt', ldc_ontology_m36.NAMESPACE)
+
  
     else:
+        print('not Graph')
         g = aifutils.make_graph()
         g.bind('ldcOnt', ldc_ontology_m36.NAMESPACE)
-    """
-    entityDic_c = {}
-    country_set_r = set()
-    for img_id in chi:
-        if img_id in flag_dict_s.keys():
-            country_set_r.add(flag_dict_s[img_id])
-    #=============== Flag ===========
-    sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Flag/Inception_v4")
-    
-    
-    for key, value in index_category_f.items():
-        if key not in country_set_r:
-            continue
-        key = key.replace(' ','_')
-        name = "http://www.columbia.edu/AIDA/DVMM/Entities/Country/"+str(value)+'/'+key
-        entity = aifutils.make_entity(g, name, sys)
-        entityDic_c[key] = entity
-        #print "parent "+ parent
-        type_assertion = aifutils.mark_type(g, \
-            "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/Country/"\
-            +str(value)+'/'+key, entity, ldc_ontology_m36.GPE, sys, 1)
-    for img_id in chi:
-        if img_id in flag_dict_s.keys():
-            #print "imgID "+img_id
-            flag_label = ['/m/07cmd','/m/0dzct','/m/03bt1vf','/m/01g317','/m/04yx4','/m/01prls','/m/07yv9','/m/03120']
-            key = img_id
-            if key in OD_result.keys():
-                for n in range(len(OD_result[key])):
-                    eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/JPG/"+key+"/"+str(n)
-                    #print OD_result[key][n]['label']
-                    if OD_result[key][n]['label'] in flag_label:
-                        #print OD_result[key][n]['label']
-                        eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/JPG/"+key+"/"+str(n)
-                        relation_entity = aifutils.make_relation(g, "http://www.columbia.edu/AIDA/DVMM/Relaion/Flag/"+\
-                                                                key+"/"+str(n), sys)
-                        #APORA = 'GeneralAffiliation.ArtifactPoliticalOrganizationReligiousAffiliation'
-                        score = 1
-                        type_assertion = aifutils.mark_type(g, "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/Flag/"+key+"/"+str(n), \
-                            relation_entity, ldc_ontology_m36.GeneralAffiliation.ArtifactPoliticalOrganizationReligiousAffiliation.NationalityCitizen, \
-                                                    sys, score)
-                        boxA = OD_result[key][n]['bbox']
-                        bb2 = Bounding_Box((boxA[0],boxA[1]),(boxA[2],boxA[3]))
-                        score = 1
-                        justif = aifutils.mark_image_justification(g, [relation_entity, \
-                                                           type_assertion], key, bb2, sys, score)
-                        aifutils.add_source_document_to_justification(g, justif, parent)
-                        aifutils.mark_informative_justification(g, relation_entity, justif)
-                        score = 1
-                        if eid in entity_dict.keys():
-                            art_argument = aifutils.mark_as_argument(g, relation_entity, \
-                            ldc_ontology_m36.GeneralAffiliation.ArtifactPoliticalOrganizationReligiousAffiliation.NationalityCitizen_Artifact, \
-                                                                entity_dict[eid], sys, score)
-                            score = 1
-                            justif = aifutils.mark_image_justification(g, [relation_entity, \
-                                                               art_argument], key, bb2, sys, score)
-                            aifutils.add_source_document_to_justification(g, justif, parent)
-                            aifutils.mark_informative_justification(g, relation_entity, justif)
-                        score = 1
-                        nation_argument = aifutils.mark_as_argument(g, relation_entity, \
-                            ldc_ontology_m36.GeneralAffiliation.ArtifactPoliticalOrganizationReligiousAffiliation.NationalityCitizen_Nationality, \
-                                                                    entityDic_c[flag_dict_s[img_id]], \
-                                                                    sys, score)
-                        score = 1
-                        justif = aifutils.mark_image_justification(g, [relation_entity, \
-                                                               nation_argument], key, bb2, sys, score)
-                        aifutils.add_source_document_to_justification(g, justif, parent)
-                        aifutils.mark_informative_justification(g, relation_entity, justif)
-                        
-                    if OD_result[key][n]['label'] == '/m/03120':
-                        #print flag_dict_s[img_id]
-                        boxA = OD_result[key][n]['bbox']
-                        bb2 = Bounding_Box((boxA[0],boxA[1]),(boxA[2],boxA[3]))
-                        type_assertion = aifutils.mark_type(g, \
-                        "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/Country/RUN00010/JPG/"+\
-                            str(key)+'/'+str(n), entityDic_c[flag_dict_s[img_id]], ldc_ontology_m36.GPE, sys, 1)
-                        score = 1
-                        justif = aifutils.mark_image_justification(g, [entityDic_c[flag_dict_s[img_id]], type_assertion], \
-                                                                   key, bb2, sys, score)
-                        aifutils.add_source_document_to_justification(g, justif, parent)
-                        aifutils.mark_informative_justification(g, entityDic_c[flag_dict_s[img_id]], justif)
-
-    #break
-    #=============== landmark ==========
-    sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Landmark/Delf")
-    #building
-    has_land = 0
-    landmark_name_set = set()
-    for imageN in chi:
-        if imageN in landmark_dict.keys():
-             
-            name_lm = landmark_dict[imageN][0]
-            print(name_lm)
-            if name_lm == '':
-                continue
-            #print name_lm
-            if name_lm not in landmark_name_set:
-                landmark_name_set.add(name_lm)
-                name = "http://www.columbia.edu/AIDA/DVMM/Entities/Landmark/"+ \
-                str(landmark_id[name_lm])+"/"+name_lm
-                entity = aifutils.make_entity(g, name, sys)
-                entityDic_b[name_lm] = entity
-                #print AIDA_PROGRAM_ONTOLOGY2.term('Person')
-                score =  1
-                type_assertion = aifutils.mark_type(g, \
-                    "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/Landmark/"+ \
-                str(landmark_id[name_lm])+"/"+name_lm \
-                    , entity, ldc_ontology_m36.FAC, sys, score)
-                if 'Maidan' in name_lm:
-                    aifutils.link_to_external_kb(g, entity, "LDC2019E43:80000020" , sys, 1)
-                elif 'United_States_Capitol' in name_lm:
-                    aifutils.link_to_external_kb(g, entity, "LDC2019E43:4140827" , sys, 1)
-                
-                else:
-                    aifutils.link_to_external_kb(g, entity, 'http://dbpedia.org/resource/'+name_lm , sys, 1)
-
-    for imageN in chi:
-        total_key.add(imageN)
-        if imageN in landmark_dict.keys():
-            #print parent
-            key = imageN
-            name_lm = landmark_dict[imageN]
-            if name_lm == '':
-                continue
-            #aifutils.mark_as_possible_cluster_member(g, \
-            #    entity,clusterDic_b[0], 1, sys)
-            
-            # Need to change in future
-            im = Image.open(input_img_path+imageN+'.jpg')
-            width, height = im.size
-            bb2 = Bounding_Box((0,0), (width,height)) #l u r d
-            type_assertion = aifutils.mark_type(g, \
-            "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/Landmark/RUN00010/JPG/"+\
-                str(key)+'/'+str(0), entityDic_b[name_lm], ldc_ontology_m36.FAC, sys, 1)
-            justif = aifutils.mark_image_justification(g, [entityDic_b[name_lm], type_assertion], key, bb2, sys, 1)
-            aifutils.add_source_document_to_justification(g, justif, parent)
-            aifutils.mark_informative_justification(g, entityDic_b[name_lm], justif)
-            
-            
-    #"""                                                       
+    #"""                                  
     #=============face recognition=============
     sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Face/FaceNet")
 
@@ -472,7 +355,6 @@ def transferAIF(parent):
     person_label = ['/m/01g317','/m/04yx4','/m/03bt1vf','/m/01bl7v','/m/05r655','/m/04hgtk','/m/01bgsw']
     for x, y in result.items():
         #print x
-
         data = x.split('/')[-1]
         if '._' in data:
             continue
@@ -531,7 +413,7 @@ def transferAIF(parent):
 
         new_key = key.lower().replace('_',' ')
         if new_key in name2ID.keys():
-            aifutils.link_to_external_kb(g, entity, "LDC2019E43:"+name2ID[new_key], sys, 1)
+            aifutils.link_to_external_kb(g, entity, "REFKB:"+name2ID[new_key], sys, 1)
             #print 'Lorelei'
             #print parent
         else:
@@ -560,79 +442,50 @@ def transferAIF(parent):
         #print key
         In = 1
 
-        name = "http://www.columbia.edu/AIDA/DVMM/Entities/FaceDetection/RUN00010/"+str(key)+'/'+str(i)
-        #entityList.append(key)
-        #entityList.append(entity)
-        entity = aifutils.make_entity(g, name, sys)
+        
 
                
-        first_cluster = 1
-        #======================== JPG ===============
-        eid_list = []
         
-        if key in OD_result.keys():
-            for n in range(len(OD_result[key])):
-
-                #print OD_result[key][n]['label']
-                if OD_result[key][n]['label'] in person_label:
-                    #print OD_result[key][n]['label']
-                    boxA = OD_result[key][n]['bbox']
-                    boxB = (int(bb[x][0]),int(bb[x][1]),int(bb[x][2]),int(bb[x][3]))
-                    IOA = bb_intersection_over_union(boxA, boxB)
-                    if IOA > 0.9:
-                    #left,top,right,bottom =  OD_result[key][n]['bbox']
-                    #if int(bb[x][1]) > left and int(bb[x][0]) > top and int(bb[x][3]) < right and int(bb[x][2]) < bottom:
-
-                        eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/JPG/"+key+"/"+str(n)
-                        #print entity_dic2[key]
-                        #print n
-                        if n in entity_dic2[key]:
-                        #if eid in entity_dict.keys():
-                            score = IOA
-
-                            eid_list.append(eid)
-                            if first_cluster == 1:
-
-                                first_cluster = 0
-                                clusterName = aifutils.make_cluster_with_prototype(g, \
-                                "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/JPG/"\
-                                +key+"/"+str(n)+"/"+str(person_c_n),entity, sys)
-
-                            aifutils.mark_as_possible_cluster_member(g, \
-                                    entity_dict[eid],clusterName, score, sys)
-
-            if first_cluster == 0:
-
-                person_c_n+=1
+        #======================== JPG ===============
+        #eid_list = []
+        
+        
 
         l,t,r,d = bb[x]
-        if (r-l)*(d-t)>3600:
-            entityList.append(entity) 
-            arrayList.append(y[2])
+        if (r-l)*(d-t)<4800:
+            continue
 
-        feature = {}
-        feature['columbia_vector_faceID_FaceNet'] = y[2].tolist()
-        json_data = json.dumps(feature)
-        aifutils.mark_private_data(g, entity, json_data, sys)
-        #labelrdf = VIS_ONTOLOGY.term(i_id)
-        #Dscore = value[i][7]
-        #if Dscore>1:
-        Dscore=1
-        #type_assertion = aifutils.mark_type(g, "Columbia/DVMM/TypeAssertion/FaceRecognition/RUN00003/"+str(i_id)+"/"+str(i)+"/1", 
-        type_assertion = aifutils.mark_type(g, \
-        "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceDetection/RUN00010/JPG/"+\
-            str(key)+'/'+str(i), entity, ldc_ontology_m36.PER, sys, Dscore)
+
 
         bb2 = Bounding_Box((bb[x][0], bb[x][1]), (bb[x][2], bb[x][3]))
         
-        justif = aifutils.mark_image_justification(g, [entity, type_assertion], key, bb2, sys, 1)
-        aifutils.add_source_document_to_justification(g, justif, parent)
-        aifutils.mark_informative_justification(g, entity, justif)
-        chi_set.add(key)
-        parent_set.add(parent)
+        
      
         if float(y[1])<0.04: 
-            continue
+            name = "http://www.columbia.edu/AIDA/DVMM/Entities/FaceDetection/RUN00010/"+str(key)+'/'+str(i)
+            #entityList.append(key)
+            #entityList.append(entity)
+            entity = aifutils.make_entity(g, name, sys)
+            entityList.append(entity) 
+            arrayList.append(y[2])
+            feature = {}
+            feature['columbia_vector_faceID_FaceNet'] = y[2].tolist()
+            json_data = json.dumps(feature)
+            aifutils.mark_private_data(g, entity, json_data, sys)
+            #labelrdf = VIS_ONTOLOGY.term(i_id)
+            #Dscore = value[i][7]
+            #if Dscore>1:
+            Dscore=1
+            #type_assertion = aifutils.mark_type(g, "Columbia/DVMM/TypeAssertion/FaceRecognition/RUN00003/"+str(i_id)+"/"+str(i)+"/1", 
+            type_assertion = aifutils.mark_type(g, \
+            "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceDetection/RUN00010/JPG/"+\
+                str(key)+'/'+str(i), entity, ldc_ontology_m36.PER, sys, Dscore)
+            justif = aifutils.mark_image_justification(g, [entity, type_assertion], key, bb2, sys, 1)
+            aifutils.add_source_document_to_justification(g, justif, parent)
+            aifutils.mark_informative_justification(g, entity, justif)
+            chi_set.add(key)
+            parent_set.add(parent)
+            person_c_n, g = link_to_obj(key,g,entity,x,person_c_n)
         else:
             #nameCount2+=1
             person_set.add(y[0].replace(' ','_'))
@@ -652,6 +505,8 @@ def transferAIF(parent):
                                                            type_assertion], key, bb2, sys, score)
             aifutils.add_source_document_to_justification(g, justif, parent)
             aifutils.mark_informative_justification(g, entityDic[y[0].replace(' ','_')], justif)
+
+            person_c_n, g = link_to_obj(key,g,entityDic[y[0].replace(' ','_')],x, person_c_n)
             
             #                                    entity, labelrdf, sys, score)
 
@@ -676,83 +531,88 @@ def transferAIF(parent):
         frame = data[:-len(data2[-1])-1]
         frameNum = frame.split('_')[-1]
 
-        name = "http://www.columbia.edu/AIDA/DVMM/Entities/FaceDetection/RUN00010/Keyframe/"+\
-        str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)
-        entity = aifutils.make_entity(g, name, sys)
+        
 
-        if str(videoDic[key])+'_'+str(frameNum) in ODF_result.keys():
-            first_cluster = 1
-
-            for n in range(len(ODF_result[str(videoDic[key])+'_'+str(frameNum)])):
-      
-                if ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['label'] in person_label:     
-
-                    boxA = ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['bbox']
-                    boxB = (int(bb_2[x][0]),int(bb_2[x][1]),int(bb_2[x][2]),int(bb_2[x][3]))
-                    IOA = bb_intersection_over_union(boxA, boxB)
-                    if IOA > 0.9:
-    
-                        eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/Keyframe/"+str(videoDic[key])+'_'+str(frameNum)+"/"+str(n)
-                        if n in entity_dic2[str(videoDic[key])+'_'+str(frameNum)]:
-                        #if eid in entity_dict.keys():
-                            score = IOA
-                            #print x
-                            #print entity_dict[eid]
-                            #print n
-
-                            if first_cluster == 1:
-
-                                first_cluster = 0
-                                clusterName = aifutils.make_cluster_with_prototype(g, \
-                                "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/Keyframe/"+\
-                                str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)+'/'+\
-                                str(person_c_n),entity, sys)
-                                #aifutils.mark_as_possible_cluster_member(g, \
-                                #    entity,clusterName, score, sys)
-
-                            aifutils.mark_as_possible_cluster_member(g, \
-                                    entity_dict[eid],clusterName, score, sys)
-            if first_cluster == 0:
-                person_c_n+=1
+        
 
         #txn.put("Columbia/DVMM/TypeAssertion/FaceID/RUN00003/"+str(key)+'/'+str(i), value[i][4]);
         #featureDic[entity] = y[2]
         featureDic[key] = y[2]
-
+ 
         #entityList.append(key)
         l,t,r,d = bb_2[x]
-        if (r-l)*(d-t)>3600:
+        if (r-l)*(d-t)<4800:
+            continue
+        bb2 = Bounding_Box((bb_2[x][0], bb_2[x][1]), (bb_2[x][2], bb_2[x][3]))
+        
+        if float(y[1])<0.04:
+            name = "http://www.columbia.edu/AIDA/DVMM/Entities/FaceDetection/RUN00010/Keyframe/"+\
+            str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)
+            entity = aifutils.make_entity(g, name, sys)
             entityList.append(entity)
             arrayList.append(y[2])
-        #if first == 1:
-        #    new_array = [y[2]]
-        #    first = 0
-        #else:
-        #    new_array = np.concatenate((new_array, [y[2]]), axis=0)
-        feature = {}
-        feature['columbia_vector_faceID_FaceNet'] = y[2].tolist()
-        json_data = json.dumps(feature)
-        aifutils.mark_private_data(g, entity, json_data, sys)
-        #labelrdf = VIS_ONTOLOGY.term(i_id)
-        #Dscore = value[i][7]
-        #if Dscore>1:
-        Dscore=1
-        #type_assertion = aifutils.mark_type(g, "Columbia/DVMM/TypeAssertion/FaceRecognition/RUN00003/"+str(i_id)+"/"+str(i)+"/1", 
-        type_assertion = aifutils.mark_type(g, "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceDetection/RUN00010/Keyframe/"+\
-            str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, ldc_ontology_m36.PER, sys, Dscore)
-            #str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, AIDA_PROGRAM_ONTOLOGY2.Entity, sys, Dscore)
-        #print bb[x][1]
-        bb2 = Bounding_Box((bb_2[x][0], bb_2[x][1]), (bb_2[x][2], bb_2[x][3]))
-        #aifutils.mark_image_justification(g, [entity, type_assertion], key, bb2, sys, 1)
-        justif = aifutils.mark_keyframe_video_justification(g, [entity, type_assertion], videoDic[key], \
-                                                            str(videoDic[key])+'_'+str(frameNum), bb2, sys, 1)
-        aifutils.add_source_document_to_justification(g, justif, parent)
-        aifutils.mark_informative_justification(g, entity, justif)
+            #if first == 1:
+            #    new_array = [y[2]]
+            #    first = 0
+            #else:
+            #    new_array = np.concatenate((new_array, [y[2]]), axis=0)
+            feature = {}
+            feature['columbia_vector_faceID_FaceNet'] = y[2].tolist()
+            json_data = json.dumps(feature)
+            aifutils.mark_private_data(g, entity, json_data, sys)
+            #labelrdf = VIS_ONTOLOGY.term(i_id)
+            #Dscore = value[i][7]
+            #if Dscore>1:
+            Dscore=1
+            #type_assertion = aifutils.mark_type(g, "Columbia/DVMM/TypeAssertion/FaceRecognition/RUN00003/"+str(i_id)+"/"+str(i)+"/1", 
+            type_assertion = aifutils.mark_type(g, "http://www.columbia.edu/AIDA/DVMM/TypeAssertion/FaceDetection/RUN00010/Keyframe/"+\
+                str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, ldc_ontology_m36.PER, sys, Dscore)
+                #str(videoDic[key])+'_'+str(frameNum)+'/'+str(i), entity, AIDA_PROGRAM_ONTOLOGY2.Entity, sys, Dscore)
+            #print bb[x][1]
+            
+            #aifutils.mark_image_justification(g, [entity, type_assertion], key, bb2, sys, 1)
+            justif = aifutils.mark_keyframe_video_justification(g, [entity, type_assertion], videoDic[key], \
+                                                                str(videoDic[key])+'_'+str(frameNum), bb2, sys, 1)
+            aifutils.add_source_document_to_justification(g, justif, parent)
+            aifutils.mark_informative_justification(g, entity, justif)
+            
+            chi_set.add(key)
+            parent_set.add(parent)
+
+            if str(videoDic[key])+'_'+str(frameNum) in ODF_result.keys():
+                first_cluster = 1
+
+                for n in range(len(ODF_result[str(videoDic[key])+'_'+str(frameNum)])):
+          
+                    if ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['label'] in person_label:     
+
+                        boxA = ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['bbox']
+                        boxB = (int(bb_2[x][0]),int(bb_2[x][1]),int(bb_2[x][2]),int(bb_2[x][3]))
+                        IOA = bb_intersection_over_union(boxA, boxB)
+                        if IOA > 0.9:
         
-        chi_set.add(key)
-        parent_set.add(parent)
-        if float(y[1])<0.04:
-            continue
+                            eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/Keyframe/"+str(videoDic[key])+'_'+str(frameNum)+"/"+str(n)
+                            if n in entity_dic2[str(videoDic[key])+'_'+str(frameNum)]:
+                            #if eid in entity_dict.keys():
+                                score = IOA
+                                #print x
+                                #print entity_dict[eid]
+                                #print n
+
+                                if first_cluster == 1:
+
+                                    first_cluster = 0
+                                    clusterName = aifutils.make_cluster_with_prototype(g, \
+                                    "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/Keyframe/"+\
+                                    str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)+'/'+\
+                                    str(person_c_n),entity, sys)
+                                    #aifutils.mark_as_possible_cluster_member(g, \
+                                    #    entity,clusterName, score, sys)
+
+                                aifutils.mark_as_possible_cluster_member(g, \
+                                        entity_dict[eid],clusterName, score, sys)
+                if first_cluster == 0:
+                    person_c_n+=1
         else:
             #nameCount2+=1
             person_set.add(y[0].replace(' ','_'))
@@ -775,6 +635,40 @@ def transferAIF(parent):
             aifutils.add_source_document_to_justification(g, justif, parent)
             aifutils.mark_informative_justification(g, entityDic[y[0].replace(' ','_')], justif)
 
+            if str(videoDic[key])+'_'+str(frameNum) in ODF_result.keys():
+                first_cluster = 1
+
+                for n in range(len(ODF_result[str(videoDic[key])+'_'+str(frameNum)])):
+          
+                    if ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['label'] in person_label:     
+
+                        boxA = ODF_result[str(videoDic[key])+'_'+str(frameNum)][n]['bbox']
+                        boxB = (int(bb_2[x][0]),int(bb_2[x][1]),int(bb_2[x][2]),int(bb_2[x][3]))
+                        IOA = bb_intersection_over_union(boxA, boxB)
+                        if IOA > 0.9:
+        
+                            eid = "http://www.columbia.edu/AIDA/DVMM/Entities/ObjectDetection/RUN00010/Keyframe/"+str(videoDic[key])+'_'+str(frameNum)+"/"+str(n)
+                            if n in entity_dic2[str(videoDic[key])+'_'+str(frameNum)]:
+                            #if eid in entity_dict.keys():
+                                score = IOA
+                                #print x
+                                #print entity_dict[eid]
+                                #print n
+
+                                if first_cluster == 1:
+
+                                    first_cluster = 0
+                                    clusterName = aifutils.make_cluster_with_prototype(g, \
+                                    "http://www.columbia.edu/AIDA/DVMM/Clusters/HumanBody/RUN00010/Keyframe/"+\
+                                    str(videoDic[key])+'_'+str(frameNum)+'/'+str(i)+'/'+\
+                                    str(person_c_n),entityDic[y[0].replace(' ','_')], sys)
+                                    #aifutils.mark_as_possible_cluster_member(g, \
+                                    #    entity,clusterName, score, sys)
+
+                                aifutils.mark_as_possible_cluster_member(g, \
+                                        entity_dict[eid],clusterName, score, sys)
+                if first_cluster == 0:
+                    person_c_n+=1
     #dbscan_run(arrayList,entityList)
     new_array = np.array(arrayList)
     
@@ -819,7 +713,7 @@ def transferAIF(parent):
                 #print score
                 aifutils.mark_as_possible_cluster_member(g, \
                     entityList[i],clusterNameDic[labels[i]], score, sys)
-    """
+    
     sys = aifutils.make_system_with_uri(g, "http://www.columbia.edu/AIDA/DVMM/Systems/Face/FaceNet")
     for key, value in index_category.items():
         if key not in NameDetected:
@@ -845,14 +739,14 @@ def transferAIF(parent):
                         RPI[parent][name2ID[new_key]][i],cluster, score, sys)
         except KeyError:
             a = 0
-    #"""
+    
     
     with open(directory+'/'+parent+'.ttl', 'w') as fout:
         serialization = BytesIO()
         # need .buffer because serialize will write bytes, not str
         g.serialize(destination=serialization, format='turtle')
         fout.write(serialization.getvalue().decode('utf-8'))
-
+    #"""
 pool = mp.Pool(processes=40)
 
 res = pool.map(transferAIF, child.keys())
